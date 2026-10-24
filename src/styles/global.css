@@ -81,9 +81,9 @@
   --font-body: 'Inter', system-ui, sans-serif;
   --font-head: 'Inter Tight', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  /* Prototype breakpoints: compact < 700px, header collapses to menu < 960px. */
+  /* Prototype breakpoints: compact < 700px, header collapses to menu < 1040px. */
   --breakpoint-wide: 700px;
-  --breakpoint-nav: 960px;
+  --breakpoint-nav: 1040px;
 }
 
 @layer base {

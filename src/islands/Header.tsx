@@ -12,7 +12,7 @@ interface Props {
   nav: Record<NavId, string>;
   /** Same page in each language. */
   langHref: Record<Lang, string>;
-  labels: { theme: string; menu: string; language: string; sections: string };
+  labels: { theme: string; menu: string; language: string; sections: string; signIn: string; admin: string };
 }
 
 const LANG_LABEL: [Lang, string][] = [['en', 'EN'], ['bn', 'বাং'], ['de', 'DE']];
@@ -20,6 +20,9 @@ const LANG_LABEL: [Lang, string][] = [['en', 'EN'], ['bn', 'বাং'], ['de', 
 export default function Header({ lang, brand, nav, langHref, labels }: Props) {
   const [active, setActive] = useState('');
   const [menu, setMenu] = useState(false);
+  // Set by /admin/ while you're signed in there; only changes the label — the admin itself checks auth.
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => { try { setIsAdmin(localStorage.getItem('pfAdmin') === '1'); } catch {} }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -96,6 +99,16 @@ export default function Header({ lang, brand, nav, langHref, labels }: Props) {
             })}
           </div>
           <ThemeToggle label={labels.theme} />
+          <a
+            href="/admin/"
+            rel="nofollow"
+            title={isAdmin ? labels.admin : labels.signIn}
+            aria-label={isAdmin ? labels.admin : labels.signIn}
+            className="flex h-10 flex-none items-center justify-center gap-2 rounded-full text-sm xl:border xl:border-outline font-medium text-on-surface-variant no-underline hover:bg-surface-highest hover:text-on-surface-variant w-10 xl:w-auto xl:pr-4 xl:pl-3"
+          >
+            <span className="ms text-xl">{isAdmin ? 'admin_panel_settings' : 'login'}</span>
+            <span className="hidden xl:inline">{isAdmin ? labels.admin : labels.signIn}</span>
+          </a>
           <button
             type="button"
             onClick={() => setMenu(!menu)}

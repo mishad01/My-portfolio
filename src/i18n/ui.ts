@@ -49,6 +49,8 @@ const en = {
   next: 'Next',
   close: 'Close',
   language: 'Language',
+  signIn: 'Sign in',
+  admin: 'Admin',
   sections: 'Sections',
   filter: 'Filter',
   figure: 'key figure',
@@ -67,7 +69,7 @@ const bn: Partial2<UI> = {
   weeks: 'সপ্তাহ', batches: 'ব্যাচ', duration: 'মেয়াদ', students: 'শিক্ষার্থী', level: 'লেভেল', format: 'ধরন', live: 'লাইভ অনলাইন',
   thesis: 'স্নাতক থিসিস', eduTitle: 'শিক্ষা ও অর্জন', achievements: 'অর্জন',
   contactTitle: 'কথা বলি।', contactSub: 'ওয়ার্কস্টুডেন্ট পদ, ফ্রিল্যান্স প্রজেক্ট ও একাডেমিক আলোচনার জন্য উন্মুক্ত।',
-  emailMe: 'ইমেইল করুন', copyEmail: 'ইমেইল কপি', copied: 'কপি হয়েছে', screenshot: 'স্ক্রিনশট', language: 'ভাষা',
+  emailMe: 'ইমেইল করুন', copyEmail: 'ইমেইল কপি', copied: 'কপি হয়েছে', screenshot: 'স্ক্রিনশট', language: 'ভাষা', signIn: 'সাইন ইন', admin: 'অ্যাডমিন',
   nav: { now: 'এখন', experience: 'অভিজ্ঞতা', projects: 'প্রজেক্ট', teaching: 'শিক্ষকতা', research: 'গবেষণা', education: 'শিক্ষা', contact: 'যোগাযোগ' },
 };
 
@@ -80,7 +82,7 @@ const de: Partial2<UI> = {
   weeks: 'Wochen', batches: 'Batches', duration: 'Dauer', students: 'Studierende', level: 'Level', format: 'Format', live: 'Live online',
   thesis: 'Bachelorarbeit', eduTitle: 'Ausbildung & Erfolge', achievements: 'Erfolge',
   contactTitle: 'Sprechen wir.', contactSub: 'Offen für Werkstudentenstellen, Freelance-Projekte und akademischen Austausch.',
-  emailMe: 'E-Mail schreiben', copyEmail: 'E-Mail kopieren', copied: 'Kopiert', screenshot: 'Screenshot', language: 'Sprache',
+  emailMe: 'E-Mail schreiben', copyEmail: 'E-Mail kopieren', copied: 'Kopiert', screenshot: 'Screenshot', language: 'Sprache', signIn: 'Anmelden', admin: 'Admin',
   nav: { now: 'Aktuell', experience: 'Erfahrung', projects: 'Projekte', teaching: 'Lehre', research: 'Forschung', education: 'Ausbildung', contact: 'Kontakt' },
 };
 

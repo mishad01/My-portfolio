@@ -44,6 +44,7 @@ export default function Admin() {
       const b = forceDemo || !firebaseConfigured ? demoBackend({ changed: q.get('changed') === '1', persist: !forceDemo }) : await firebaseBackend();
       setBe(b);
       off = b.onAuth(async (inn) => {
+        try { if (!b.demo) inn ? localStorage.setItem('pfAdmin', '1') : localStorage.removeItem('pfAdmin'); } catch {}
         if (!inn) { setAuth('out'); setScreen('login'); return; }
         try {
           const s = await b.load();
