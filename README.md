@@ -35,7 +35,7 @@ npm run build      # → dist/
 npm run check
 ```
 
-Without `FIREBASE_SERVICE_ACCOUNT`, the site builds from `src/data/seed.ts`. `/admin/` talks to the real Firebase project. Add `?demo=1` for a demo where any login works and edits stay in the browser.
+Pages read the published snapshot (`site/live`) from Firestore's public REST API: on every refresh in `npm run dev`, and once per `npm run build`. If it doesn't exist yet or can't be reached, they use `src/data/seed.ts`. `/admin/` talks to the real Firebase project. Add `?demo=1` for a demo where any login works and edits stay in the browser.
 
 ## How content flows
 
@@ -54,7 +54,7 @@ Drafts (`status: draft`) never reach the public build. The admin edits English o
 2. **Authentication** → enable Email/Password → add your user → copy its **UID**.
 3. **Firestore** and **Storage**: create both. In `firestore.rules` and `storage.rules`, the owner UID is already set; paste the rules into the console (Rules tab → Publish) or deploy them: `npx firebase-tools deploy --only firestore:rules,storage`.
 4. **App Check** (recommended): register a reCAPTCHA v3 key for `mishad01.github.io`, then turn on enforcement for Firestore and Storage once the admin works.
-5. **Service account** for builds: Project settings → Service accounts → Generate key. Paste the JSON, minified to one line, as a GitHub **secret** named `FIREBASE_SERVICE_ACCOUNT`. The builder uses the Admin SDK, so App Check doesn't block it.
+5. *(Only if you enforce App Check on Firestore.)* **Service account** for builds: Project settings → Service accounts → Generate key. Paste the JSON, minified to one line, as a GitHub **secret** named `FIREBASE_SERVICE_ACCOUNT`. Builds then read through the Admin SDK, which App Check doesn't block.
 6. GitHub repo → Settings → Secrets and variables → Actions → **Variables**: add `PUBLIC_FIREBASE_APPCHECK_SITE_KEY` once you have one. The other `PUBLIC_FIREBASE_*` variables are optional overrides of the built-in config.
 7. Settings → Pages → Source: **GitHub Actions**.
 8. Add `mishad01.github.io` to Authentication → Settings → Authorized domains.

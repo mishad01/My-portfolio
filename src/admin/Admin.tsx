@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Content, ListSection, Section } from '@/lib/types';
 import { type Backend, demoBackend, firebaseBackend, firebaseConfigured } from './backend';
-import { FIELDS, META, type Field, type Form, applyForm, blank, meta, subOf, tags, titleOf, toForm } from './schema';
+import { FIELDS, META, type Field, type Form, applyForm, blank, meta, setEn, subOf, tags, titleOf, toForm } from './schema';
 
 type Screen = 'login' | 'dashboard' | 'list' | 'edit' | 'inline';
 type Toast = { msg: string; undo?: boolean } | null;
@@ -393,18 +393,18 @@ export default function Admin() {
                 <div className="flex flex-col items-start gap-5 px-10 py-12">
                   <div className="flex h-8 items-center gap-2 rounded-lg bg-tertiary-container pr-3 pl-2 text-sm font-medium text-on-tertiary-container">
                     <span className="ms text-lg">flight_takeoff</span>
-                    <input aria-label="Availability badge" value={c.profile.avail.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, avail: { ...c.profile.avail, en: e.target.value } } })} className="border-0 bg-transparent p-0 text-sm font-medium text-inherit outline-0" style={{ width: Math.max(120, c.profile.avail.en.length * 8) }} />
+                    <input aria-label="Availability badge" value={c.profile.avail.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, avail: setEn(c.profile.avail, e.target.value) } })} className="border-0 bg-transparent p-0 text-sm font-medium text-inherit outline-0" style={{ width: Math.max(120, c.profile.avail.en.length * 8) }} />
                   </div>
-                  <input aria-label="Display name" value={c.profile.displayName.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, displayName: { ...c.profile.displayName, en: e.target.value } } })} className={inlineEdit + ' w-full rounded-xl h-display text-[clamp(48px,8vw,88px)] leading-none text-on-surface'} />
-                  <input aria-label="Role line" value={c.profile.heroRole.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, heroRole: { ...c.profile.heroRole, en: e.target.value } } })} className={inlineEdit + ' w-full text-lg font-medium text-primary'} />
-                  <textarea aria-label="Positioning sentence" rows={3} value={c.profile.heroPos.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, heroPos: { ...c.profile.heroPos, en: e.target.value } } })} className={inlineEdit + ' w-full max-w-[720px] resize-none text-[22px] leading-8 text-on-surface'} />
+                  <input aria-label="Display name" value={c.profile.displayName.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, displayName: setEn(c.profile.displayName, e.target.value) } })} className={inlineEdit + ' w-full rounded-xl h-display text-[clamp(48px,8vw,88px)] leading-none text-on-surface'} />
+                  <input aria-label="Role line" value={c.profile.heroRole.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, heroRole: setEn(c.profile.heroRole, e.target.value) } })} className={inlineEdit + ' w-full text-lg font-medium text-primary'} />
+                  <textarea aria-label="Positioning sentence" rows={3} value={c.profile.heroPos.en} onChange={(e) => commit({ ...c, profile: { ...c.profile, heroPos: setEn(c.profile.heroPos, e.target.value) } })} className={inlineEdit + ' w-full max-w-[720px] resize-none text-[22px] leading-8 text-on-surface'} />
                 </div>
                 <div className="flex flex-col gap-6 bg-surface-low p-10">
                   <span className="h-display text-4xl leading-[44px]">Right now</span>
                   <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
                     {c.now.map((n) => {
                       const patch = (k: 'label' | 'text', v: string) =>
-                        commit({ ...c, now: c.now.map((x) => (x.id === n.id ? { ...x, [k]: { ...x[k], en: v } } : x)), profile: { ...c.profile, nowUpdated: new Date().toISOString().slice(0, 10) } });
+                        commit({ ...c, now: c.now.map((x) => (x.id === n.id ? { ...x, [k]: setEn(x[k], v) } : x)), profile: { ...c.profile, nowUpdated: new Date().toISOString().slice(0, 10) } });
                       return (
                         <div key={n.id} className="flex flex-col gap-3 rounded-[28px] bg-primary-container p-6 text-on-primary-container" style={{ opacity: n.status === 'draft' ? 0.55 : 1 }}>
                           <span className="ms text-[28px]">{n.icon}</span>

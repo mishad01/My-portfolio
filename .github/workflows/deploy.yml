@@ -27,12 +27,8 @@ jobs:
         if: github.event_name == 'schedule'
       - uses: actions/setup-node@v4
         if: github.event_name == 'schedule'
-        with: { node-version: 22, cache: npm }
-      - if: github.event_name == 'schedule'
-        run: npm ci
+        with: { node-version: 22 }
       - id: decide
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
             node scripts/needs-deploy.mjs

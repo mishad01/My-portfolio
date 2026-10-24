@@ -42,7 +42,8 @@ export const FIELDS: Record<Section, Field[]> = {
 
 // --- i18n helpers: the admin edits English only and keeps bn/de as they are.
 const en = (v: I18n | undefined) => v?.en ?? '';
-const setEn = (v: I18n | undefined, s: string): I18n => ({ ...(v ?? {}), en: s });
+/** Keep translations while the English is unchanged; once it changes they're stale, so drop them (pages fall back to English). */
+export const setEn = (v: I18n | undefined, s: string): I18n => (v && v.en === s ? v : { en: s });
 export const tags = (s: string) => (s || '').split(',').map((x) => x.trim()).filter(Boolean);
 const lines = (s: string) => (s || '').split('\n').map((x) => x.trim()).filter(Boolean);
 const slug = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g, '').trim().replace(/[\s_]+/g, '-') || 'item';
