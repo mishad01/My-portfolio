@@ -40,7 +40,7 @@ src/
 
 Material 3, teal seed `#006A6A`.
 
-- **Tokens** — `styles/global.css`: M3 colour roles as CSS variables (light + `[data-theme=dark]`), mapped into Tailwind (`bg-primary`, `text-on-surface-variant`, `bg-surface-high` …); type families; breakpoints `wide` (700px) and `nav` (1040px).
+- **Tokens** — `styles/global.css`: M3 colour roles as CSS variables (light + `[data-theme=dark]`), mapped into Tailwind (`bg-primary`, `text-on-surface-variant`, `bg-surface-high` …); type families; breakpoints `wide` (700px) and `nav` (1180px).
 - **Recipes** — `ui/classes.ts`: type scale (`text.display / headline / title / label`), layout, tonal roles, `button(variant, size)`, `iconButton(variant, tint)`, `filterChip`, `labelChip`, `tag`, `card`, `field`. Usable from Astro and React.
 - **Components** — `ui/*.tsx`: `Icon`, `Button`, `IconButton`, `FilterChip`, `LabelChip`, `Tag`, `TextField`, `Switch`, `Snackbar`.
 

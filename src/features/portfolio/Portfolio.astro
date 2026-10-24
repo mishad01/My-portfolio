@@ -9,7 +9,7 @@ import Projects from '@/features/portfolio/Projects';
 import Teaching from '@/features/portfolio/Teaching';
 import ResearchList from '@/features/portfolio/ResearchList';
 import CopyEmail from '@/features/portfolio/CopyEmail';
-import PortraitSlideshow from '@/features/portfolio/PortraitSlideshow';
+import PhotoCollage from '@/features/portfolio/PhotoCollage';
 import Footer from './Footer.astro';
 
 interface Props { lang: Lang; content: Content }
@@ -36,7 +36,12 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
   brand={t(P.displayName, lang)}
   nav={U.nav}
   langHref={langHref}
-  labels={{ theme: U.theme, menu: U.menu, language: U.language, sections: U.sections, signIn: U.signIn, admin: U.admin }}
+  pageHref={{ experience: href(lang, '/experience/'), projects: href(lang, '/projects/'), research: href(lang, '/research/'), teaching: href(lang, '/teaching/') }}
+  labels={{
+    theme: U.theme, menu: U.menu, language: U.language, sections: U.sections, admin: U.admin,
+    jumpTo: U.jumpTo, jumpPlaceholder: U.jumpPlaceholder, noResults: U.noResults, groupSections: U.groupSections, groupPages: U.groupPages, groupSettings: U.groupSettings,
+    allExperience: U.allExperience, allProjects: U.allProjects, allResearch: U.allResearch, allClasses: U.allClasses, switchTheme: U.switchTheme,
+  }}
 />
 
 <main id="main">
@@ -59,23 +64,7 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
           <a href="#contact" class={button('tonal')}>{U.contact}</a>
         </div>
       </div>
-      {portraits.length > 1 ? (
-        <PortraitSlideshow
-          client:visible
-          images={portraits.map((src) => ({ src, alt: P.fullName }))}
-          className="order-first aspect-square w-full max-w-[168px] justify-self-center rounded-[32px_32px_96px_32px] wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]"
-        />
-      ) : portraits[0] ? (
-        <img
-          src={portraits[0]}
-          alt={P.fullName}
-          class="order-first aspect-square w-full max-w-[168px] justify-self-center rounded-[32px_32px_96px_32px] object-cover wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]"
-        />
-      ) : (
-        <div class="stripes order-first box-border flex aspect-square w-full max-w-[168px] items-center justify-center justify-self-center rounded-[32px_32px_96px_32px] bg-primary-container p-6 text-center font-mono text-[13px] leading-5 text-on-primary-container wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]">
-          {U.portrait}<br />1:1
-        </div>
-      )}
+      <PhotoCollage client:visible photos={portraits} labels={U.photo} alt={P.fullName} />
     </div>
   </section>
 

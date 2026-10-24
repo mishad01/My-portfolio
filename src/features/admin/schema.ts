@@ -30,7 +30,7 @@ export const ICONS = ['work', 'school', 'rocket_launch', 'menu_book', 'flight_ta
 export const CLASS_ICONS = ['flutter_dash', 'account_tree', 'cloud', 'architecture', 'code', 'school'];
 
 export const FIELDS: Record<Section, Field[]> = {
-  profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), { k: 'portraits', label: 'Portrait photos · first is the cover · 2+ auto-rotate and advance on tap', type: 'images' }, T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
+  profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), { k: 'portraits', label: 'Hero photos · fill the tiles in order: Graduation, Portrait, Classes, Office, Project screenshot · extras rotate in', type: 'images' }, T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
   now: [T('label', 'Label'), S('icon', 'Icon', ICONS), S('tone', 'Colour', ['primary', 'secondary', 'tertiary']), A('text', 'Text')],
   experience: [T('role', 'Role'), T('org', 'Organisation'), T('start', 'Start', 'YYYY-MM'), T('end', 'End (or Present)', 'YYYY-MM or Present'), T('location', 'Location'), A('summary', 'Summary'), Ln('bullets', 'Impact bullets'), G('skills', 'Skills')],
   projects: [T('name', 'Name'), A('desc', 'Description'), G('stack', 'Stack'), T('github', 'GitHub URL'), T('live', 'Live / store URL'), { k: 'images', label: 'Images · the first one is the cover', type: 'images' }],
