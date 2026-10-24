@@ -1,0 +1,93 @@
+import type { Lang } from '@/lib/types';
+
+const en = {
+  skip: 'Skip to content',
+  theme: 'Toggle theme',
+  menu: 'Menu',
+  cv: 'Download CV',
+  contact: 'Contact',
+  nowTitle: 'Right now',
+  updated: 'Updated',
+  present: 'Present',
+  datesTbd: '[dates]',
+  current: 'CURRENT',
+  all: 'All',
+  displayOnly: 'Display only',
+  platform: 'Platform',
+  topics: 'Topics',
+  classes: 'Classes',
+  viewAll: 'View all',
+  loadMore: 'Load more',
+  more: 'more',
+  showLess: 'Show less',
+  back: 'Back',
+  backAll: 'All classes',
+  backPortfolio: 'Back to portfolio',
+  teachIntro: 'Courses I teach at Ostad. Open a class for the syllabus, topics and outcomes.',
+  syllabus: 'Syllabus',
+  outcome: 'What students build',
+  weeks: 'weeks',
+  batches: 'batches',
+  duration: 'Duration',
+  students: 'Students',
+  level: 'Level',
+  format: 'Format',
+  live: 'Live online',
+  thesis: 'Undergraduate thesis',
+  eduTitle: 'Education & achievements',
+  achievements: 'Achievements',
+  contactTitle: 'Let’s talk.',
+  contactSub: 'Open to Werkstudent roles, freelance projects and academic conversations.',
+  emailMe: 'Email me',
+  copyEmail: 'Copy email',
+  copied: 'Copied',
+  screenshot: 'screenshot',
+  screenshots: 'project screenshots',
+  noImages: 'no images yet',
+  portrait: 'portrait photo',
+  previous: 'Previous',
+  next: 'Next',
+  close: 'Close',
+  language: 'Language',
+  sections: 'Sections',
+  filter: 'Filter',
+  figure: 'key figure',
+  nav: { now: 'Now', experience: 'Experience', projects: 'Projects', teaching: 'Teaching', research: 'Research', education: 'Education', contact: 'Contact' },
+};
+
+export type UI = typeof en;
+type Partial2<T> = { [K in keyof T]?: T[K] extends object ? Partial<T[K]> : T[K] };
+
+const bn: Partial2<UI> = {
+  skip: 'মূল অংশে যান', theme: 'থিম পরিবর্তন', menu: 'মেনু', cv: 'সিভি ডাউনলোড', contact: 'যোগাযোগ',
+  nowTitle: 'এই মুহূর্তে', updated: 'হালনাগাদ', present: 'বর্তমান', current: 'চলমান', all: 'সব', displayOnly: 'শুধু প্রদর্শন',
+  platform: 'প্ল্যাটফর্ম', topics: 'বিষয়', classes: 'ক্লাস', viewAll: 'সব দেখুন', loadMore: 'আরও দেখুন', more: 'টি আরও', showLess: 'কম দেখুন',
+  back: 'ফিরুন', backAll: 'সব ক্লাস', backPortfolio: 'পোর্টফোলিওতে ফিরুন',
+  teachIntro: 'ওস্তাদে আমার পড়ানো কোর্স। সিলেবাস, বিষয় ও ফলাফল দেখতে ক্লাসে ক্লিক করুন।', syllabus: 'সিলেবাস', outcome: 'শিক্ষার্থীরা যা বানায়',
+  weeks: 'সপ্তাহ', batches: 'ব্যাচ', duration: 'মেয়াদ', students: 'শিক্ষার্থী', level: 'লেভেল', format: 'ধরন', live: 'লাইভ অনলাইন',
+  thesis: 'স্নাতক থিসিস', eduTitle: 'শিক্ষা ও অর্জন', achievements: 'অর্জন',
+  contactTitle: 'কথা বলি।', contactSub: 'ওয়ার্কস্টুডেন্ট পদ, ফ্রিল্যান্স প্রজেক্ট ও একাডেমিক আলোচনার জন্য উন্মুক্ত।',
+  emailMe: 'ইমেইল করুন', copyEmail: 'ইমেইল কপি', copied: 'কপি হয়েছে', screenshot: 'স্ক্রিনশট', language: 'ভাষা',
+  nav: { now: 'এখন', experience: 'অভিজ্ঞতা', projects: 'প্রজেক্ট', teaching: 'শিক্ষকতা', research: 'গবেষণা', education: 'শিক্ষা', contact: 'যোগাযোগ' },
+};
+
+const de: Partial2<UI> = {
+  skip: 'Zum Inhalt springen', theme: 'Design wechseln', menu: 'Menü', cv: 'Lebenslauf laden', contact: 'Kontakt',
+  nowTitle: 'Gerade jetzt', updated: 'Aktualisiert', present: 'Heute', current: 'AKTUELL', all: 'Alle', displayOnly: 'Nur Ansicht',
+  platform: 'Plattform', topics: 'Themen', classes: 'Kurse', viewAll: 'Alle ansehen', loadMore: 'Mehr laden', more: 'weitere', showLess: 'Weniger anzeigen',
+  back: 'Zurück', backAll: 'Alle Kurse', backPortfolio: 'Zurück zum Portfolio',
+  teachIntro: 'Kurse, die ich bei Ostad unterrichte. Öffne einen Kurs für Lehrplan, Themen und Ergebnisse.', syllabus: 'Lehrplan', outcome: 'Was Studierende bauen',
+  weeks: 'Wochen', batches: 'Batches', duration: 'Dauer', students: 'Studierende', level: 'Level', format: 'Format', live: 'Live online',
+  thesis: 'Bachelorarbeit', eduTitle: 'Ausbildung & Erfolge', achievements: 'Erfolge',
+  contactTitle: 'Sprechen wir.', contactSub: 'Offen für Werkstudentenstellen, Freelance-Projekte und akademischen Austausch.',
+  emailMe: 'E-Mail schreiben', copyEmail: 'E-Mail kopieren', copied: 'Kopiert', screenshot: 'Screenshot', language: 'Sprache',
+  nav: { now: 'Aktuell', experience: 'Erfahrung', projects: 'Projekte', teaching: 'Lehre', research: 'Forschung', education: 'Ausbildung', contact: 'Kontakt' },
+};
+
+const partials: Record<Lang, Partial2<UI>> = { en, bn, de };
+
+/** UI strings for a language; any missing key falls back to English. */
+export function ui(lang: Lang): UI {
+  const p = partials[lang];
+  return { ...en, ...p, nav: { ...en.nav, ...p.nav } } as UI;
+}
