@@ -1,0 +1,11 @@
+---
+import Base from '@/layouts/Base.astro';
+import Canvas from '@/islands/Canvas';
+import { loadPublished } from '@/lib/content';
+
+const c = await loadPublished();
+const detail = c.classes.find((k) => k.id === 'flutter-firebase')?.id ?? c.classes[0]?.id ?? '';
+---
+<Base lang="en" path="/canvas/" title="Portfolio canvas" description="Every page and state of the site side by side." noindex frame="app">
+  <Canvas client:only="react" classId={detail} />
+</Base>
