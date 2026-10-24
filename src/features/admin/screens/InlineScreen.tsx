@@ -1,12 +1,11 @@
 import type { Content, I18n, NowCard } from '@/domain/types';
-import { Icon, cx, text, tone } from '@/ui';
+import { Icon, cx, iconTile, text, tone } from '@/ui';
 import { setEn } from '../schema';
 import { collageStacks } from '@/domain/collage';
 import { CollageEditor } from '../components/CollageEditor';
 import type { AdminVM } from '../useAdmin';
 
 const editable = 'rounded-lg border-0 bg-transparent p-0 outline-0 hover:shadow-[0_0_0_2px_var(--md-primary)] focus:shadow-[0_0_0_2px_var(--md-primary)]';
-const editableOnTone = 'rounded-md border-0 bg-transparent p-0 text-inherit outline-0 hover:shadow-[0_0_0_2px_currentColor] focus:shadow-[0_0_0_2px_currentColor]';
 const today = () => new Date().toISOString().slice(0, 10);
 
 /** A live-looking copy of the hero and Now cards where every text is an input. */
@@ -38,10 +37,10 @@ export function InlineScreen({ vm }: { vm: AdminVM }) {
           <span className="h-display text-4xl leading-[44px]">Right now</span>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
             {c.now.map((n) => (
-              <div key={n.id} className={'flex flex-col gap-3 rounded-[28px] p-6 ' + tone[n.tone]} style={{ opacity: n.status === 'draft' ? 0.55 : 1 }}>
-                <Icon name={n.icon} size={28} />
-                <input aria-label="Label" value={n.label.en} onChange={(e) => setNow(n, 'label', e.target.value)} className={cx(text.label, editableOnTone, 'w-full')} />
-                <textarea aria-label="Text" rows={3} value={n.text.en} onChange={(e) => setNow(n, 'text', e.target.value)} className={cx(editableOnTone, 'w-full resize-none text-lg leading-[26px]')} />
+              <div key={n.id} className="flex flex-col gap-3 rounded-[28px] bg-surface-high p-6 text-on-surface" style={{ opacity: n.status === 'draft' ? 0.55 : 1 }}>
+                <div className={cx(iconTile, tone.primary)}><Icon name={n.icon} size={26} /></div>
+                <input aria-label="Label" value={n.label.en} onChange={(e) => setNow(n, 'label', e.target.value)} className={cx(text.label, editable, 'w-full text-on-surface-variant')} />
+                <textarea aria-label="Text" rows={3} value={n.text.en} onChange={(e) => setNow(n, 'text', e.target.value)} className={cx(editable, 'w-full resize-none text-lg leading-[26px] text-on-surface')} />
               </div>
             ))}
           </div>

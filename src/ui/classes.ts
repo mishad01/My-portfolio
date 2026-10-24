@@ -33,6 +33,8 @@ export const tone: Record<Tone, string> = {
   secondary: 'bg-secondary-container text-on-secondary-container',
   tertiary: 'bg-tertiary-container text-on-tertiary-container',
 };
+/** 48px rounded icon tile; pair with a `tone` for its colour (Now cards use `tone.primary`). */
+export const iconTile = 'flex size-12 flex-none items-center justify-center rounded-2xl';
 
 // ---------------------------------------------------------------- buttons
 export type ButtonVariant = 'filled' | 'tonal' | 'outlined' | 'text';

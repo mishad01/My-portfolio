@@ -35,7 +35,7 @@ export const CLASS_ICONS = ['flutter_dash', 'account_tree', 'cloud', 'architectu
 
 export const FIELDS: Record<Section, Field[]> = {
   profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), ...COLLAGE_SLOTS.map((slot): Field => ({ k: `collage_${slot}`, label: `Hero collage · ${COLLAGE_LABEL[slot]} · several photos rotate`, type: 'images' })), T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
-  now: [T('label', 'Label'), S('icon', 'Icon', ICONS), S('tone', 'Colour', ['primary', 'secondary', 'tertiary']), A('text', 'Text')],
+  now: [T('label', 'Label'), S('icon', 'Icon', ICONS), A('text', 'Text')],
   experience: [T('role', 'Role'), T('org', 'Organisation'), T('start', 'Start', 'YYYY-MM'), T('end', 'End (or Present)', 'YYYY-MM or Present'), T('location', 'Location'), A('summary', 'Summary'), Ln('bullets', 'Impact bullets'), G('skills', 'Skills')],
   projects: [T('name', 'Name'), A('desc', 'Description'), G('stack', 'Stack'), T('github', 'GitHub URL'), T('live', 'Live / store URL'), { k: 'images', label: 'Images · the first one is the cover', type: 'images' }],
   classes: [T('name', 'Class name'), S('level', 'Level', ['Beginner', 'Intermediate', 'Advanced']), S('icon', 'Icon', CLASS_ICONS), T('weeks', 'Weeks'), T('batches', 'Batches'), T('students', 'Students'), A('desc', 'Description'), G('topics', 'Topics'), Ln('modules', 'Syllabus modules'), A('outcome', 'What students build')],
