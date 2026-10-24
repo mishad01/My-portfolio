@@ -27,6 +27,26 @@ export const firebaseConfigured = !!(config.apiKey && config.projectId);
 
 const clone = <T,>(x: T): T => JSON.parse(JSON.stringify(x));
 
+/**
+ * Images go to Cloudinary's free tier via an unsigned upload preset — Firebase
+ * Storage now requires the paid Blaze plan even to turn on. Everything else
+ * (auth, Firestore, the CV file) still goes through Firebase.
+ */
+async function cloudinaryUpload(file: File, folder: string): Promise<string> {
+  const cloud = env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+  const preset = env.PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+  if (!cloud || !preset) throw new Error('cloudinary-not-configured');
+  const body = new FormData();
+  body.append('file', file);
+  body.append('upload_preset', preset);
+  body.append('folder', `portfolio/${folder}`);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud}/image/upload`, { method: 'POST', body });
+  if (!res.ok) throw new Error(`cloudinary-upload-failed: ${res.status} ${(await res.text()).slice(0, 200)}`);
+  const data = (await res.json()) as { secure_url: string };
+  // Deliver resized + auto-format (e.g. HEIC → browser-safe) instead of the original upload.
+  return data.secure_url.replace('/upload/', '/upload/w_1000,q_auto,f_auto/');
+}
+
 /** Browser-only stand-in used when Firebase isn't configured, and by the canvas (?demo=1). */
 export function demoBackend(opts: { changed?: boolean; persist?: boolean } = {}): Backend {
   const KEY = 'pfAdminDemo';
@@ -102,6 +122,7 @@ export async function firebaseBackend(): Promise<Backend> {
       await setDoc(liveRef, { ...plain(c), publishedAt: at });
     },
     async upload(file, folder) {
+      if (file.type.startsWith('image/')) return cloudinaryUpload(file, folder);
       const r = ref(storage, `uploads/${folder}/${Date.now()}-${file.name.replace(/[^\w.-]+/g, '_')}`);
       await uploadBytes(r, file, { contentType: file.type });
       return getDownloadURL(r);

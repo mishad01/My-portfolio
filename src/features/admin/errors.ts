@@ -9,5 +9,7 @@ export function describeError(e: unknown): string {
   if (/permission|insufficient/i.test(m))
     return 'Signed in, but the Firestore rules don’t allow this account yet. Put your User UID in the rules and publish them.';
   if (/not-found|NOT_FOUND|database .* does not exist/i.test(m)) return 'Signed in, but the Firestore database doesn’t exist yet. Create it in the Firebase console.';
+  if (/cloudinary-not-configured/.test(m)) return 'Image uploads aren’t set up yet — add PUBLIC_CLOUDINARY_CLOUD_NAME and PUBLIC_CLOUDINARY_UPLOAD_PRESET (see README).';
+  if (/cloudinary-upload-failed/.test(m)) return 'Cloudinary rejected the upload — check the upload preset allows this file type and is unsigned.';
   return m.replace(/^Firebase:\s*/, '');
 }

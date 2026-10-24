@@ -20,7 +20,7 @@ const GH = 'https://github.com/mishad01';
  * version). This overwrites admin edits, so bump only for deliberate content
  * migrations.
  */
-export const SEED_VERSION = '2026-10-24-cv';
+export const SEED_VERSION = '2026-10-24-portraits';
 
 export const seed: Content = {
   seedVersion: SEED_VERSION,
@@ -43,7 +43,7 @@ export const seed: Content = {
       'Offen für Werkstudentenstellen in Deutschland ab 2027',
     ),
     stack: ['Flutter', 'Dart', 'TypeScript', 'Node.js', 'Firebase', 'GraphQL'],
-    portrait: '',
+    portraits: [],
     nowUpdated: '2026-10-24',
     teachPlatform: 'Ostad',
     teachRole: T('Flutter & AI instructor (part-time)', 'ফ্লাটার ও এআই ইন্সট্রাক্টর (খণ্ডকালীন)', 'Flutter- & KI-Dozent (Teilzeit)'),

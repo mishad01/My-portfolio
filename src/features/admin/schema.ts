@@ -30,7 +30,7 @@ export const ICONS = ['work', 'school', 'rocket_launch', 'menu_book', 'flight_ta
 export const CLASS_ICONS = ['flutter_dash', 'account_tree', 'cloud', 'architecture', 'code', 'school'];
 
 export const FIELDS: Record<Section, Field[]> = {
-  profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), { k: 'portrait', label: 'Portrait photo', type: 'image' }, T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
+  profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), { k: 'portraits', label: 'Portrait photos · first is the cover · 2+ auto-rotate and advance on tap', type: 'images' }, T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
   now: [T('label', 'Label'), S('icon', 'Icon', ICONS), S('tone', 'Colour', ['primary', 'secondary', 'tertiary']), A('text', 'Text')],
   experience: [T('role', 'Role'), T('org', 'Organisation'), T('start', 'Start', 'YYYY-MM'), T('end', 'End (or Present)', 'YYYY-MM or Present'), T('location', 'Location'), A('summary', 'Summary'), Ln('bullets', 'Impact bullets'), G('skills', 'Skills')],
   projects: [T('name', 'Name'), A('desc', 'Description'), G('stack', 'Stack'), T('github', 'GitHub URL'), T('live', 'Live / store URL'), { k: 'images', label: 'Images · the first one is the cover', type: 'images' }],
@@ -56,7 +56,7 @@ const url = (s: string) => (s && !/^(https?:|mailto:|\/|data:)/.test(s) ? `https
 export function toForm(sec: Section, c: Content, id: string | null): Form {
   if (sec === 'profile') {
     const p = c.profile;
-    return { id: 'single', displayName: en(p.displayName), heroRole: en(p.heroRole), heroPos: en(p.heroPos), avail: en(p.avail), stack: p.stack.join(', '), portrait: p.portrait, fullName: p.fullName, teachRole: en(p.teachRole), teachTopics: p.teachTopics.join(', '), achievement: en(p.achievement) };
+    return { id: 'single', displayName: en(p.displayName), heroRole: en(p.heroRole), heroPos: en(p.heroPos), avail: en(p.avail), stack: p.stack.join(', '), portraits: p.portraits, fullName: p.fullName, teachRole: en(p.teachRole), teachTopics: p.teachTopics.join(', '), achievement: en(p.achievement) };
   }
   if (sec === 'contact') return { id: 'single', ...c.contact };
   const it = id ? (c[sec] as { id: string }[]).find((x) => x.id === id) : undefined;
@@ -85,7 +85,7 @@ export function blank(sec: Section): Form {
 export function applyForm(sec: Section, c: Content, f: Form): Content {
   if (sec === 'profile') {
     const p = c.profile;
-    const profile: Profile = { ...p, displayName: setEn(p.displayName, f.displayName), heroRole: setEn(p.heroRole, f.heroRole), heroPos: setEn(p.heroPos, f.heroPos), avail: setEn(p.avail, f.avail), stack: tags(f.stack), portrait: f.portrait || '', fullName: f.fullName, teachRole: setEn(p.teachRole, f.teachRole), teachTopics: tags(f.teachTopics), achievement: setEn(p.achievement, f.achievement) };
+    const profile: Profile = { ...p, displayName: setEn(p.displayName, f.displayName), heroRole: setEn(p.heroRole, f.heroRole), heroPos: setEn(p.heroPos, f.heroPos), avail: setEn(p.avail, f.avail), stack: tags(f.stack), portraits: f.portraits || [], fullName: f.fullName, teachRole: setEn(p.teachRole, f.teachRole), teachTopics: tags(f.teachTopics), achievement: setEn(p.achievement, f.achievement) };
     return { ...c, profile };
   }
   if (sec === 'contact') {
