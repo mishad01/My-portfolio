@@ -7,7 +7,7 @@ Built from the Claude Design handoff in [`design/`](design/) (`Portfolio Canvas.
 |---|---|
 | Framework | Astro (static output) + TypeScript |
 | Interactive parts | React islands |
-| Styling | Tailwind CSS v4, M3 colour tokens in `src/styles/global.css` |
+| Styling | Tailwind CSS v4 + an M3 component library (`src/ui/`) on the colour tokens in `src/styles/global.css` |
 | i18n | Astro i18n routing: `/`, `/bn/`, `/de/` |
 | Backend | Firebase — Firestore, Auth, Storage, App Check (browser SDK, admin only) |
 | Hosting | GitHub Pages via GitHub Actions |
@@ -25,6 +25,8 @@ Built from the Claude Design handoff in [`design/`](design/) (`Portfolio Canvas.
 
 On the main page, "Load more" opens the section's full page (Projects keeps the active filter as `?tech=`). The Teaching cards open `/teaching/`, and a class card there opens `/teaching/<id>/`.
 URL helpers: `?theme=dark|light` forces a theme without saving it; `/admin/?demo=1&screen=list&sec=projects` opens a demo admin screen (used by the canvas).
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the folder layers, patterns and design-system rules.
 
 ## Develop
 
@@ -50,7 +52,7 @@ Drafts (`status: draft`) never reach the public build. The admin edits English o
 
 ## Firebase setup (one time)
 
-1. ✅ Project `my-portfolio-fd9f0` and its web app exist. The web config is in `src/admin/backend.ts`.
+1. ✅ Project `my-portfolio-fd9f0` and its web app exist. The web config is in `src/data/firebase-config.ts`.
 2. **Authentication** → enable Email/Password → add your user → copy its **UID**.
 3. **Firestore** and **Storage**: create both. In `firestore.rules` and `storage.rules`, the owner UID is already set; paste the rules into the console (Rules tab → Publish) or deploy them: `npx firebase-tools deploy --only firestore:rules,storage`.
 4. **App Check** (recommended): register a reCAPTCHA v3 key for `mishad01.github.io`, then turn on enforcement for Firestore and Storage once the admin works.
@@ -64,7 +66,7 @@ For local work with real Firebase, copy `.env.example` to `.env` and fill it in.
 
 ## Placeholders to replace
 
-- Bracketed copy (`[dates]`, `[location]`, `[Project name 6]` …) in `src/data/seed.ts`, or edit it in the admin.
+- Content now comes from your CV (`src/data/seed.ts`). Load it in Admin → Dashboard → **Load content from code**, review it, then Publish. Remaining placeholders are drafts (hidden from the site).
 - `public/cv.pdf` (the hero "Download CV" button links to `/cv.pdf`), or upload a CV in Admin → Contact & links.
 - Portrait, project screenshots and research figures: upload them in the admin.
 - The email (`hello@example.com`) and the LinkedIn handle.
