@@ -1,0 +1,181 @@
+---
+import type { Content, Lang } from '@/lib/types';
+import { formatDay, href, t } from '@/lib/i18n';
+import { cls, toneCls } from '@/lib/cls';
+import { views } from '@/lib/view';
+import Header from '@/islands/Header';
+import ExperienceList from '@/islands/ExperienceList';
+import Projects from '@/islands/Projects';
+import Teaching from '@/islands/Teaching';
+import ResearchList from '@/islands/ResearchList';
+import CopyEmail from '@/islands/CopyEmail';
+import Footer from './Footer.astro';
+
+interface Props { lang: Lang; content: Content }
+const { lang, content: c } = Astro.props;
+const V = views(c, lang);
+const U = V.U;
+const P = c.profile;
+const email = c.contact.email;
+const strip = (u: string) => u.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const contacts = [
+  { icon: 'mail', label: 'Email', value: email, url: `mailto:${email}`, ext: false },
+  { icon: 'code', label: 'GitHub', value: strip(c.contact.github), url: c.contact.github, ext: true },
+  { icon: 'badge', label: 'LinkedIn', value: strip(c.contact.linkedin), url: c.contact.linkedin, ext: true },
+].filter((k) => k.value);
+const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/') };
+---
+<a href="#main" class="absolute -top-[60px] left-2 z-[100] rounded-[20px] bg-primary px-5 py-3 font-medium text-on-primary focus:top-2">{U.skip}</a>
+
+<Header
+  client:load
+  lang={lang}
+  brand={t(P.displayName, lang)}
+  nav={U.nav}
+  langHref={langHref}
+  labels={{ theme: U.theme, menu: U.menu, language: U.language, sections: U.sections }}
+/>
+
+<main id="main">
+  <section id="hero" class="px-5 pt-6 pb-12 wide:px-6 wide:pt-[72px] wide:pb-24">
+    <div class="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-center gap-7 wide:gap-12">
+      <div class="flex flex-col items-start gap-6">
+        <div class="flex min-h-8 items-center gap-2 rounded-lg bg-tertiary-container py-1 pr-3 pl-2 text-sm leading-5 font-medium tracking-[.1px] text-on-tertiary-container">
+          <span class="ms text-lg">flight_takeoff</span>{t(P.avail, lang)}
+        </div>
+        <div class="flex flex-col gap-2">
+          <h1 class="m-0 h-display text-[clamp(56px,10vw,104px)] leading-[.92]">{t(P.displayName, lang)}</h1>
+          <span class="text-lg font-medium text-primary">{t(P.heroRole, lang)}</span>
+        </div>
+        <p class="m-0 max-w-[30em] text-lg leading-7 text-pretty wide:text-[22px] wide:leading-8">{t(P.heroPos, lang)}</p>
+        <div class="flex flex-wrap gap-2">
+          {P.stack.map((s) => <span class="flex h-8 items-center rounded-lg border border-outline px-3 text-sm font-medium text-on-surface-variant">{s}</span>)}
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href={c.contact.cv} download="Mishad-CV.pdf" class={cls.filledBtn}><span class="ms text-xl">download</span>{U.cv}</a>
+          <a href="#contact" class={cls.tonalBtn}>{U.contact}</a>
+        </div>
+      </div>
+      {P.portrait ? (
+        <img
+          src={P.portrait}
+          alt={P.fullName}
+          class="order-first aspect-square w-full max-w-[168px] justify-self-center rounded-[32px_32px_96px_32px] object-cover wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]"
+        />
+      ) : (
+        <div class="stripes order-first box-border flex aspect-square w-full max-w-[168px] items-center justify-center justify-self-center rounded-[32px_32px_96px_32px] bg-primary-container p-6 text-center font-mono text-[13px] leading-5 text-on-primary-container wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]">
+          {U.portrait}<br />1:1
+        </div>
+      )}
+    </div>
+  </section>
+
+  {c.now.length > 0 && (
+    <section id="now" class={cls.section + ' bg-surface-low'}>
+      <div class={cls.inner + ' gap-8'}>
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <h2 class={cls.h2}>{U.nowTitle}</h2>
+          <span class="flex items-center gap-1.5 text-sm text-on-surface-variant"><span class="ms text-lg">update</span>{U.updated} {formatDay(P.nowUpdated, lang)}</span>
+        </div>
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4">
+          {c.now.map((n) => (
+            <div class={'flex flex-col gap-3 rounded-[28px] p-6 ' + toneCls[n.tone]}>
+              <span class="ms text-[28px]">{n.icon}</span>
+              <span class="kicker">{t(n.label, lang)}</span>
+              <span class="text-lg leading-[26px] text-pretty">{t(n.text, lang)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section id="experience" class={cls.section}>
+    <div class={cls.inner + ' gap-8'}>
+      <h2 class={cls.h2}>{U.nav.experience}</h2>
+      <ExperienceList client:visible items={V.experience} labels={{ current: U.current, ...V.moreLabels }} />
+    </div>
+  </section>
+
+  <section id="projects" class={cls.section + ' bg-surface-low'}>
+    <div class={cls.inner + ' gap-6'}>
+      <h2 class={cls.h2}>{U.nav.projects}</h2>
+      <Projects client:visible projects={V.projects} labels={V.projectLabels} />
+    </div>
+  </section>
+
+  <section id="teaching" class={cls.section}>
+    <div class={cls.inner}>
+      <Teaching
+        client:visible
+        classes={c.classes}
+        platform={P.teachPlatform}
+        teachRole={t(P.teachRole, lang)}
+        topics={P.teachTopics}
+        title={U.nav.teaching}
+        labels={V.teachLabels}
+      />
+    </div>
+  </section>
+
+  {c.research.length > 0 && (
+    <section id="research" class={cls.section + ' bg-surface-low'}>
+      <div class={cls.inner + ' gap-8'}>
+        <h2 class={cls.h2}>{U.nav.research}</h2>
+        <ResearchList client:visible items={V.research} labels={V.moreLabels} />
+      </div>
+    </section>
+  )}
+
+  <section id="education" class={cls.section}>
+    <div class={cls.inner + ' gap-8'}>
+      <h2 class={cls.h2}>{U.eduTitle}</h2>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-4">
+        {c.education.map((e) => (
+          <div class={'flex flex-col gap-1.5 rounded-3xl border p-6 ' + (e.highlight ? 'border-transparent bg-tertiary-container text-on-tertiary-container' : 'border-outline-variant text-on-surface')}>
+            <span class="kicker">{t(e.tag, lang)}</span>
+            <span class="text-xl leading-7 font-medium text-pretty">{t(e.level, lang)}</span>
+            <span class="text-[15px]">{e.inst}</span>
+            <span class="mt-1.5 text-[15px] font-medium">{t(e.result, lang)}</span>
+          </div>
+        ))}
+      </div>
+      {t(P.achievement, lang) && (
+        <div class="flex items-center gap-4 rounded-3xl bg-surface-high px-6 py-5">
+          <div class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-primary-container text-on-primary-container"><span class="ms">emoji_events</span></div>
+          <div class="flex flex-col">
+            <span class="kicker text-on-surface-variant">{U.achievements}</span>
+            <span class="text-lg font-medium">{t(P.achievement, lang)}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section id="contact" class={cls.section + ' bg-surface-low'}>
+    <div class="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] items-start gap-10">
+      <div class="flex flex-col gap-5">
+        <h2 class="m-0 h-display text-[clamp(40px,7vw,64px)] leading-none">{U.contactTitle}</h2>
+        <p class="m-0 max-w-[26em] text-lg leading-7 text-pretty text-on-surface-variant">{U.contactSub}</p>
+        <div class="flex flex-wrap gap-3">
+          <a href={`mailto:${email}`} class={cls.filledBtn}><span class="ms text-xl">mail</span>{U.emailMe}</a>
+          <CopyEmail client:idle email={email} label={U.copyEmail} done={U.copied} />
+        </div>
+      </div>
+      <div class="flex flex-col overflow-hidden rounded-[28px] bg-surface-high py-2">
+        {contacts.map((k) => (
+          <a href={k.url} target={k.ext ? '_blank' : undefined} rel="noopener" class="flex items-center gap-4 px-6 py-4 text-on-surface no-underline hover:bg-surface-highest hover:text-on-surface">
+            <span class="ms text-primary">{k.icon}</span>
+            <div class="flex min-w-0 flex-1 flex-col">
+              <span class="text-xs tracking-[.4px] text-on-surface-variant">{k.label}</span>
+              <span class="overflow-hidden text-base text-ellipsis">{k.value}</span>
+            </div>
+            <span class="ms text-on-surface-variant">north_east</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+
+<Footer fullName={P.fullName} />

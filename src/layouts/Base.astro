@@ -1,0 +1,79 @@
+---
+import '@/styles/global.css';
+import type { Lang } from '@/lib/types';
+import { LANGS } from '@/lib/types';
+import { href } from '@/lib/i18n';
+import { seed } from '@/data/seed';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Path without language prefix, e.g. '/' or '/teaching/'. */
+  path: string;
+  noindex?: boolean;
+  /** Frames forward plain wheel events to the canvas unless the page scrolls itself. */
+  frame?: 'page' | 'app';
+}
+
+const { lang, title, description, path, noindex = false, frame = 'page' } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(href(lang, path), site).href;
+const ogLocale = { en: 'en_GB', bn: 'bn_BD', de: 'de_DE' }[lang];
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: seed.profile.fullName,
+  alternateName: 'Mishad',
+  url: site.href,
+  jobTitle: 'Full-stack software engineer',
+  worksFor: { '@type': 'Organization', name: 'Brain Station 23' },
+  sameAs: [seed.contact.github],
+};
+---
+<!doctype html>
+<html lang={lang} data-theme="light" data-frame={frame}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    {!noindex && LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(href(l, path), site).href} />)}
+    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(href('en', path), site).href} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta name="theme-color" content="#006A6A" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Hind+Siliguri:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
+    />
+    <script is:inline>
+      // Theme before first paint: ?theme= (not stored) → saved choice → OS preference.
+      (function () {
+        var root = document.documentElement, q = new URLSearchParams(location.search), f = q.get('theme'), d;
+        if (f === 'dark' || f === 'light') { d = f === 'dark'; root.dataset.forced = '1'; }
+        else {
+          try { var s = localStorage.getItem('pfDark'); if (s !== null) d = s === '1'; } catch (e) {}
+          if (d === undefined) d = matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+        root.dataset.theme = d ? 'dark' : 'light';
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '@/lib/frame';
+      import '@/lib/lang-redirect';
+    </script>
+  </body>
+</html>

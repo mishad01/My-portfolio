@@ -1,0 +1,16 @@
+---
+import Base from '@/layouts/Base.astro';
+import Portfolio from '@/components/Portfolio.astro';
+import { loadPublished } from '@/lib/content';
+import { localePaths } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+import type { Lang } from '@/lib/types';
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const content = await loadPublished();
+const P = content.profile;
+---
+<Base lang={lang} path="/" title={`${P.fullName} — ${t(P.heroRole, lang).split(' · ')[0]}`} description={t(P.heroPos, lang)}>
+  <Portfolio lang={lang} content={content} />
+</Base>
