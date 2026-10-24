@@ -103,8 +103,8 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
                     <div className="mt-1 flex flex-wrap gap-1.5">{k.topics.map((t) => <span key={t} className={cls.tag}>{t}</span>)}</div>
                   </div>
                   <div className="flex items-center gap-4 px-5 pt-2 pb-4 text-[13px] text-on-surface-variant">
-                    <span className="flex items-center gap-1.5"><span className="ms text-lg">schedule</span>{k.weeks} {L.weeks}</span>
-                    <span className="flex items-center gap-1.5"><span className="ms text-lg">groups</span>{k.batches} {L.batches}</span>
+                    {k.weeks > 0 && <span className="flex items-center gap-1.5"><span className="ms text-lg">schedule</span>{k.weeks} {L.weeks}</span>}
+                    {k.batches > 0 && <span className="flex items-center gap-1.5"><span className="ms text-lg">groups</span>{k.batches} {L.batches}</span>}
                     <span className="ms ml-auto text-primary">arrow_forward</span>
                   </div>
                 </>
@@ -126,11 +126,11 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-4">
             {[
-              [L.duration, `${kk.weeks} ${L.weeks}`],
-              [L.students, kk.students],
+              [L.duration, kk.weeks > 0 ? `${kk.weeks} ${L.weeks}` : ''],
+              [L.students, /\d/.test(kk.students) ? kk.students : ''],
               [L.level, kk.level],
               [L.format, L.live],
-            ].map(([label, value]) => (
+            ].filter(([, value]) => value).map(([label, value]) => (
               <div key={label} className="flex flex-col gap-1 rounded-3xl bg-surface-high p-5">
                 <span className="kicker text-on-surface-variant">{label}</span>
                 <span className="h-title text-[26px] leading-[34px]">{value}</span>

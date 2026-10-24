@@ -142,11 +142,11 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
         ))}
       </div>
       {t(P.achievement, lang) && (
-        <div class="flex items-center gap-4 rounded-3xl bg-surface-high px-6 py-5">
+        <div class="flex items-start gap-4 rounded-3xl bg-surface-high px-6 py-5">
           <div class="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-primary-container text-on-primary-container"><span class="ms">emoji_events</span></div>
-          <div class="flex flex-col">
+          <div class="flex flex-col gap-1">
             <span class="kicker text-on-surface-variant">{U.achievements}</span>
-            <span class="text-lg font-medium">{t(P.achievement, lang)}</span>
+            {t(P.achievement, lang).split('\n').filter(Boolean).map((line) => <span class="text-lg font-medium text-pretty">{line}</span>)}
           </div>
         </div>
       )}

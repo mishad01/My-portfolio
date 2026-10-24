@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Content, ListSection, Section } from '@/lib/types';
+import { seed } from '@/data/seed';
 import { type Backend, demoBackend, firebaseBackend, firebaseConfigured } from './backend';
 import { FIELDS, META, type Field, type Form, applyForm, blank, meta, setEn, subOf, tags, titleOf, toForm } from './schema';
 
@@ -294,6 +295,24 @@ export default function Admin() {
                     </button>
                   );
                 })}
+              </div>
+              <div className="flex flex-wrap items-center gap-4 rounded-3xl border border-outline-variant p-5">
+                <span className="ms text-on-surface-variant">restore_page</span>
+                <div className="flex min-w-[240px] flex-1 flex-col">
+                  <span className="font-medium">Load content from code</span>
+                  <span className="text-sm text-on-surface-variant">Replace your draft with the content built into the site (from your CV). Nothing goes live until you press Publish.</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!confirm('Replace your whole draft with the built-in content? Your unpublished edits will be lost; the live site stays as it is until you Publish.')) return;
+                    commit(JSON.parse(JSON.stringify(seed)));
+                    showToast('Draft replaced · review it, then Publish');
+                  }}
+                  className="flex h-10 cursor-pointer items-center rounded-[20px] border border-outline bg-transparent px-6 text-sm font-medium text-primary hover:bg-surface-mid"
+                >
+                  Load into draft
+                </button>
               </div>
             </div>
           )}
