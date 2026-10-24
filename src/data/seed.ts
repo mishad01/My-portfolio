@@ -43,7 +43,7 @@ export const seed: Content = {
       'Offen für Werkstudentenstellen in Deutschland ab 2027',
     ),
     stack: ['Flutter', 'Dart', 'TypeScript', 'Node.js', 'Firebase', 'GraphQL'],
-    portrait: '',
+    photos: {},
     nowUpdated: '2026-10-24',
     teachPlatform: 'Ostad',
     teachRole: T('Flutter & AI instructor (part-time)', 'ফ্লাটার ও এআই ইন্সট্রাক্টর (খণ্ডকালীন)', 'Flutter- & KI-Dozent (Teilzeit)'),

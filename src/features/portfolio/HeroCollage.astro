@@ -1,0 +1,43 @@
+---
+/**
+ * Hero photo collage: five staggered tiles (graduation, portrait, classes /
+ * office, project). Empty slots show a labelled placeholder; images are set in
+ * Admin → Profile & hero.
+ */
+import type { PhotoSlot } from '@/domain/types';
+
+interface Props { photos: Partial<Record<PhotoSlot, string>>; labels: Record<PhotoSlot, string>; alt: string }
+const { photos, labels, alt } = Astro.props;
+
+// Desktop sizes follow the design; phones scale to ~60%.
+const rows: { slot: PhotoSlot; grow: number; h: string }[][] = [
+  [
+    { slot: 'graduation', grow: 138, h: 'h-[120px] wide:h-[198px]' },
+    { slot: 'portrait', grow: 150, h: 'h-[156px] wide:h-[257px]' },
+    { slot: 'classes', grow: 198, h: 'h-[136px] wide:h-[225px]' },
+  ],
+  [
+    { slot: 'office', grow: 304, h: 'h-[118px] wide:h-[196px]' },
+    { slot: 'project', grow: 198, h: 'h-[124px] wide:h-[204px]' },
+  ],
+];
+---
+<div class="mx-auto flex w-full max-w-[520px] flex-col gap-3 wide:gap-4" aria-label={alt}>
+  {rows.map((row) => (
+    <div class="flex items-end gap-3 wide:gap-4">
+      {row.map(({ slot, grow, h }) =>
+        photos[slot] ? (
+          <img src={photos[slot]} alt={labels[slot]} loading="lazy" class={`min-w-0 rounded-[20px] object-cover shadow-[0_2px_10px_rgba(0,0,0,.12)] ${h}`} style={`flex:${grow} 1 0`} />
+        ) : (
+          <div
+            class={`box-border flex min-w-0 flex-col items-center justify-center gap-1.5 rounded-[20px] border border-dashed border-outline bg-surface-highest p-3 text-center text-[13px] leading-[18px] text-on-surface-variant shadow-[0_2px_10px_rgba(0,0,0,.08)] ${h}`}
+            style={`flex:${grow} 1 0`}
+          >
+            <span class="ms text-[22px]" aria-hidden="true">image</span>
+            <span>{labels[slot]}</span>
+          </div>
+        ),
+      )}
+    </div>
+  ))}
+</div>

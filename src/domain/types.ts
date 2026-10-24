@@ -11,6 +11,10 @@ interface Item {
   status: Status;
 }
 
+/** The five hero-collage slots, in display order. */
+export const PHOTO_SLOTS = ['graduation', 'portrait', 'classes', 'office', 'project'] as const;
+export type PhotoSlot = (typeof PHOTO_SLOTS)[number];
+
 export interface Profile {
   displayName: I18n;
   fullName: string;
@@ -18,7 +22,8 @@ export interface Profile {
   heroPos: I18n;
   avail: I18n;
   stack: string[];
-  portrait: string;
+  /** Hero collage images (empty = placeholder). */
+  photos: Partial<Record<PhotoSlot, string>>;
   /** YYYY-MM-DD, shown as “Updated …” on the Now section. */
   nowUpdated: string;
   teachPlatform: string;

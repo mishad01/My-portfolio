@@ -44,7 +44,18 @@ const en = {
   screenshot: 'screenshot',
   screenshots: 'project screenshots',
   noImages: 'no images yet',
-  portrait: 'portrait photo',
+  photo: { graduation: 'Graduation photo', portrait: 'Portrait', classes: 'Classes photo', office: 'Office photo', project: 'Project screenshot' },
+  jumpTo: 'Jump to…',
+  jumpPlaceholder: 'Search sections, pages and settings…',
+  noResults: 'No matches',
+  groupSections: 'Sections',
+  groupPages: 'Pages',
+  groupSettings: 'Settings',
+  allExperience: 'All experience',
+  allProjects: 'All projects',
+  allResearch: 'All research',
+  allClasses: 'All classes',
+  switchTheme: 'Switch light / dark',
   previous: 'Previous',
   next: 'Next',
   close: 'Close',
@@ -70,6 +81,9 @@ const bn: Partial2<UI> = {
   thesis: 'স্নাতক থিসিস', eduTitle: 'শিক্ষা ও অর্জন', achievements: 'অর্জন',
   contactTitle: 'কথা বলি।', contactSub: 'ওয়ার্কস্টুডেন্ট পদ, ফ্রিল্যান্স প্রজেক্ট ও একাডেমিক আলোচনার জন্য উন্মুক্ত।',
   emailMe: 'ইমেইল করুন', copyEmail: 'ইমেইল কপি', copied: 'কপি হয়েছে', screenshot: 'স্ক্রিনশট', language: 'ভাষা', signIn: 'সাইন ইন', admin: 'অ্যাডমিন',
+  photo: { graduation: 'গ্র্যাজুয়েশনের ছবি', portrait: 'পোর্ট্রেট', classes: 'ক্লাসের ছবি', office: 'অফিসের ছবি', project: 'প্রজেক্টের স্ক্রিনশট' },
+  jumpTo: 'খুঁজুন…', jumpPlaceholder: 'সেকশন, পেজ ও সেটিংস খুঁজুন…', noResults: 'কিছু পাওয়া যায়নি', groupSections: 'সেকশন', groupPages: 'পেজ', groupSettings: 'সেটিংস',
+  allExperience: 'সব অভিজ্ঞতা', allProjects: 'সব প্রজেক্ট', allResearch: 'সব গবেষণা', allClasses: 'সব ক্লাস', switchTheme: 'লাইট / ডার্ক',
   nav: { now: 'এখন', experience: 'অভিজ্ঞতা', projects: 'প্রজেক্ট', teaching: 'শিক্ষকতা', research: 'গবেষণা', education: 'শিক্ষা', contact: 'যোগাযোগ' },
 };
 
@@ -83,6 +97,9 @@ const de: Partial2<UI> = {
   thesis: 'Bachelorarbeit', eduTitle: 'Ausbildung & Erfolge', achievements: 'Erfolge',
   contactTitle: 'Sprechen wir.', contactSub: 'Offen für Werkstudentenstellen, Freelance-Projekte und akademischen Austausch.',
   emailMe: 'E-Mail schreiben', copyEmail: 'E-Mail kopieren', copied: 'Kopiert', screenshot: 'Screenshot', language: 'Sprache', signIn: 'Anmelden', admin: 'Admin',
+  photo: { graduation: 'Abschlussfoto', portrait: 'Porträt', classes: 'Foto vom Unterricht', office: 'Bürofoto', project: 'Projekt-Screenshot' },
+  jumpTo: 'Springe zu…', jumpPlaceholder: 'Abschnitte, Seiten und Einstellungen suchen…', noResults: 'Keine Treffer', groupSections: 'Abschnitte', groupPages: 'Seiten', groupSettings: 'Einstellungen',
+  allExperience: 'Alle Stationen', allProjects: 'Alle Projekte', allResearch: 'Alle Forschung', allClasses: 'Alle Kurse', switchTheme: 'Hell / Dunkel',
   nav: { now: 'Aktuell', experience: 'Erfahrung', projects: 'Projekte', teaching: 'Lehre', research: 'Forschung', education: 'Ausbildung', contact: 'Kontakt' },
 };
 
@@ -91,5 +108,5 @@ const partials: Record<Lang, Partial2<UI>> = { en, bn, de };
 /** UI strings for a language; any missing key falls back to English. */
 export function ui(lang: Lang): UI {
   const p = partials[lang];
-  return { ...en, ...p, nav: { ...en.nav, ...p.nav } } as UI;
+  return { ...en, ...p, nav: { ...en.nav, ...p.nav }, photo: { ...en.photo, ...p.photo } } as UI;
 }

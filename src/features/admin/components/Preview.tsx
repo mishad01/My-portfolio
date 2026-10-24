@@ -12,7 +12,7 @@ const filled = 'bg-surface-high text-on-surface border-transparent';
 function previewOf(sec: Section, f: Form): PreviewModel {
   const base: PreviewModel = { surface: plain, kicker: '', title: '', body: '', meta: '', tags: [], icon: '', cover: false, img: '', titleSize: '24px' };
   switch (sec) {
-    case 'profile': return { ...base, surface: tonal('primary'), kicker: f.avail, title: f.displayName, titleSize: '56px', body: f.heroPos, meta: f.heroRole, tags: tags(f.stack), cover: !!f.portrait, img: f.portrait };
+    case 'profile': return { ...base, surface: tonal('primary'), kicker: f.avail, title: f.displayName, titleSize: '56px', body: f.heroPos, meta: f.heroRole, tags: tags(f.stack), cover: !!f.photo_portrait, img: f.photo_portrait };
     case 'now': return { ...base, surface: tonal((f.tone as keyof typeof tone) || 'primary'), icon: f.icon, kicker: f.label, body: f.text };
     case 'experience': return { ...base, kicker: `${f.start || ''} – ${f.end || ''}`, title: f.role, body: f.summary, meta: f.org + (f.location ? ` · ${f.location}` : ''), tags: tags(f.skills) };
     case 'projects': return { ...base, surface: filled, cover: true, img: f.images?.[0] || '', title: f.name, body: f.desc, tags: tags(f.stack) };
