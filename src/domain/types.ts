@@ -1,6 +1,13 @@
 export const LANGS = ['en', 'bn', 'de'] as const;
 export type Lang = (typeof LANGS)[number];
 
+/**
+ * Languages actually offered through routing/the language switcher.
+ * German is hidden for now — uncomment it below to bring back /de/ pages
+ * and the DE option in the header switcher.
+ */
+export const VISIBLE_LANGS: Lang[] = ['en', 'bn' /*, 'de' */];
+
 /** Translatable string. Missing bn/de falls back to en. */
 export type I18n = { en: string; bn?: string; de?: string };
 export type Status = 'published' | 'draft';
@@ -26,6 +33,8 @@ export interface Profile {
   portraits: string[];
   /** Hero collage: each tile has its own photos and rotates through them. */
   collage?: Partial<Record<CollageSlot, string[]>>;
+  /** Focal point per collage photo URL, as CSS `object-position` (e.g. "62% 20%"); missing → centered. */
+  collagePos?: Record<string, string>;
   /** YYYY-MM-DD, shown as “Updated …” on the Now section. */
   nowUpdated: string;
   teachPlatform: string;

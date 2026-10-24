@@ -6,14 +6,14 @@ import { cx } from '@/ui';
 const INTERVAL_MS = 5000;
 
 
-interface Props { stacks: CollageStacks; labels: Record<CollageSlot, string>; alt: string }
+interface Props { stacks: CollageStacks; labels: Record<CollageSlot, string>; alt: string; positions?: Record<string, string> }
 
 /**
  * Hero photo collage: five staggered tiles, each with its own photos (set per
  * tile in the admin). Tiles with several photos rotate, one tile at a time;
  * tap a tile to advance it.
  */
-export default function PhotoCollage({ stacks: bySlot, labels, alt }: Props) {
+export default function PhotoCollage({ stacks: bySlot, labels, alt, positions = {} }: Props) {
   const stacks = COLLAGE_SLOTS.map((s) => bySlot[s] ?? []);
   const key = stacks.map((s) => s.length).join(',');
   const [shown, setShown] = useState<number[]>(() => COLLAGE_SLOTS.map(() => 0));
@@ -57,7 +57,7 @@ export default function PhotoCollage({ stacks: bySlot, labels, alt }: Props) {
                 style={{ flex: `${grow} 1 0` }}
               >
                 {stack.map((src, k) => (
-                  <img key={src} src={src} alt={labels[slot]} loading="lazy" className={cx('absolute inset-0 h-full w-full object-cover transition-opacity duration-700', k === shown[i] ? 'opacity-100' : 'opacity-0')} />
+                  <img key={src} src={src} alt={labels[slot]} loading="lazy" style={{ objectPosition: positions[src] ?? '50% 50%' }} className={cx('absolute inset-0 h-full w-full object-cover transition-opacity duration-700', k === shown[i] ? 'opacity-100' : 'opacity-0')} />
                 ))}
               </button>
             );

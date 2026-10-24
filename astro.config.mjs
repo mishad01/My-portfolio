@@ -9,14 +9,16 @@ export default defineConfig({
   trailingSlash: 'always',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'bn', 'de'],
+    // 'de' is hidden for now — no /de/ pages are built (see VISIBLE_LANGS in
+    // src/domain/types.ts). Add it back here too when re-enabling German.
+    locales: ['en', 'bn' /*, 'de' */],
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
     react(),
     sitemap({
       filter: (page) => !page.includes('/admin/') && !page.includes('/canvas/'),
-      i18n: { defaultLocale: 'en', locales: { en: 'en', bn: 'bn-BD', de: 'de-DE' } },
+      i18n: { defaultLocale: 'en', locales: { en: 'en', bn: 'bn-BD' /*, de: 'de-DE' */ } },
     }),
   ],
   vite: { plugins: [tailwindcss()] },

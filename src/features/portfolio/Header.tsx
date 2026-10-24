@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Lang } from '@/domain/types';
+import { VISIBLE_LANGS } from '@/domain/types';
 import { NAV_ICON, NAV_IDS } from '@/features/portfolio/icons';
 import { scrollToId } from '@/platform/scroll';
 import { toggleTheme } from '@/platform/theme';
@@ -26,7 +27,9 @@ interface Props {
   };
 }
 
-const LANG_LABEL: [Lang, string][] = [['en', 'EN'], ['bn', 'বাং'], ['de', 'DE']];
+// 'de' is hidden for now — see VISIBLE_LANGS in domain/types.ts to bring it back.
+const LANG_LABEL: [Lang, string][] = ([['en', 'EN'], ['bn', 'বাং'], ['de', 'DE']] as [Lang, string][])
+  .filter(([k]) => VISIBLE_LANGS.includes(k));
 /** "Now" sits right under the hero, so the bar starts at Experience; the menu and palette list everything. */
 const BAR_IDS = NAV_IDS.filter((id) => id !== 'now');
 
@@ -118,7 +121,7 @@ export default function Header({ lang, brand, nav, langHref, pageHref, labels: L
                   onClick={() => { try { localStorage.setItem('pfLang', k); } catch {} }}
                   className={cx(
                     '-ml-px box-border flex min-w-11 items-center justify-center border border-outline px-2.5 text-[13px] font-semibold tracking-[.3px] no-underline',
-                    i === 0 && 'rounded-l-[18px]', i === 2 && 'rounded-r-[18px]',
+                    i === 0 && 'rounded-l-[18px]', i === LANG_LABEL.length - 1 && 'rounded-r-[18px]',
                     on ? 'bg-secondary-container text-on-secondary-container hover:text-on-secondary-container' : 'bg-transparent text-on-surface hover:text-on-surface',
                   )}
                 >

@@ -26,7 +26,7 @@ export const COLLAGE_ROWS: { slot: CollageSlot; grow: number; h: string }[][] = 
     { slot: 'classes', grow: 198, h: 'h-[136px] wide:h-[225px]' },
   ],
   [
-    { slot: 'office', grow: 304, h: 'h-[118px] wide:h-[196px]' },
-    { slot: 'project', grow: 198, h: 'h-[124px] wide:h-[204px]' },
+    { slot: 'office', grow: 270, h: 'h-[118px] wide:h-[196px]' },
+    { slot: 'project', grow: 270, h: 'h-[124px] wide:h-[204px]' },
   ],
 ];

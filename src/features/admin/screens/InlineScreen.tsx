@@ -31,7 +31,14 @@ export function InlineScreen({ vm }: { vm: AdminVM }) {
           <input aria-label="Role line" value={P.heroRole.en} onChange={(e) => setProfile('heroRole', e.target.value)} className={cx(editable, 'w-full text-lg font-medium text-primary')} />
           <textarea aria-label="Positioning sentence" rows={3} value={P.heroPos.en} onChange={(e) => setProfile('heroPos', e.target.value)} className={cx(editable, 'w-full max-w-[720px] resize-none text-[22px] leading-8 text-on-surface')} />
         </div>
-        <CollageEditor stacks={collageStacks(P)} onChange={vm.setCollageSlot} onUpload={vm.uploadToCollage} uploadingSlot={(slot) => vm.busy === 'upload:collage_' + slot} />
+        <CollageEditor
+          stacks={collageStacks(P)}
+          onChange={vm.setCollageSlot}
+          onUpload={vm.uploadToCollage}
+          uploadingSlot={(slot) => vm.busy === 'upload:collage_' + slot}
+          positions={P.collagePos ?? {}}
+          onPositionChange={vm.setCollagePos}
+        />
         </div>
         <div className="flex flex-col gap-6 bg-surface-low p-10">
           <span className="h-display text-4xl leading-[44px]">Right now</span>

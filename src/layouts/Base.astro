@@ -1,7 +1,7 @@
 ---
 import '@/styles/global.css';
 import type { Lang } from '@/domain/types';
-import { LANGS } from '@/domain/types';
+import { VISIBLE_LANGS } from '@/domain/types';
 import { href } from '@/domain/i18n';
 import { seed } from '@/data/seed';
 
@@ -40,7 +40,7 @@ const person = {
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
-    {!noindex && LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(href(l, path), site).href} />)}
+    {!noindex && VISIBLE_LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(href(l, path), site).href} />)}
     {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(href('en', path), site).href} />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />

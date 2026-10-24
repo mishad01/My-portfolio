@@ -26,6 +26,9 @@ const contacts = [
   { icon: 'badge', label: 'LinkedIn', value: strip(c.contact.linkedin), url: c.contact.linkedin, ext: true },
 ].filter((k) => k.value);
 const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/') };
+// Germany mention hidden for now — flip to true to bring the hero badge back. The text itself
+// stays editable in the admin (Profile & hero); this only controls whether it renders.
+const SHOW_AVAIL_BADGE = false;
 ---
 <a href="#main" class="absolute -top-[60px] left-2 z-[100] rounded-[20px] bg-primary px-5 py-3 font-medium text-on-primary focus:top-2">{U.skip}</a>
 
@@ -47,9 +50,11 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
   <section id="hero" class="px-5 pt-6 pb-12 wide:px-6 wide:pt-[72px] wide:pb-24">
     <div class="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-center gap-7 wide:gap-12">
       <div class="flex flex-col items-start gap-6">
-        <div class="flex min-h-8 items-center gap-2 rounded-lg bg-tertiary-container py-1 pr-3 pl-2 text-sm leading-5 font-medium tracking-[.1px] text-on-tertiary-container">
-          <span class="ms text-lg">flight_takeoff</span>{t(P.avail, lang)}
-        </div>
+        {SHOW_AVAIL_BADGE && (
+          <div class="flex min-h-8 items-center gap-2 rounded-lg bg-tertiary-container py-1 pr-3 pl-2 text-sm leading-5 font-medium tracking-[.1px] text-on-tertiary-container">
+            <span class="ms text-lg">flight_takeoff</span>{t(P.avail, lang)}
+          </div>
+        )}
         <div class="flex flex-col gap-2">
           <h1 class="m-0 h-display text-[clamp(56px,10vw,104px)] leading-[.92]">{t(P.displayName, lang)}</h1>
           <span class="text-lg font-medium text-primary">{t(P.heroRole, lang)}</span>
@@ -63,7 +68,7 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
           <a href="#contact" class={button('tonal')}>{U.contact}</a>
         </div>
       </div>
-      <PhotoCollage client:visible stacks={collageStacks(P)} labels={U.photo} alt={P.fullName} />
+      <PhotoCollage client:visible stacks={collageStacks(P)} labels={U.photo} alt={P.fullName} positions={P.collagePos ?? {}} />
     </div>
   </section>
 

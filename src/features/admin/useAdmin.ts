@@ -228,6 +228,11 @@ export function useAdmin() {
       const collage = { ...collageStacks(c.profile), [slot]: urls };
       commit({ ...c, profile: { ...c.profile, collage, portraits: COLLAGE_SLOTS.flatMap((s) => collage[s]) } });
     },
+    /** Set a collage photo's focal point ("x% y%"), used as its object-position on the live site. */
+    setCollagePos(src: string, pos: string) {
+      if (!c) return;
+      commit({ ...c, profile: { ...c.profile, collagePos: { ...c.profile.collagePos, [src]: pos } } });
+    },
     /** Upload files and append them to a collage tile. */
     uploadToCollage: (slot: CollageSlot, files: File[]) =>
       run('upload:collage_' + slot, async () => {
