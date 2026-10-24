@@ -15,24 +15,30 @@ export interface ProjectView {
 
 interface Props {
   projects: ProjectView[];
-  all?: boolean;
+  /** Main page: show 6 and link here for the rest (keeping the filter). Omit on the full page. */
+  moreHref?: string;
   labels: {
-    all: string; filter: string; displayOnly: string; loadMore: string; more: string; showLess: string;
+    all: string; filter: string; displayOnly: string; loadMore: string; more: string;
     screenshots: string; noImages: string; screenshot: string; previous: string; next: string; close: string;
   };
 }
 
 const LIMIT = 6;
 
-export default function Projects({ projects, all = false, labels }: Props) {
+export default function Projects({ projects, moreHref, labels }: Props) {
   const [filter, setFilter] = useState('All');
-  const [showAll, setShowAll] = useState(all);
   const [lb, setLb] = useState<{ id: string; i: number } | null>(null);
+
+  // The full page opens with the filter chosen on the main page (?tech=Flutter).
+  useEffect(() => {
+    const tech = new URLSearchParams(location.search).get('tech');
+    if (tech && projects.some((p) => p.stack.includes(tech))) setFilter(tech);
+  }, []);
 
   const techs = useMemo(() => byFrequency(projects.map((p) => p.stack)), [projects]);
   const filtered = projects.filter((p) => filter === 'All' || p.stack.includes(filter));
-  const hidden = showAll ? 0 : Math.max(0, filtered.length - LIMIT);
-  const cards = showAll ? filtered : filtered.slice(0, LIMIT);
+  const hidden = moreHref ? Math.max(0, filtered.length - LIMIT) : 0;
+  const cards = moreHref ? filtered.slice(0, LIMIT) : filtered;
   const lbProject = lb ? projects.find((p) => p.id === lb.id) : undefined;
 
   const step = (d: number) =>
@@ -59,7 +65,7 @@ export default function Projects({ projects, all = false, labels }: Props) {
         {['All', ...techs].map((k) => {
           const on = filter === k;
           return (
-            <button key={k} type="button" aria-pressed={on} className={filterChip(on)} onClick={() => { setFilter(k); setShowAll(all); }}>
+            <button key={k} type="button" aria-pressed={on} className={filterChip(on)} onClick={() => setFilter(k)}>
               {on && <span className="ms text-lg">check</span>}
               {k === 'All' ? labels.all : k}
             </button>
@@ -115,7 +121,7 @@ export default function Projects({ projects, all = false, labels }: Props) {
         ))}
       </div>
 
-      {hidden > 0 && <MoreButton open={false} hidden={hidden} collapsible={false} labels={labels} onClick={() => setShowAll(true)} />}
+      {moreHref && hidden > 0 && <MoreButton href={filter === 'All' ? moreHref : `${moreHref}?tech=${encodeURIComponent(filter)}`} hidden={hidden} labels={labels} />}
 
       {lb && lbProject && (
         <div role="dialog" aria-modal="true" aria-label={lbProject.name} className="fixed inset-0 z-[60] flex items-center justify-center p-4">

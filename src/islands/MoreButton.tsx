@@ -1,20 +1,17 @@
 import { cls } from '@/lib/cls';
 
 interface Props {
-  open: boolean;
+  href: string;
   hidden: number;
-  /** Projects' Load more only expands; it never collapses. */
-  collapsible?: boolean;
-  labels: { loadMore: string; more: string; showLess: string };
-  onClick: () => void;
+  labels: { loadMore: string; more: string };
 }
 
-export function MoreButton({ open, hidden, collapsible = true, labels, onClick }: Props) {
-  if (open && !collapsible) return null;
+/** "Load more · N more" — opens the section's full page. */
+export function MoreButton({ href, hidden, labels }: Props) {
   return (
-    <button type="button" onClick={onClick} aria-expanded={open} className={cls.moreBtn}>
-      {open ? labels.showLess : `${labels.loadMore} · ${hidden} ${labels.more}`}
-      <span className="ms text-xl">{open ? 'expand_less' : 'expand_more'}</span>
-    </button>
+    <a href={href} className={cls.moreBtn + ' no-underline hover:text-on-secondary-container'}>
+      {`${labels.loadMore} · ${hidden} ${labels.more}`}
+      <span className="ms text-xl">arrow_forward</span>
+    </a>
   );
 }

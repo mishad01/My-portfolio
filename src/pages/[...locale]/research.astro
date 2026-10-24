@@ -15,6 +15,6 @@ const V = views(await loadPublished(), lang);
 <Base lang={lang} path="/research/" title={`${V.U.nav.research} — Mishad`} description={V.research.map((r) => r.title).join(' · ')}>
   <SubPage lang={lang} id="research" tinted>
     <h2 class={cls.h2}>{V.U.nav.research}</h2>
-    <ResearchList client:idle all items={V.research} labels={V.moreLabels} />
+    <ResearchList client:idle items={V.research} labels={V.moreLabels} />
   </SubPage>
 </Base>

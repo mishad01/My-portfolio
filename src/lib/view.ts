@@ -34,8 +34,8 @@ export function views(c: Content, lang: Lang) {
     experience,
     projects,
     research,
-    moreLabels: pick('loadMore', 'more', 'showLess'),
-    projectLabels: pick('all', 'filter', 'displayOnly', 'loadMore', 'more', 'showLess', 'screenshots', 'noImages', 'screenshot', 'previous', 'next', 'close'),
+    moreLabels: pick('loadMore', 'more'),
+    projectLabels: pick('all', 'filter', 'displayOnly', 'loadMore', 'more', 'screenshots', 'noImages', 'screenshot', 'previous', 'next', 'close'),
     teachLabels: pick('platform', 'classes', 'topics', 'viewAll', 'back', 'backAll', 'all', 'teachIntro', 'syllabus', 'outcome', 'weeks', 'batches', 'duration', 'students', 'level', 'format', 'live'),
   };
 }

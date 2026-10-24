@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { ClassItem } from '@/lib/types';
 import { cls, filterChip, tones, toneCls } from '@/lib/cls';
-import { scrollToId } from '@/lib/scroll';
 
 type View = 'home' | 'list' | 'detail';
 
@@ -11,14 +10,12 @@ interface Props {
   teachRole: string;
   topics: string[];
   title: string;
+  /** home = the three cards on the portfolio; list = /teaching/; detail = /teaching/<id>/ */
   view?: View;
   sel?: string;
-  /**
-   * Standalone pages (/teaching/, /teaching/<id>/) navigate with links instead
-   * of swapping views in place. Value is the language-prefixed /teaching/ path.
-   */
-  pagesBase?: string;
-  /** Where "Back" goes from the standalone list page. */
+  /** Language-prefixed /teaching/ path; cards link to it and to /teaching/<id>/. */
+  pagesBase: string;
+  /** Where "Back" goes from the list page. */
   backHref?: string;
   labels: {
     platform: string; classes: string; topics: string; viewAll: string; back: string; backAll: string; all: string;
@@ -29,42 +26,26 @@ interface Props {
 
 const card = 'relative flex cursor-pointer flex-col gap-4 rounded-[28px] p-7 text-left no-underline transition-shadow duration-200 hover:shadow-[0_2px_10px_rgba(0,0,0,.2)]';
 
-export default function Teaching({ classes, platform, teachRole, topics, title, view: view0 = 'home', sel: sel0, pagesBase, backHref, labels: L }: Props) {
-  const [view, setView] = useState<View>(view0);
-  const [sel, setSel] = useState(sel0);
+export default function Teaching({ classes, platform, teachRole, topics, title, view = 'home', sel, pagesBase, backHref = '/', labels: L }: Props) {
   const [topic, setTopic] = useState('All');
-
-  const go = (v: View, s?: string) => {
-    setView(v);
-    setSel(s);
-    setTimeout(() => scrollToId('teaching', 70), 30);
-  };
   const toneOf = (k: ClassItem) => toneCls[tones[classes.indexOf(k) % 3]];
   const allTopics = ['All', ...new Set(classes.flatMap((k) => k.topics))];
   const kk = classes.find((k) => k.id === sel);
 
-  const back =
-    view === 'home' ? null : pagesBase ? (view === 'detail' ? pagesBase : backHref) : null;
+  const back = view === 'detail' ? pagesBase : backHref;
   const backLabel = view === 'detail' ? L.backAll : L.back;
   const backCls = 'flex h-12 cursor-pointer items-center gap-2 rounded-3xl border-0 bg-secondary-container pr-5 pl-3.5 text-sm font-medium text-on-secondary-container no-underline hover:text-on-secondary-container hover:opacity-[.92]';
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-wrap items-center gap-4">
-        {view !== 'home' &&
-          (back ? (
-            <a href={back} className={backCls}><span className="ms text-xl">arrow_back</span>{backLabel}</a>
-          ) : (
-            <button type="button" onClick={() => (view === 'detail' ? go('list') : go('home'))} className={backCls}>
-              <span className="ms text-xl">arrow_back</span>{backLabel}
-            </button>
-          ))}
+        {view !== 'home' && <a href={back} className={backCls}><span className="ms text-xl">arrow_back</span>{backLabel}</a>}
         {view !== 'detail' && <h2 className={cls.h2}>{view === 'list' ? L.classes : title}</h2>}
       </div>
 
       {view === 'home' && (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-4">
-          <button type="button" onClick={() => go('list')} className={card + ' border-0 bg-primary-container text-on-primary-container'}>
+          <a href={pagesBase} className={card + ' bg-primary-container text-on-primary-container hover:text-on-primary-container'}>
             <span className="ms self-start text-[32px]">school</span>
             <div className="flex flex-col gap-1">
               <span className="kicker">{L.platform}</span>
@@ -73,8 +54,8 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
             <span>{teachRole}</span>
             <span className="mt-auto text-sm">{classes.length} {L.classes}</span>
             <span className="ms absolute top-6 right-6 opacity-70">north_east</span>
-          </button>
-          <button type="button" onClick={() => go('list')} className={card + ' border-0 bg-surface-low text-on-surface'}>
+          </a>
+          <a href={pagesBase} className={card + ' bg-surface-low text-on-surface hover:text-on-surface'}>
             <span className="kicker text-on-surface-variant">{L.classes}</span>
             <div className="flex flex-col gap-3">
               {classes.slice(0, 3).map((k) => (
@@ -86,14 +67,14 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
             </div>
             <span className="mt-auto text-sm font-medium text-primary">{L.viewAll} →</span>
             <span className="ms absolute top-6 right-6 opacity-70">north_east</span>
-          </button>
-          <button type="button" onClick={() => go('list')} className={card + ' border-0 bg-surface-low text-on-surface'}>
+          </a>
+          <a href={pagesBase} className={card + ' bg-surface-low text-on-surface hover:text-on-surface'}>
             <span className="kicker text-on-surface-variant">{L.topics}</span>
             <div className="flex flex-wrap gap-2">
               {topics.map((t) => <span key={t} className={cls.chipFilled}>{t}</span>)}
             </div>
             <span className="ms absolute top-6 right-6 opacity-70">north_east</span>
-          </button>
+          </a>
         </div>
       )}
 
@@ -129,11 +110,7 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
                 </>
               );
               const c = 'flex flex-col overflow-hidden rounded-[28px] bg-surface-high text-left text-on-surface no-underline transition-shadow duration-200 hover:text-on-surface hover:shadow-[0_2px_10px_rgba(0,0,0,.2)]';
-              return pagesBase ? (
-                <a key={k.id} href={`${pagesBase}${k.id}/`} className={c}>{inner}</a>
-              ) : (
-                <button key={k.id} type="button" onClick={() => go('detail', k.id)} className={c + ' cursor-pointer border-0 p-0'}>{inner}</button>
-              );
+              return <a key={k.id} href={`${pagesBase}${k.id}/`} className={c}>{inner}</a>;
             })}
           </div>
         </div>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { toneCls } from '@/lib/cls';
 import type { Tone } from '@/lib/types';
 import { MoreButton } from './MoreButton';
@@ -17,15 +16,15 @@ export interface ResearchView {
 
 interface Props {
   items: ResearchView[];
-  all?: boolean;
-  labels: { loadMore: string; more: string; showLess: string };
+  /** Main page: show the first item and link here for the rest. Omit on the full page. */
+  moreHref?: string;
+  labels: { loadMore: string; more: string };
 }
 
 const TONE_ORDER: Tone[] = ['tertiary', 'secondary', 'primary'];
 
-export default function ResearchList({ items, all = false, labels }: Props) {
-  const [open, setOpen] = useState(all);
-  const shown = open ? items : items.slice(0, 1);
+export default function ResearchList({ items, moreHref, labels }: Props) {
+  const shown = moreHref ? items.slice(0, 1) : items;
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -57,7 +56,7 @@ export default function ResearchList({ items, all = false, labels }: Props) {
           );
         })}
       </div>
-      {!all && items.length > 1 && <MoreButton open={open} hidden={items.length - 1} labels={labels} onClick={() => setOpen(!open)} />}
+      {moreHref && items.length > 1 && <MoreButton href={moreHref} hidden={items.length - 1} labels={labels} />}
     </>
   );
 }

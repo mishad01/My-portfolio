@@ -23,7 +23,7 @@ Built from the Claude Design handoff in [`design/`](design/) (`Portfolio Canvas.
 | `/admin/` | Admin: login, dashboard, list, edit + preview, edit on page | 4a–4e |
 | `/canvas/` | Review board: every page side by side, pan + zoom (noindex) | — |
 
-On the main page, "Load more" expands lists in place, and the Teaching cards → classes → detail flow swaps in place, as in the final prototype.
+On the main page, "Load more" opens the section's full page (Projects keeps the active filter as `?tech=`). The Teaching cards open `/teaching/`, and a class card there opens `/teaching/<id>/`.
 URL helpers: `?theme=dark|light` forces a theme without saving it; `/admin/?demo=1&screen=list&sec=projects` opens a demo admin screen (used by the canvas).
 
 ## Develop

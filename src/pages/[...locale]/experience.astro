@@ -15,6 +15,6 @@ const V = views(await loadPublished(), lang);
 <Base lang={lang} path="/experience/" title={`${V.U.nav.experience} — Mishad`} description={V.experience.map((e) => e.role).join(' · ')}>
   <SubPage lang={lang} id="experience">
     <h2 class={cls.h2}>{V.U.nav.experience}</h2>
-    <ExperienceList client:idle all items={V.experience} labels={{ current: V.U.current, ...V.moreLabels }} />
+    <ExperienceList client:idle items={V.experience} labels={{ current: V.U.current, ...V.moreLabels }} />
   </SubPage>
 </Base>

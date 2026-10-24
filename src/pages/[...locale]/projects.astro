@@ -15,6 +15,6 @@ const V = views(await loadPublished(), lang);
 <Base lang={lang} path="/projects/" title={`${V.U.nav.projects} — Mishad`} description={V.projects.map((p) => p.name).join(' · ')}>
   <SubPage lang={lang} id="projects" tinted>
     <h2 class={cls.h2}>{V.U.nav.projects}</h2>
-    <Projects client:idle all projects={V.projects} labels={V.projectLabels} />
+    <Projects client:idle projects={V.projects} labels={V.projectLabels} />
   </SubPage>
 </Base>

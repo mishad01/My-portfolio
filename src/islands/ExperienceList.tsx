@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { cls } from '@/lib/cls';
 import { MoreButton } from './MoreButton';
 
@@ -16,15 +15,14 @@ export interface ExpView {
 
 interface Props {
   items: ExpView[];
-  /** Standalone page: show everything, no Load more. */
-  all?: boolean;
+  /** Main page: show the latest `limit` and link here for the rest. Omit on the full page. */
+  moreHref?: string;
   limit?: number;
-  labels: { current: string; loadMore: string; more: string; showLess: string };
+  labels: { current: string; loadMore: string; more: string };
 }
 
-export default function ExperienceList({ items, all = false, limit = 3, labels }: Props) {
-  const [open, setOpen] = useState(all);
-  const shown = open ? items : items.slice(0, limit);
+export default function ExperienceList({ items, moreHref, limit = 3, labels }: Props) {
+  const shown = moreHref ? items.slice(0, limit) : items;
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -63,9 +61,7 @@ export default function ExperienceList({ items, all = false, limit = 3, labels }
           </article>
         ))}
       </div>
-      {!all && items.length > limit && (
-        <MoreButton open={open} hidden={items.length - limit} labels={labels} onClick={() => setOpen(!open)} />
-      )}
+      {moreHref && items.length > limit && <MoreButton href={moreHref} hidden={items.length - limit} labels={labels} />}
     </>
   );
 }
