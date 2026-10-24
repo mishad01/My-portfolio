@@ -52,7 +52,7 @@ Drafts (`status: draft`) never reach the public build. The admin edits English o
 
 1. ✅ Project `my-portfolio-fd9f0` and its web app exist. The web config is in `src/admin/backend.ts`.
 2. **Authentication** → enable Email/Password → add your user → copy its **UID**.
-3. **Firestore** and **Storage**: create both. In `firestore.rules` and `storage.rules`, replace `REPLACE_WITH_YOUR_UID` with your UID, then deploy the rules: `npx firebase-tools deploy --only firestore:rules,storage`.
+3. **Firestore** and **Storage**: create both. In `firestore.rules` and `storage.rules`, the owner UID is already set; paste the rules into the console (Rules tab → Publish) or deploy them: `npx firebase-tools deploy --only firestore:rules,storage`.
 4. **App Check** (recommended): register a reCAPTCHA v3 key for `mishad01.github.io`, then turn on enforcement for Firestore and Storage once the admin works.
 5. **Service account** for builds: Project settings → Service accounts → Generate key. Paste the JSON, minified to one line, as a GitHub **secret** named `FIREBASE_SERVICE_ACCOUNT`. The builder uses the Admin SDK, so App Check doesn't block it.
 6. GitHub repo → Settings → Secrets and variables → Actions → **Variables**: add `PUBLIC_FIREBASE_APPCHECK_SITE_KEY` once you have one. The other `PUBLIC_FIREBASE_*` variables are optional overrides of the built-in config.

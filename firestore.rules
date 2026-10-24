@@ -1,9 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Replace with your Firebase Auth UID (Authentication → Users).
+    // Site owner: test6251@gmail.com (Firebase Auth UID).
     function isOwner() {
-      return request.auth != null && request.auth.uid == 'REPLACE_WITH_YOUR_UID';
+      return request.auth != null && request.auth.uid == 'V6M1bHaZYeenWANNdhTja1pybzd2';
     }
 
     // site/live is the published snapshot; site/draft is the admin's working copy.
