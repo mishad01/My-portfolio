@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Content, ListSection, Section } from '@/domain/types';
+import { COLLAGE_SLOTS, type CollageSlot, type Content, type ListSection, type Section } from '@/domain/types';
+import { collageStacks } from '@/domain/collage';
 import { SEED_VERSION, seed } from '@/data/seed';
 import { type Backend, demoBackend, firebaseBackend, firebaseConfigured } from './backend';
 import { describeError } from './errors';
@@ -106,12 +107,16 @@ export function useAdmin() {
     return () => off();
   }, []);
 
-  /** Apply a change locally and save the draft shortly after. */
-  const commit = (next: Content) => {
-    setContent(next);
+  /** Schedule a draft save of `next` (already applied to state). */
+  const commitLater = (next: Content) => {
     setChanged(true);
     clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => backend?.saveDraft(next).catch((e) => notify('Couldn’t save draft: ' + describeError(e))), SAVE_DEBOUNCE);
+  };
+  /** Apply a change locally and save the draft shortly after. */
+  const commit = (next: Content) => {
+    setContent(next);
+    commitLater(next);
   };
 
   const run = async (tag: string, fn: () => Promise<void>, fail: string) => {
@@ -208,11 +213,36 @@ export function useAdmin() {
 
     // ---- edit form
     setField: (k: string, v: unknown) => setForm((f) => (f ? { ...f, [k]: v } : f)),
-    upload: (file: File, k: string, multi: boolean) =>
+    /** Upload one or more files into form field `k` (appends for photo lists). */
+    upload: (files: File[], k: string, multi: boolean) =>
       run('upload:' + k, async () => {
         if (!backend) return;
-        const url = await backend.upload(file, sec);
-        setForm((f) => (f ? { ...f, [k]: multi ? [...(f[k] || []), url] : url } : f));
+        for (const file of files) {
+          const url = await backend.upload(file, sec);
+          setForm((f) => (f ? { ...f, [k]: multi ? [...(f[k] || []), url] : url } : f));
+        }
+      }, 'Upload failed: '),
+    /** Hero collage, edited in place: replace one tile's photos. */
+    setCollageSlot(slot: CollageSlot, urls: string[]) {
+      if (!c) return;
+      const collage = { ...collageStacks(c.profile), [slot]: urls };
+      commit({ ...c, profile: { ...c.profile, collage, portraits: COLLAGE_SLOTS.flatMap((s) => collage[s]) } });
+    },
+    /** Upload files and append them to a collage tile. */
+    uploadToCollage: (slot: CollageSlot, files: File[]) =>
+      run('upload:collage_' + slot, async () => {
+        if (!backend) return;
+        for (const file of files) {
+          const url = await backend.upload(file, 'profile');
+          setContent((cur) => {
+            if (!cur) return cur;
+            const collage = collageStacks(cur.profile);
+            collage[slot] = [...collage[slot], url];
+            const next = { ...cur, profile: { ...cur.profile, collage, portraits: COLLAGE_SLOTS.flatMap((s) => collage[s]) } };
+            commitLater(next);
+            return next;
+          });
+        }
       }, 'Upload failed: '),
     save() {
       if (!c || !form) return;

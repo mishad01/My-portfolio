@@ -11,6 +11,10 @@ interface Item {
   status: Status;
 }
 
+/** The five hero-collage tiles, in display order. */
+export const COLLAGE_SLOTS = ['graduation', 'portrait', 'classes', 'office', 'project'] as const;
+export type CollageSlot = (typeof COLLAGE_SLOTS)[number];
+
 export interface Profile {
   displayName: I18n;
   fullName: string;
@@ -18,8 +22,10 @@ export interface Profile {
   heroPos: I18n;
   avail: I18n;
   stack: string[];
-  /** Hero photo(s). More than one and the hero becomes a tap/auto-advance slideshow. */
+  /** Legacy flat list of hero photos; superseded by `collage`, still read when `collage` is empty. */
   portraits: string[];
+  /** Hero collage: each tile has its own photos and rotates through them. */
+  collage?: Partial<Record<CollageSlot, string[]>>;
   /** YYYY-MM-DD, shown as “Updated …” on the Now section. */
   nowUpdated: string;
   teachPlatform: string;

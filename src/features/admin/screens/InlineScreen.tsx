@@ -1,6 +1,8 @@
 import type { Content, I18n, NowCard } from '@/domain/types';
 import { Icon, cx, text, tone } from '@/ui';
 import { setEn } from '../schema';
+import { collageStacks } from '@/domain/collage';
+import { CollageEditor } from '../components/CollageEditor';
 import type { AdminVM } from '../useAdmin';
 
 const editable = 'rounded-lg border-0 bg-transparent p-0 outline-0 hover:shadow-[0_0_0_2px_var(--md-primary)] focus:shadow-[0_0_0_2px_var(--md-primary)]';
@@ -17,10 +19,11 @@ export function InlineScreen({ vm }: { vm: AdminVM }) {
   return (
     <div className="flex flex-col gap-5">
       <div className={'flex items-center gap-3 rounded-2xl px-5 py-3 text-sm font-medium ' + tone.tertiary}>
-        <Icon name="ads_click" />Click any text below to edit it. Changes are saved as unpublished edits until you press Publish.
+        <Icon name="ads_click" />Click any text to edit it, or a photo tile to set its photos. Changes are saved as unpublished edits until you press Publish.
       </div>
       <div className="overflow-hidden rounded-[28px] border border-outline-variant bg-surface">
-        <div className="flex flex-col items-start gap-5 px-10 py-12">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-center gap-10 px-10 py-12">
+        <div className="flex flex-col items-start gap-5">
           <div className={'flex h-8 items-center gap-2 rounded-lg pr-3 pl-2 text-sm font-medium ' + tone.tertiary}>
             <Icon name="flight_takeoff" size={18} />
             <input aria-label="Availability badge" value={P.avail.en} onChange={(e) => setProfile('avail', e.target.value)} className="border-0 bg-transparent p-0 text-sm font-medium text-inherit outline-0" style={{ width: Math.max(120, P.avail.en.length * 8) }} />
@@ -28,6 +31,8 @@ export function InlineScreen({ vm }: { vm: AdminVM }) {
           <input aria-label="Display name" value={P.displayName.en} onChange={(e) => setProfile('displayName', e.target.value)} className={cx(editable, 'w-full rounded-xl h-display text-[clamp(48px,8vw,88px)] leading-none text-on-surface')} />
           <input aria-label="Role line" value={P.heroRole.en} onChange={(e) => setProfile('heroRole', e.target.value)} className={cx(editable, 'w-full text-lg font-medium text-primary')} />
           <textarea aria-label="Positioning sentence" rows={3} value={P.heroPos.en} onChange={(e) => setProfile('heroPos', e.target.value)} className={cx(editable, 'w-full max-w-[720px] resize-none text-[22px] leading-8 text-on-surface')} />
+        </div>
+        <CollageEditor stacks={collageStacks(P)} onChange={vm.setCollageSlot} onUpload={vm.uploadToCollage} uploadingSlot={(slot) => vm.busy === 'upload:collage_' + slot} />
         </div>
         <div className="flex flex-col gap-6 bg-surface-low p-10">
           <span className="h-display text-4xl leading-[44px]">Right now</span>

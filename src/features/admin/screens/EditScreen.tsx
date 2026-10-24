@@ -12,7 +12,7 @@ export function EditScreen({ vm }: { vm: AdminVM }) {
     <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-6">
       <div className="flex flex-col gap-4 rounded-[28px] bg-surface-low p-7">
         {FIELDS[vm.sec].map((f) => (
-          <FieldInput key={f.k} f={f} value={form[f.k]} onChange={(v) => vm.setField(f.k, v)} onUpload={(file) => vm.upload(file, f.k, f.type === 'images')} uploading={vm.busy === 'upload:' + f.k} />
+          <FieldInput key={f.k} f={f} value={form[f.k]} onChange={(v) => vm.setField(f.k, v)} onUpload={(files) => vm.upload(files, f.k, f.type === 'images')} uploading={vm.busy === 'upload:' + f.k} />
         ))}
         {!vm.meta.single && (
           <div className="mt-1 border-t border-outline-variant">

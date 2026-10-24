@@ -1,3 +1,5 @@
+import { COLLAGE_SLOTS } from '@/domain/types';
+import { collageStacks } from '@/domain/collage';
 import type { ClassItem, Content, Education, Experience, I18n, LinkType, ListSection, NowCard, Profile, Contact, Project, Research, Section } from '@/domain/types';
 
 export interface Meta { k: Section; name: string; one: string; icon: string; single?: boolean }
@@ -26,11 +28,13 @@ const G = (k: string, label: string): Field => ({ k, label, type: 'tags' });
 const Ln = (k: string, label: string): Field => ({ k, label, type: 'lines' });
 const S = (k: string, label: string, options: string[]): Field => ({ k, label, type: 'select', options });
 
+export const COLLAGE_LABEL = { graduation: 'Graduation', portrait: 'Portrait', classes: 'Classes', office: 'Office', project: 'Project screenshot' } as const;
+
 export const ICONS = ['work', 'school', 'rocket_launch', 'menu_book', 'flight_takeoff', 'bolt'];
 export const CLASS_ICONS = ['flutter_dash', 'account_tree', 'cloud', 'architecture', 'code', 'school'];
 
 export const FIELDS: Record<Section, Field[]> = {
-  profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), { k: 'portraits', label: 'Hero photos · fill the tiles in order: Graduation, Portrait, Classes, Office, Project screenshot · extras rotate in', type: 'images' }, T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
+  profile: [T('displayName', 'Display name'), T('heroRole', 'Role line'), A('heroPos', 'Positioning sentence'), T('avail', 'Availability badge'), G('stack', 'Stack chips'), ...COLLAGE_SLOTS.map((slot): Field => ({ k: `collage_${slot}`, label: `Hero collage · ${COLLAGE_LABEL[slot]} · several photos rotate`, type: 'images' })), T('fullName', 'Full name (footer)'), T('teachRole', 'Teaching role'), G('teachTopics', 'Teaching topics'), Ln('achievement', 'Achievements')],
   now: [T('label', 'Label'), S('icon', 'Icon', ICONS), S('tone', 'Colour', ['primary', 'secondary', 'tertiary']), A('text', 'Text')],
   experience: [T('role', 'Role'), T('org', 'Organisation'), T('start', 'Start', 'YYYY-MM'), T('end', 'End (or Present)', 'YYYY-MM or Present'), T('location', 'Location'), A('summary', 'Summary'), Ln('bullets', 'Impact bullets'), G('skills', 'Skills')],
   projects: [T('name', 'Name'), A('desc', 'Description'), G('stack', 'Stack'), T('github', 'GitHub URL'), T('live', 'Live / store URL'), { k: 'images', label: 'Images · the first one is the cover', type: 'images' }],
@@ -56,7 +60,7 @@ const url = (s: string) => (s && !/^(https?:|mailto:|\/|data:)/.test(s) ? `https
 export function toForm(sec: Section, c: Content, id: string | null): Form {
   if (sec === 'profile') {
     const p = c.profile;
-    return { id: 'single', displayName: en(p.displayName), heroRole: en(p.heroRole), heroPos: en(p.heroPos), avail: en(p.avail), stack: p.stack.join(', '), portraits: p.portraits, fullName: p.fullName, teachRole: en(p.teachRole), teachTopics: p.teachTopics.join(', '), achievement: en(p.achievement) };
+    return { id: 'single', displayName: en(p.displayName), heroRole: en(p.heroRole), heroPos: en(p.heroPos), avail: en(p.avail), stack: p.stack.join(', '), ...Object.fromEntries(Object.entries(collageStacks(p)).map(([slot, urls]) => [`collage_${slot}`, urls])), fullName: p.fullName, teachRole: en(p.teachRole), teachTopics: p.teachTopics.join(', '), achievement: en(p.achievement) };
   }
   if (sec === 'contact') return { id: 'single', ...c.contact };
   const it = id ? (c[sec] as { id: string }[]).find((x) => x.id === id) : undefined;
@@ -82,10 +86,16 @@ export function blank(sec: Section): Form {
 }
 
 /** Editor form → content, merged over the original item so translations survive. */
+/** Per-tile photos from the form; `portraits` is kept as the flat list for older code. */
+function collageFromForm(f: Form) {
+  const collage = Object.fromEntries(COLLAGE_SLOTS.map((slot) => [slot, (f[`collage_${slot}`] as string[] | undefined) ?? []]));
+  return { collage, portraits: COLLAGE_SLOTS.flatMap((slot) => collage[slot]) };
+}
+
 export function applyForm(sec: Section, c: Content, f: Form): Content {
   if (sec === 'profile') {
     const p = c.profile;
-    const profile: Profile = { ...p, displayName: setEn(p.displayName, f.displayName), heroRole: setEn(p.heroRole, f.heroRole), heroPos: setEn(p.heroPos, f.heroPos), avail: setEn(p.avail, f.avail), stack: tags(f.stack), portraits: f.portraits || [], fullName: f.fullName, teachRole: setEn(p.teachRole, f.teachRole), teachTopics: tags(f.teachTopics), achievement: setEn(p.achievement, f.achievement) };
+    const profile: Profile = { ...p, displayName: setEn(p.displayName, f.displayName), heroRole: setEn(p.heroRole, f.heroRole), heroPos: setEn(p.heroPos, f.heroPos), avail: setEn(p.avail, f.avail), stack: tags(f.stack), ...collageFromForm(f), fullName: f.fullName, teachRole: setEn(p.teachRole, f.teachRole), teachTopics: tags(f.teachTopics), achievement: setEn(p.achievement, f.achievement) };
     return { ...c, profile };
   }
   if (sec === 'contact') {

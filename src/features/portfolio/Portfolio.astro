@@ -10,6 +10,7 @@ import Teaching from '@/features/portfolio/Teaching';
 import ResearchList from '@/features/portfolio/ResearchList';
 import CopyEmail from '@/features/portfolio/CopyEmail';
 import PhotoCollage from '@/features/portfolio/PhotoCollage';
+import { collageStacks } from '@/domain/collage';
 import Footer from './Footer.astro';
 
 interface Props { lang: Lang; content: Content }
@@ -17,8 +18,6 @@ const { lang, content: c } = Astro.props;
 const V = views(c, lang);
 const U = V.U;
 const P = c.profile;
-// Firestore may briefly hold the pre-migration shape until the owner's next admin sign-in applies SEED_VERSION.
-const portraits = P.portraits ?? [];
 const email = c.contact.email;
 const strip = (u: string) => u.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const contacts = [
@@ -64,7 +63,7 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
           <a href="#contact" class={button('tonal')}>{U.contact}</a>
         </div>
       </div>
-      <PhotoCollage client:visible photos={portraits} labels={U.photo} alt={P.fullName} />
+      <PhotoCollage client:visible stacks={collageStacks(P)} labels={U.photo} alt={P.fullName} />
     </div>
   </section>
 
