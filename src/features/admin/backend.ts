@@ -1,6 +1,6 @@
 import { seed } from '@/data/seed';
-import type { Content } from '@/lib/types';
-import { FIREBASE_WEB } from '@/lib/firebase-web';
+import type { Content } from '@/domain/types';
+import { FIREBASE_WEB } from '@/data/firebase-config';
 
 export interface Snapshot {
   draft: Content;

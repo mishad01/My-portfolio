@@ -1,4 +1,4 @@
-import type { Lang } from '@/lib/types';
+import type { Lang } from '@/domain/types';
 
 const en = {
   skip: 'Skip to content',

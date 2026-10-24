@@ -1,14 +1,14 @@
 ---
-import type { Content, Lang } from '@/lib/types';
-import { formatDay, href, t } from '@/lib/i18n';
-import { cls, toneCls } from '@/lib/cls';
-import { views } from '@/lib/view';
-import Header from '@/islands/Header';
-import ExperienceList from '@/islands/ExperienceList';
-import Projects from '@/islands/Projects';
-import Teaching from '@/islands/Teaching';
-import ResearchList from '@/islands/ResearchList';
-import CopyEmail from '@/islands/CopyEmail';
+import type { Content, Lang } from '@/domain/types';
+import { formatDay, href, t } from '@/domain/i18n';
+import { cls, toneCls } from '@/ui/classes';
+import { views } from '@/features/portfolio/view-model';
+import Header from '@/features/portfolio/Header';
+import ExperienceList from '@/features/portfolio/ExperienceList';
+import Projects from '@/features/portfolio/Projects';
+import Teaching from '@/features/portfolio/Teaching';
+import ResearchList from '@/features/portfolio/ResearchList';
+import CopyEmail from '@/features/portfolio/CopyEmail';
 import Footer from './Footer.astro';
 
 interface Props { lang: Lang; content: Content }

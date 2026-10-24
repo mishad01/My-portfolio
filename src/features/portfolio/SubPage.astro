@@ -1,10 +1,10 @@
 ---
 /** Standalone section page (canvas frames 2a–3c): no site header, a back link instead. */
-import type { Lang } from '@/lib/types';
-import { href } from '@/lib/i18n';
+import type { Lang } from '@/domain/types';
+import { href } from '@/domain/i18n';
 import { ui } from '@/i18n/ui';
-import { cls } from '@/lib/cls';
-import ThemeToggle from '@/islands/ThemeToggle';
+import { cls } from '@/ui/classes';
+import ThemeToggle from '@/features/portfolio/ThemeToggle';
 
 interface Props { lang: Lang; id: string; tinted?: boolean; back?: boolean }
 const { lang, id, tinted = false, back = true } = Astro.props;

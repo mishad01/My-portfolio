@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { byFrequency } from '@/lib/i18n';
-import { cls, filterChip } from '@/lib/cls';
+import { byFrequency } from '@/domain/i18n';
+import { cls, filterChip } from '@/ui/classes';
 import { MoreButton } from './MoreButton';
 
 export interface ProjectView {

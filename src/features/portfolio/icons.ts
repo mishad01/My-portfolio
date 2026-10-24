@@ -1,4 +1,4 @@
-import type { LinkType } from './types';
+import type { LinkType } from '@/domain/types';
 
 export const LINK_ICON: Record<LinkType, string> = { github: 'code', linkedin: 'badge', facebook: 'groups', youtube: 'smart_display', playstore: 'android', appstore: 'phone_iphone', website: 'language', other: 'link' };
 export const LINK_TITLE: Record<LinkType, string> = { github: 'GitHub', linkedin: 'LinkedIn', facebook: 'Facebook', youtube: 'YouTube', playstore: 'Play Store', appstore: 'App Store', website: 'Website', other: 'Link' };

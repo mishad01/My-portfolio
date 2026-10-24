@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { Lang } from '@/lib/types';
-import { NAV_ICON, NAV_IDS } from '@/lib/icons';
-import { scrollToId } from '@/lib/scroll';
+import type { Lang } from '@/domain/types';
+import { NAV_ICON, NAV_IDS } from '@/features/portfolio/icons';
+import { scrollToId } from '@/platform/scroll';
 import { ThemeToggle } from './ThemeToggle';
 
 type NavId = (typeof NAV_IDS)[number];

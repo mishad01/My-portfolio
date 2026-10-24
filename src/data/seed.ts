@@ -1,4 +1,4 @@
-import type { Content, I18n } from '@/lib/types';
+import type { Content, I18n } from '@/domain/types';
 
 /**
  * Built-in content, taken from the CV (German academic CV, Aug 2026, and the

@@ -1,10 +1,10 @@
-import type { Content, Lang } from './types';
-import { formatYm, t } from './i18n';
+import type { Content, Lang } from '@/domain/types';
+import { formatYm, t } from '@/domain/i18n';
 import { LINK_ICON, LINK_TITLE } from './icons';
 import { ui } from '@/i18n/ui';
-import type { ExpView } from '@/islands/ExperienceList';
-import type { ProjectView } from '@/islands/Projects';
-import type { ResearchView } from '@/islands/ResearchList';
+import type { ExpView } from '@/features/portfolio/ExperienceList';
+import type { ProjectView } from '@/features/portfolio/Projects';
+import type { ResearchView } from '@/features/portfolio/ResearchList';
 
 /** Localise content into the plain props the islands take. */
 export function views(c: Content, lang: Lang) {

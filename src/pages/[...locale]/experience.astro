@@ -1,12 +1,12 @@
 ---
 import Base from '@/layouts/Base.astro';
-import SubPage from '@/components/SubPage.astro';
-import ExperienceList from '@/islands/ExperienceList';
-import { loadPublished } from '@/lib/content';
-import { localePaths } from '@/lib/paths';
-import { views } from '@/lib/view';
-import { cls } from '@/lib/cls';
-import type { Lang } from '@/lib/types';
+import SubPage from '@/features/portfolio/SubPage.astro';
+import ExperienceList from '@/features/portfolio/ExperienceList';
+import { loadPublished } from '@/data/content-repository';
+import { localePaths } from '@/platform/locale-paths';
+import { views } from '@/features/portfolio/view-model';
+import { cls } from '@/ui/classes';
+import type { Lang } from '@/domain/types';
 
 export const getStaticPaths = localePaths;
 const { lang } = Astro.props as { lang: Lang };

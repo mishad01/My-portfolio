@@ -1,7 +1,7 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Canvas from '@/islands/Canvas';
-import { loadPublished } from '@/lib/content';
+import Canvas from '@/features/canvas/Canvas';
+import { loadPublished } from '@/data/content-repository';
 
 const c = await loadPublished();
 const detail = c.classes.find((k) => k.id === 'flutter-firebase')?.id ?? c.classes[0]?.id ?? '';

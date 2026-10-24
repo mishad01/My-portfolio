@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Content, ListSection, Section } from '@/lib/types';
+import type { Content, ListSection, Section } from '@/domain/types';
 import { seed } from '@/data/seed';
 import { type Backend, demoBackend, firebaseBackend, firebaseConfigured } from './backend';
 import { FIELDS, META, type Field, type Form, applyForm, blank, meta, setEn, subOf, tags, titleOf, toForm } from './schema';

@@ -1,4 +1,4 @@
-import type { ClassItem, Content, Education, Experience, I18n, LinkType, ListSection, NowCard, Profile, Contact, Project, Research, Section } from '@/lib/types';
+import type { ClassItem, Content, Education, Experience, I18n, LinkType, ListSection, NowCard, Profile, Contact, Project, Research, Section } from '@/domain/types';
 
 export interface Meta { k: Section; name: string; one: string; icon: string; single?: boolean }
 

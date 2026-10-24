@@ -1,4 +1,4 @@
-import { cls } from '@/lib/cls';
+import { cls } from '@/ui/classes';
 
 interface Props {
   href: string;

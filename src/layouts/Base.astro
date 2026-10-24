@@ -1,8 +1,8 @@
 ---
 import '@/styles/global.css';
-import type { Lang } from '@/lib/types';
-import { LANGS } from '@/lib/types';
-import { href } from '@/lib/i18n';
+import type { Lang } from '@/domain/types';
+import { LANGS } from '@/domain/types';
+import { href } from '@/domain/i18n';
 import { seed } from '@/data/seed';
 
 interface Props {
@@ -72,8 +72,8 @@ const person = {
   <body>
     <slot />
     <script>
-      import '@/lib/frame';
-      import '@/lib/lang-redirect';
+      import '@/platform/frame';
+      import '@/platform/lang-redirect';
     </script>
   </body>
 </html>

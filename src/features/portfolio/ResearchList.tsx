@@ -1,5 +1,5 @@
-import { toneCls } from '@/lib/cls';
-import type { Tone } from '@/lib/types';
+import { toneCls } from '@/ui/classes';
+import type { Tone } from '@/domain/types';
 import { MoreButton } from './MoreButton';
 
 export interface ResearchView {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { cls } from '@/lib/cls';
+import { cls } from '@/ui/classes';
 
 export default function CopyEmail({ email, label, done }: { email: string; label: string; done: string }) {
   const [copied, setCopied] = useState(false);

@@ -1,12 +1,12 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Teaching from '@/islands/Teaching';
-import { loadPublished } from '@/lib/content';
-import { localePaths } from '@/lib/paths';
-import { href, t } from '@/lib/i18n';
-import { views } from '@/lib/view';
-import { cls } from '@/lib/cls';
-import type { Lang } from '@/lib/types';
+import Teaching from '@/features/portfolio/Teaching';
+import { loadPublished } from '@/data/content-repository';
+import { localePaths } from '@/platform/locale-paths';
+import { href, t } from '@/domain/i18n';
+import { views } from '@/features/portfolio/view-model';
+import { cls } from '@/ui/classes';
+import type { Lang } from '@/domain/types';
 
 export const getStaticPaths = localePaths;
 const { lang } = Astro.props as { lang: Lang };

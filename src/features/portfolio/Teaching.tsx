@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { ClassItem } from '@/lib/types';
-import { cls, filterChip, tones, toneCls } from '@/lib/cls';
+import type { ClassItem } from '@/domain/types';
+import { cls, filterChip, tones, toneCls } from '@/ui/classes';
 
 type View = 'home' | 'list' | 'detail';
 

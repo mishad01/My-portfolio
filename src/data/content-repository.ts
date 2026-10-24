@@ -1,6 +1,7 @@
 import { seed } from '@/data/seed';
-import type { Content } from './types';
-import { FIREBASE_WEB } from './firebase-web';
+import type { Content } from '@/domain/types';
+import { publishedOnly } from '@/domain/publishing';
+import { FIREBASE_WEB } from './firebase-config';
 
 export interface Loaded {
   content: Content;
@@ -76,12 +77,7 @@ function decode(v: FsValue): unknown {
   return null;
 }
 
-/** Content with drafts removed — what visitors see. */
+/** Published content — what visitors see. */
 export async function loadPublished(): Promise<Content> {
   return publishedOnly((await loadContent()).content);
-}
-
-export function publishedOnly(c: Content): Content {
-  const p = <T extends { status: string }>(a: T[]) => a.filter((x) => x.status === 'published');
-  return { ...c, now: p(c.now), experience: p(c.experience), projects: p(c.projects), classes: p(c.classes), research: p(c.research), education: p(c.education) };
 }

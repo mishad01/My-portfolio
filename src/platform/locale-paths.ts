@@ -1,4 +1,4 @@
-import type { Lang } from './types';
+import type { Lang } from '@/domain/types';
 
 /** getStaticPaths entries for a page that exists in every language (en unprefixed). */
 export const localePaths = () =>
