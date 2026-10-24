@@ -14,6 +14,13 @@ type Item = { id: string; status: 'draft' | 'published' };
 export const listOf = (c: Content, s: Section) => (Array.isArray(c[s]) ? (c[s] as Item[]) : null);
 const clone = <T,>(x: T): T => JSON.parse(JSON.stringify(x));
 const LOAD_TIMEOUT = 15000;
+
+/**
+ * Only migrate content that predates this code's release. Versions start with
+ * a date (YYYY-MM-DD-…), so string order is release order. Never overwrite
+ * content published by a newer or different copy of the site.
+ */
+const isOlderRelease = (stored?: string) => !stored ? true : stored < SEED_VERSION && stored.slice(0, 10) < SEED_VERSION.slice(0, 10);
 const SAVE_DEBOUNCE = 400;
 
 /**
@@ -75,7 +82,7 @@ export function useAdmin() {
           const s = await Promise.race([b.load(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error('firestore-timeout')), LOAD_TIMEOUT))]);
           // Content migration: a newer built-in release replaces the draft and goes live once.
           let draft = s.draft;
-          if (draft.seedVersion !== SEED_VERSION && q.get('demo') !== '1') {
+          if (isOlderRelease(draft.seedVersion) && q.get('demo') !== '1') {
             draft = clone(seed);
             await b.publish(draft);
             setChanged(false);
