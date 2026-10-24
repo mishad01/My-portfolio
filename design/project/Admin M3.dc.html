@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap" rel="stylesheet">
 <style>
 body{margin:0}
-a{color:#006A6A}a:hover{color:#004F4F}
+a{color:#0B57D0}a:hover{color:#0842A0}
 .ms{font-family:'Material Symbols Outlined';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;-webkit-font-smoothing:antialiased;font-size:24px;flex:none}
 .stripes{background-image:repeating-linear-gradient(135deg,transparent 0 10px,rgba(127,127,127,.14) 10px 11px)}
 input,textarea{font-family:inherit}
@@ -192,7 +192,8 @@ input,textarea{font-family:inherit}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;login&quot;,&quot;tsType&quot;:&quot;'login'|'dashboard'|'list'|'edit'|'inline'&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;dashboard&quot;,&quot;list&quot;,&quot;edit&quot;,&quot;inline&quot;],&quot;section&quot;:&quot;Admin&quot;},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Admin&quot;}}">
 class Component extends DCLogic {
-  state = this.init();
+  state = { theme: this.pickTheme(), ...this.init() };
+  pickTheme() { let t = new URLSearchParams(location.search).get('theme'); try { t = t || localStorage.getItem('pfTheme'); } catch (e) {} return this.themes()[t] ? t : 'blue'; }
   init() {
     const q = new URLSearchParams(location.search), data = this.seed();
     const screen = q.get('screen') || this.props.screen || 'login', sec = q.get('sec') || 'experience';
@@ -274,9 +275,14 @@ class Component extends DCLogic {
       ]
     };
   }
-  pal(d) {
-    return d ? { primary:'#80D5D4', onPrimary:'#003737', primaryContainer:'#004F4F', onPrimaryContainer:'#9CF1F0', secondaryContainer:'#304B4B', onSecondaryContainer:'#CCE8E7', tertiaryContainer:'#334863', onTertiaryContainer:'#D3E4FF', surface:'#0E1514', surfaceContainerLow:'#161D1D', surfaceContainer:'#1A2121', surfaceContainerHigh:'#252B2B', surfaceContainerHighest:'#303636', onSurface:'#DDE4E3', onSurfaceVariant:'#BEC9C8', outline:'#899392', outlineVariant:'#3F4948', error:'#F2B8B5', errorContainer:'#601410', inverse:'#DDE4E3', onInverse:'#161D1D', inversePrimary:'#006A6A' }
-      : { primary:'#006A6A', onPrimary:'#FFFFFF', primaryContainer:'#9CF1F0', onPrimaryContainer:'#002020', secondaryContainer:'#CCE8E7', onSecondaryContainer:'#051F1F', tertiaryContainer:'#D3E4FF', onTertiaryContainer:'#041C35', surface:'#F4FAF9', surfaceContainerLow:'#EEF5F4', surfaceContainer:'#E8EFEE', surfaceContainerHigh:'#E3E9E8', surfaceContainerHighest:'#DDE4E3', onSurface:'#161D1D', onSurfaceVariant:'#3F4948', outline:'#6F7979', outlineVariant:'#BEC9C8', error:'#B3261E', errorContainer:'#F9DEDC', inverse:'#2B3231', onInverse:'#EBF2F1', inversePrimary:'#80D5D4' };
+  themes() { return {"blue":["Blue",["#0B57D0","#FFFFFF","#D3E3FD","#041E49","#DAE2F9","#131C2B","#FBD7FC","#29132D","#F8F9FF","#F2F3F9","#ECEDF3","#E6E8EE","#E1E2E8","#191C20","#44474E","#74777F","#C4C6D0"],["#A8C7FA","#062E6F","#0842A0","#D3E3FD","#3F4759","#DAE2F9","#583E5B","#FBD7FC","#111318","#191C20","#1D2024","#282A2F","#33353A","#E2E2E9","#C4C6D0","#8E9099","#44474E"]],"violet":["Violet",["#6750A4","#FFFFFF","#EADDFF","#21005D","#E8DEF8","#1D192B","#FFD8E4","#31111D","#FEF7FF","#F7F2FA","#F3EDF7","#ECE6F0","#E6E0E9","#1D1B20","#49454F","#7A757F","#CAC4D0"],["#D0BCFF","#381E72","#4F378B","#EADDFF","#4A4458","#E8DEF8","#633B48","#FFD8E4","#141218","#1D1B20","#211F26","#2B2930","#36343B","#E6E0E9","#CAC4D0","#938F99","#49454F"]],"green":["Green",["#386A20","#FFFFFF","#B8F397","#062100","#D7E8CD","#112109","#BCEBEE","#002022","#F8FAF0","#F2F5EA","#ECEFE5","#E6E9DF","#E1E4D9","#191D16","#43483E","#73796D","#C3C8BB"],["#9DD67D","#0B3900","#205107","#B8F397","#3B4B33","#D7E8CD","#1F4D50","#BCEBEE","#11140F","#191D16","#1D211A","#272B24","#32362E","#E1E4D9","#C3C8BB","#8D9387","#43483E"]],"terracotta":["Terracotta",["#9A4521","#FFFFFF","#FFDBCD","#360F00","#F5DFD5","#2B160D","#E8E2AA","#1E1C00","#FFF8F6","#FFF1EC","#FCEBE5","#F6E5DF","#F0DFD9","#231916","#53433E","#85736D","#D8C2BA"],["#FFB59A","#5A1B00","#7B2F0D","#FFDBCD","#5B413A","#F5DFD5","#4A4809","#E8E2AA","#1A110E","#231916","#271D1A","#322824","#3D332F","#F1DFD9","#D8C2BA","#A08D86","#53433E"]],"teal":["Teal",["#006A6A","#FFFFFF","#9CF1F0","#002020","#CCE8E7","#051F1F","#D3E4FF","#041C35","#F4FAF9","#EEF5F4","#E8EFEE","#E3E9E8","#DDE4E3","#161D1D","#3F4948","#6F7979","#BEC9C8"],["#80D5D4","#003737","#004F4F","#9CF1F0","#304B4B","#CCE8E7","#334863","#D3E4FF","#0E1514","#161D1D","#1A2121","#252B2B","#303636","#DDE4E3","#BEC9C8","#899392","#3F4948"]]}; }
+  pal(d, extra) {
+    const K = ['primary','onPrimary','primaryContainer','onPrimaryContainer','secondaryContainer','onSecondaryContainer','tertiaryContainer','onTertiaryContainer','surface','surfaceContainerLow','surfaceContainer','surfaceContainerHigh','surfaceContainerHighest','onSurface','onSurfaceVariant','outline','outlineVariant'];
+    const th = this.themes(), e = th[this.state.theme] || th.blue, L = e[1], D = e[2], v = d ? D : L, c = {};
+    K.forEach((k, i) => c[k] = v[i]);
+    c.code = d ? { kw:'#E5B4F3', str:'#9AD7A8', num:'#F2B66B', prop:c.primary, com:c.outline } : { kw:'#8B3FA0', str:'#1E6E3C', num:'#9A5B00', prop:c.primary, com:c.outline };
+    if (extra) Object.assign(c, d ? { error:'#F2B8B5', errorContainer:'#601410', inverse:c.onSurface, onInverse:c.surface, inversePrimary:L[0] } : { error:'#B3261E', errorContainer:'#F9DEDC', inverse:'#2E3132', onInverse:'#F0F0F4', inversePrimary:D[0] });
+    return c;
   }
   titleOf(sec, it) { return ({ now: it.label, experience: it.role, projects: it.name, classes: it.name, research: it.title, education: it.level })[sec] || ''; }
   subOf(sec, it) { return ({ now: it.text, experience: it.org + ' · ' + it.start + ' – ' + it.end, projects: it.stack, classes: it.level + ' · ' + it.weeks + ' weeks', research: it.kind + ' · ' + it.venue, education: it.inst })[sec] || ''; }
@@ -297,7 +303,7 @@ class Component extends DCLogic {
     this.setState(s => { const a = [...s.data[sec]], i = a.findIndex(x => x.id === from), j = a.findIndex(x => x.id === to); const [m] = a.splice(i, 1); a.splice(j, 0, m); return { changed: true, dragId: null, overId: null, data: { ...s.data, [sec]: a } }; });
   }
   renderVals() {
-    const s = this.state, c = this.pal(s.dark), meta = this.meta(), sec = s.sec, m = meta.find(x => x.k === sec), data = s.data;
+    const s = this.state, c = this.pal(s.dark, true), meta = this.meta(), sec = s.sec, m = meta.find(x => x.k === sec), data = s.data;
     const isLogin = s.screen === 'login', isApp = !isLogin;
     const count = k => { const a = data[k]; return Array.isArray(a) ? a : null; };
     const navTop = [['dashboard','Dashboard','dashboard'], ['inline','Edit on page','edit_note']].map(([id, label, icon]) => { const on = s.screen === id; return { label, icon, go: () => this.setState({ screen: id }), bg: on ? c.secondaryContainer : 'transparent', color: on ? c.onSecondaryContainer : c.onSurfaceVariant, hover: on ? c.secondaryContainer : c.surfaceContainerHighest }; });
