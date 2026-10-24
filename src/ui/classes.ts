@@ -38,12 +38,14 @@ export const tone: Record<Tone, string> = {
 export type ButtonVariant = 'filled' | 'tonal' | 'outlined' | 'text';
 export type ButtonSize = 'md' | 'lg';
 
-const buttonBase = 'inline-flex flex-none cursor-pointer items-center justify-center gap-2 font-medium no-underline transition-opacity disabled:cursor-default disabled:opacity-60';
+const buttonBase = 'inline-flex flex-none cursor-pointer items-center justify-center gap-2 font-medium no-underline transition-opacity disabled:cursor-default';
+/** M3 disabled state for container buttons: neutral container, muted label. */
+const disabledContainer = 'disabled:bg-surface-highest disabled:text-on-surface-variant disabled:opacity-100';
 const buttonVariant: Record<ButtonVariant, string> = {
-  filled: 'border-0 bg-primary text-on-primary hover:text-on-primary hover:opacity-[.92]',
-  tonal: 'border-0 bg-secondary-container text-on-secondary-container hover:text-on-secondary-container hover:opacity-[.92]',
-  outlined: 'border border-outline bg-transparent text-primary hover:bg-surface-mid hover:text-primary',
-  text: 'border-0 bg-transparent text-primary hover:bg-surface-highest hover:text-primary',
+  filled: `border-0 bg-primary text-on-primary hover:text-on-primary hover:opacity-[.92] ${disabledContainer}`,
+  tonal: `border-0 bg-secondary-container text-on-secondary-container hover:text-on-secondary-container hover:opacity-[.92] ${disabledContainer}`,
+  outlined: 'border border-outline bg-transparent text-primary hover:bg-surface-mid hover:text-primary disabled:opacity-40',
+  text: 'border-0 bg-transparent text-primary hover:bg-surface-highest hover:text-primary disabled:opacity-40',
 };
 const buttonSize: Record<ButtonSize, string> = {
   md: 'h-10 rounded-[20px] px-6 text-sm',
