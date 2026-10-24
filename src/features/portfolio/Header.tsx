@@ -5,6 +5,7 @@ import { scrollToId } from '@/platform/scroll';
 import { toggleTheme } from '@/platform/theme';
 import { Icon, IconButton, cx } from '@/ui';
 import { type Command, CommandPalette } from './CommandPalette';
+import { ScrollProgressLogo } from './ScrollProgressLogo';
 import { ThemeToggle } from './ThemeToggle';
 
 type NavId = (typeof NAV_IDS)[number];
@@ -84,7 +85,7 @@ export default function Header({ lang, brand, nav, langHref, pageHref, labels: L
       {/* Floating M3 app bar */}
       <div className="relative mx-auto flex max-w-[1120px] items-center gap-3 rounded-[28px] border border-outline-variant bg-surface-mid/90 py-2 pr-2 pl-2 shadow-[0_4px_18px_rgba(0,0,0,.08)] backdrop-blur-md wide:pl-3">
         <div className="flex min-w-0 flex-1 nav:flex-none">
-          <a href="#top" aria-label={brand} title={brand} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0 }); }} className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-primary font-[Inter_Tight] text-lg font-bold tracking-[-.03em] text-on-primary no-underline hover:text-on-primary">M</a>
+          <ScrollProgressLogo label={brand} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0 }); }} />
         </div>
 
         <nav aria-label={L.sections} className="no-scrollbar hidden min-w-0 flex-1 justify-center-safe gap-0.5 overflow-x-auto nav:flex">
