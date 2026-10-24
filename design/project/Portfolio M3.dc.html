@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Hind+Siliguri:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap" rel="stylesheet">
+<style>
+html{scroll-padding-top:120px}
+body{margin:0}
+a{color:#006A6A}a:hover{color:#004F4F}
+.ms{font-family:'Material Symbols Outlined';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;-webkit-font-smoothing:antialiased;font-size:24px;flex:none}
+.stripes{background-image:repeating-linear-gradient(135deg,transparent 0 10px,rgba(127,127,127,.14) 10px 11px)}
+*:focus-visible{outline:3px solid #006A6A;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+<div style="min-height:100vh;background:{{ c.surface }};color:{{ c.onSurface }};font-family:{{ fontBody }};font-size:16px;line-height:24px">
+
+<a href="#main" style="position:absolute;left:8px;top:-60px;background:{{ c.primary }};color:{{ c.onPrimary }};padding:12px 20px;border-radius:20px;z-index:100;font-weight:500" style-focus="top:8px">{{ ui.skip }}</a>
+
+<header style="display:{{ mainDisp }};position:sticky;top:0;z-index:30;background:{{ c.surfaceContainer }};border-bottom:1px solid {{ c.outlineVariant }}">
+  <div style="max-width:1120px;margin:0 auto;padding:{{ pad.hdr }};display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px">
+    <div onClick="{{ goTop }}" style="display:flex;align-items:center;gap:12px;cursor:pointer;min-width:0;order:1;flex:{{ pad.brandFlex }}">
+      <div style="width:40px;height:40px;border-radius:12px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:-.03em;font-size:20px;flex:none">M</div>
+      <span style="font-family:{{ fontHead }};font-size:20px;line-height:28px;font-weight:700;letter-spacing:-.02em;opacity:{{ wordOp }};transition:opacity .2s">{{ ui.shortName }}</span>
+    </div>
+    <nav aria-label="Sections" style="display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;order:{{ pad.navOrder }};flex:{{ pad.navFlex }};min-width:0;justify-content:{{ pad.navJustify }};display:{{ pad.navDisp }}">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+        <a href="#{{ n.id }}" onClick="{{ n.go }}" aria-current="{{ n.current }}" style="flex:none;height:36px;padding:0 14px;display:flex;align-items:center;font-size:14px;font-weight:500;letter-spacing:.1px;color:{{ n.color }};background:{{ n.bg }};text-decoration:none;border-radius:18px;transition:background .2s,color .2s" style-hover="background:{{ c.surfaceContainerHighest }}">{{ n.label }}</a>
+      </sc-for>
+    </nav>
+    <div style="display:flex;align-items:center;gap:8px;order:2;flex:none">
+      <div role="group" aria-label="Language" style="display:flex;height:36px;flex:none">
+        <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+          <div onClick="{{ l.pick }}" role="button" tabindex="0" aria-pressed="{{ l.on }}" style="min-width:44px;box-sizing:border-box;justify-content:center;padding:0 10px;display:flex;align-items:center;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:.3px;border:1px solid {{ c.outline }};margin-left:-1px;border-radius:{{ l.radius }};background:{{ l.bg }};color:{{ l.color }}">{{ l.label }}</div>
+        </sc-for>
+      </div>
+      <div onClick="{{ toggleDark }}" role="button" tabindex="0" aria-label="{{ ui.theme }}" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ c.onSurfaceVariant }};flex:none" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">{{ themeIcon }}</span></div>
+      <div onClick="{{ toggleMenu }}" role="button" tabindex="0" aria-label="Menu" aria-expanded="{{ menuOpen }}" style="display:{{ pad.menuDisp }};width:40px;height:40px;border-radius:20px;align-items:center;justify-content:center;cursor:pointer;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};flex:none"><span class="ms">{{ menuIcon }}</span></div>
+    </div>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;left:12px;right:12px;top:100%;margin-top:4px;background:{{ c.surfaceContainerHigh }};border-radius:28px;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;flex-direction:column">
+    <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+      <a href="#{{ n.id }}" onClick="{{ n.goMenu }}" style="height:52px;padding:0 20px;display:flex;align-items:center;gap:16px;font-size:16px;font-weight:500;color:{{ n.color }};background:{{ n.bg }};text-decoration:none;border-radius:26px"><span class="ms" style="font-size:22px">{{ n.icon }}</span>{{ n.label }}</a>
+    </sc-for>
+  </div>
+  </sc-if>
+</header>
+
+<main id="main">
+
+<section id="hero" style="display:{{ disp.hero }};padding:{{ pad.hero }}">
+  <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:{{ pad.heroGap }};align-items:center">
+    <div style="display:flex;flex-direction:column;gap:24px;align-items:flex-start">
+      <div style="display:flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 8px;border-radius:8px;background:{{ c.tertiaryContainer }};color:{{ c.onTertiaryContainer }};font-size:14px;font-weight:500;letter-spacing:.1px"><span class="ms" style="font-size:18px">flight_takeoff</span>{{ ui.avail }}</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <h1 style="margin:0;font-family:{{ fontHead }};font-size:clamp(56px,10vw,104px);line-height:.92;letter-spacing:-.03em;font-weight:700">{{ ui.displayName }}</h1>
+        <span style="font-size:18px;font-weight:500;color:{{ c.primary }}">{{ ui.heroRole }}</span>
+      </div>
+      <p style="margin:0;font-size:{{ pad.heroSub }};line-height:{{ pad.heroSubLh }};max-width:30em;text-wrap:pretty">{{ ui.heroPos }}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ heroStack }}" as="s" hint-placeholder-count="6"><span style="height:32px;padding:0 12px;border-radius:8px;border:1px solid {{ c.outline }};display:flex;align-items:center;font-size:14px;font-weight:500;color:{{ c.onSurfaceVariant }}">{{ s }}</span></sc-for>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="cv.pdf" download="Mishad-CV.pdf" style="height:48px;padding:0 24px 0 20px;border-radius:24px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;gap:8px;font-size:16px;font-weight:500;text-decoration:none" style-hover="opacity:.92"><span class="ms" style="font-size:20px">download</span>{{ ui.cv }}</a>
+        <a href="#contact" onClick="{{ goContact }}" style="height:48px;padding:0 24px;border-radius:24px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;font-size:16px;font-weight:500;text-decoration:none" style-hover="opacity:.92">{{ ui.contact }}</a>
+      </div>
+    </div>
+    <div class="stripes" style="order:{{ pad.photoOrder }};aspect-ratio:1/1;max-width:{{ pad.photoMax }};width:100%;justify-self:center;border-radius:{{ pad.photoRadius }};background-color:{{ c.primaryContainer }};color:{{ c.onPrimaryContainer }};display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:20px">portrait photo<br>1:1 · drop in /public/mishad.jpg</div>
+  </div>
+</section>
+
+<section id="now" style="display:{{ disp.now }};padding:{{ pad.sec }};background:{{ c.surfaceContainerLow }}">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <h2 style="margin:0;font-family:{{ fontHead }};font-size:{{ pad.h2 }};line-height:1.1;font-weight:700;letter-spacing:-.03em">{{ ui.nowTitle }}</h2>
+      <span style="display:flex;align-items:center;gap:6px;font-size:14px;color:{{ c.onSurfaceVariant }}"><span class="ms" style="font-size:18px">update</span>{{ ui.updated }} {{ nowDate }}</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px">
+      <sc-for list="{{ now }}" as="n" hint-placeholder-count="5">
+        <div style="background:{{ n.bg }};color:{{ n.fg }};border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <span class="ms" style="font-size:28px">{{ n.icon }}</span>
+          <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase">{{ n.label }}</span>
+          <span style="font-size:18px;line-height:26px;text-wrap:pretty">{{ n.text }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="display:{{ disp.experience }};padding:{{ pad.sec }}">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:32px">
+    <h2 style="margin:0;font-family:{{ fontHead }};font-size:{{ pad.h2 }};line-height:1.1;font-weight:700;letter-spacing:-.03em">{{ ui.nav.experience }}</h2>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <sc-for list="{{ exp }}" as="e" hint-placeholder-count="5">
+        <article style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px 32px;background:{{ e.bg }};border-radius:24px;padding:{{ pad.expPad }};border:1px solid {{ e.border }}">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:14px;font-weight:500;letter-spacing:.1px;color:{{ e.dateColor }}">{{ e.dates }}</span>
+            <span style="font-size:14px;color:{{ c.onSurfaceVariant }}">{{ e.loc }}</span>
+            <span style="display:{{ e.curDisp }};align-self:flex-start;margin-top:8px;height:24px;padding:0 10px;border-radius:12px;background:{{ c.primary }};color:{{ c.onPrimary }};font-size:12px;font-weight:500;align-items:center;letter-spacing:.5px">{{ ui.current }}</span>
+          </div>
+          <div style="grid-column:{{ pad.expSpan }};min-width:0;flex:2;display:flex;flex-direction:column;gap:8px">
+            <h3 style="margin:0;font-family:{{ fontHead }};font-size:22px;line-height:28px;font-weight:700;letter-spacing:-.02em">{{ e.role }}</h3>
+            <span style="font-size:16px;color:{{ c.onSurfaceVariant }}">{{ e.org }}</span>
+            <p style="margin:4px 0 0;text-wrap:pretty">{{ e.summary }}</p>
+            <ul style="margin:0;padding-left:20px;color:{{ c.onSurfaceVariant }}"><sc-for list="{{ e.bullets }}" as="b" hint-placeholder-count="1"><li>{{ b }}</li></sc-for></ul>
+            <div style="display:{{ e.skillsDisp }};gap:8px;flex-wrap:wrap;margin-top:4px">
+              <sc-for list="{{ e.skills }}" as="s" hint-placeholder-count="2"><span style="height:28px;padding:0 12px;border-radius:8px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;font-size:13px;font-weight:500">{{ s }}</span></sc-for>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+    <div onClick="{{ toggleExp }}" role="button" tabindex="0" style="cursor:pointer;align-self:center;height:48px;padding:0 24px 0 28px;border-radius:24px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:{{ moreDisp }};align-items:center;gap:8px;font-size:16px;font-weight:500;text-decoration:none" style-hover="opacity:.92">{{ moreLabel }}<span class="ms" style="font-size:20px">{{ expIcon }}</span></div>
+  </div>
+</section>
+
+<section id="projects" style="display:{{ disp.projects }};padding:{{ pad.sec }};background:{{ c.surfaceContainerLow }}">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px">
+    <h2 style="margin:0;font-family:{{ fontHead }};font-size:{{ pad.h2 }};line-height:1.1;font-weight:700;letter-spacing:-.03em">{{ ui.nav.projects }}</h2>
+    <div role="group" aria-label="Filter" style="display:flex;gap:8px;flex-wrap:wrap">
+      <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="6">
+        <div onClick="{{ ch.pick }}" role="button" tabindex="0" aria-pressed="{{ ch.on }}" style="height:32px;box-sizing:border-box;border-radius:8px;padding:0 14px;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;font-weight:500;background:{{ ch.bg }};border:1px solid {{ ch.border }};color:{{ ch.color }}">
+          <span class="ms" style="font-size:18px;display:{{ ch.checkDisp }}">check</span>{{ ch.label }}
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px">
+      <sc-for list="{{ cards }}" as="p" hint-placeholder-count="5">
+        <article onClick="{{ p.open }}" style="background:{{ c.surfaceContainerHigh }};border-radius:28px;overflow:hidden;display:flex;flex-direction:column;cursor:{{ p.cursor }}" style-hover="box-shadow:0 2px 8px rgba(0,0,0,.2)">
+          <div class="stripes" style="height:{{ pad.coverH }};background-color:{{ p.coverBg }};color:{{ c.onPrimaryContainer }};position:relative;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;text-align:center;padding:16px">
+            {{ p.coverLabel }}
+            <div onClick="{{ p.openImgs }}" role="button" tabindex="0" style="display:{{ p.imgDisp }};position:absolute;right:12px;bottom:12px;height:32px;padding:0 12px 0 8px;border-radius:16px;background:{{ c.surface }};color:{{ c.onSurface }};align-items:center;gap:6px;font-family:{{ fontBody }};font-size:13px;font-weight:500;cursor:pointer"><span class="ms" style="font-size:18px">photo_library</span>{{ p.imgCount }}</div>
+          </div>
+          <div style="padding:20px 20px 12px;display:flex;flex-direction:column;gap:8px;flex:1">
+            <h3 style="margin:0;font-family:{{ fontHead }};font-size:22px;line-height:28px;font-weight:700;letter-spacing:-.02em">{{ p.name }}</h3>
+            <p style="margin:0;color:{{ c.onSurfaceVariant }};font-size:15px;line-height:22px;text-wrap:pretty">{{ p.desc }}</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+              <sc-for list="{{ p.stack }}" as="s" hint-placeholder-count="3"><span style="height:24px;padding:0 10px;border-radius:8px;border:1px solid {{ c.outlineVariant }};display:flex;align-items:center;font-size:12px;font-weight:500;color:{{ c.onSurfaceVariant }}">{{ s }}</span></sc-for>
+            </div>
+          </div>
+          <div style="padding:4px 12px 12px;display:flex;align-items:center;gap:4px;min-height:48px">
+            <sc-for list="{{ p.links }}" as="l" hint-placeholder-count="2">
+              <a href="{{ l.url }}" target="_blank" rel="noopener" title="{{ l.title }}" aria-label="{{ l.title }}" onClick="{{ l.stop }}" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:{{ c.primary }};text-decoration:none" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">{{ l.icon }}</span></a>
+            </sc-for>
+            <span style="display:{{ p.dispOnlyDisp }};margin-left:12px;font-size:12px;letter-spacing:.4px;color:{{ c.onSurfaceVariant }}">{{ ui.displayOnly }}</span>
+            <span class="ms" style="display:{{ p.arrowDisp }};margin-left:auto;margin-right:8px;color:{{ c.onSurfaceVariant }}">north_east</span>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+    <div onClick="{{ showMore }}" role="button" tabindex="0" style="align-self:center;height:48px;padding:0 24px 0 28px;border-radius:24px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:{{ projMoreDisp }};align-items:center;gap:8px;font-size:16px;font-weight:500;cursor:pointer" style-hover="opacity:.92">{{ projMoreLabel }}<span class="ms" style="font-size:20px">expand_more</span></div>
+  </div>
+</section>
+
+<section id="teaching" style="display:{{ disp.teaching }};padding:{{ pad.sec }}">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div onClick="{{ tBack }}" role="button" tabindex="0" aria-label="Back" style="display:{{ tBackDisp }};height:48px;padding:0 20px 0 14px;border-radius:24px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:pointer" style-hover="opacity:.92"><span class="ms" style="font-size:20px">arrow_back</span>{{ tBackLabel }}</div>
+      <h2 style="margin:0;font-family:{{ fontHead }};font-size:{{ pad.h2 }};line-height:1.1;font-weight:700;letter-spacing:-.03em">{{ tTitle }}</h2>
+    </div>
+    <sc-if value="{{ tHome }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px">
+      <div onClick="{{ openClasses }}" role="button" tabindex="0" style="cursor:pointer;background:{{ c.primaryContainer }};color:{{ c.onPrimaryContainer }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px;text-decoration:none;position:relative;transition:box-shadow .2s" style-hover="box-shadow:0 2px 10px rgba(0,0,0,.2)">
+        <span class="ms" style="font-size:32px;align-self:flex-start">school</span>
+        <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase">{{ ui.platform }}</span><span style="font-size:28px;line-height:36px;font-family:{{ fontHead }};font-weight:700;letter-spacing:-.02em">Ostad EdTech</span></div>
+        <span>{{ ui.teachRole }}</span>
+        <span style="font-size:14px;margin-top:auto">{{ classCount }} {{ ui.classes }}</span>
+        <span class="ms" style="position:absolute;right:24px;top:24px;opacity:.7">north_east</span>
+      </div>
+      <div onClick="{{ openClasses }}" role="button" tabindex="0" style="cursor:pointer;background:{{ c.surfaceContainerLow }};color:{{ c.onSurface }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px;text-decoration:none;position:relative;transition:box-shadow .2s" style-hover="box-shadow:0 2px 10px rgba(0,0,0,.2)">
+        <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }}">{{ ui.classes }}</span>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ classPreview }}" as="k" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:12px"><span class="ms" style="font-size:20px;color:{{ c.primary }}">{{ k.icon }}</span><span style="font-size:16px;font-weight:500">{{ k.name }}</span></div></sc-for>
+        </div>
+        <span style="font-size:14px;color:{{ c.primary }};font-weight:500;margin-top:auto">{{ classMore }}</span>
+        <span class="ms" style="position:absolute;right:24px;top:24px;opacity:.7">north_east</span>
+      </div>
+      <div onClick="{{ openClasses }}" role="button" tabindex="0" style="cursor:pointer;background:{{ c.surfaceContainerLow }};color:{{ c.onSurface }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px;text-decoration:none;position:relative;transition:box-shadow .2s" style-hover="box-shadow:0 2px 10px rgba(0,0,0,.2)">
+        <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }}">{{ ui.topics }}</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ topics }}" as="t" hint-placeholder-count="6"><span style="height:32px;padding:0 14px;border-radius:8px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;font-size:14px;font-weight:500">{{ t }}</span></sc-for>
+        </div>
+        <span class="ms" style="position:absolute;right:24px;top:24px;opacity:.7">north_east</span>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ tList }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <p style="margin:0;color:{{ c.onSurfaceVariant }};max-width:36em;text-wrap:pretty">{{ tui.intro }}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ tChips }}" as="ch" hint-placeholder-count="6">
+            <div onClick="{{ ch.pick }}" role="button" tabindex="0" aria-pressed="{{ ch.on }}" style="height:32px;box-sizing:border-box;border-radius:8px;padding:0 14px;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;font-weight:500;background:{{ ch.bg }};border:1px solid {{ ch.border }};color:{{ ch.color }}"><span class="ms" style="font-size:18px;display:{{ ch.checkDisp }}">check</span>{{ ch.label }}</div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px">
+          <sc-for list="{{ tCards }}" as="k" hint-placeholder-count="4">
+            <article onClick="{{ k.open }}" role="button" tabindex="0" style="background:{{ c.surfaceContainerHigh }};border-radius:28px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:box-shadow .2s" style-hover="box-shadow:0 2px 10px rgba(0,0,0,.2)">
+              <div class="stripes" style="height:{{ pad.coverH }};background-color:{{ k.coverBg }};color:{{ k.coverFg }};position:relative;display:flex;align-items:center;justify-content:center"><span class="ms" style="font-size:56px">{{ k.icon }}</span><span style="position:absolute;left:12px;top:12px;height:28px;padding:0 12px;border-radius:14px;background:{{ c.surface }};color:{{ c.onSurface }};display:flex;align-items:center;font-size:13px;font-weight:500">{{ k.level }}</span></div>
+              <div style="padding:20px 20px 12px;display:flex;flex-direction:column;gap:8px;flex:1">
+                <h3 style="margin:0;font-family:{{ fontHead }};font-size:22px;line-height:28px;font-weight:700;letter-spacing:-.02em">{{ k.name }}</h3>
+                <p style="margin:0;color:{{ c.onSurfaceVariant }};font-size:15px;line-height:22px;text-wrap:pretty">{{ k.desc }}</p>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><sc-for list="{{ k.topics }}" as="t" hint-placeholder-count="3"><span style="height:24px;padding:0 10px;border-radius:8px;border:1px solid {{ c.outlineVariant }};display:flex;align-items:center;font-size:12px;font-weight:500;color:{{ c.onSurfaceVariant }}">{{ t }}</span></sc-for></div>
+              </div>
+              <div style="padding:8px 20px 16px;display:flex;align-items:center;gap:16px;font-size:13px;color:{{ c.onSurfaceVariant }}">
+                <span style="display:flex;align-items:center;gap:6px"><span class="ms" style="font-size:18px">schedule</span>{{ k.weeks }}</span>
+                <span style="display:flex;align-items:center;gap:6px"><span class="ms" style="font-size:18px">groups</span>{{ k.batches }}</span>
+                <span class="ms" style="margin-left:auto;color:{{ c.primary }}">arrow_forward</span>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ tDetail }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="stripes" style="border-radius:36px;background-color:{{ td.coverBg }};color:{{ td.coverFg }};padding:{{ pad.card }};display:flex;flex-direction:column;gap:16px">
+          <span class="ms" style="font-size:48px">{{ td.icon }}</span>
+          <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase">Ostad EdTech · {{ td.level }}</span>
+          <h3 style="margin:0;font-family:{{ fontHead }};font-size:clamp(32px,6vw,52px);line-height:1.05;letter-spacing:-.03em;font-weight:700;text-wrap:balance">{{ td.name }}</h3>
+          <p style="margin:0;font-size:18px;line-height:28px;max-width:34em;text-wrap:pretty">{{ td.desc }}</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px">
+          <sc-for list="{{ td.facts }}" as="f" hint-placeholder-count="4"><div style="background:{{ c.surfaceContainerHigh }};border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }}">{{ f.label }}</span><span style="font-family:{{ fontHead }};font-size:26px;line-height:34px;font-weight:700;letter-spacing:-.02em">{{ f.value }}</span></div></sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;align-items:start">
+          <div style="background:{{ c.surfaceContainerHigh }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }};margin-bottom:8px">{{ tui.syllabus }}</span>
+            <sc-for list="{{ td.modules }}" as="m" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:16px;padding:8px 0"><div style="width:32px;height:32px;border-radius:16px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex:none">{{ m.n }}</div><span>{{ m.title }}</span></div></sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="background:{{ c.surfaceContainerHigh }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px">
+              <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }}">{{ ui.topics }}</span>
+              <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ td.topics }}" as="t" hint-placeholder-count="3"><span style="height:32px;padding:0 14px;border-radius:8px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;font-size:14px;font-weight:500">{{ t }}</span></sc-for></div>
+            </div>
+            <div style="background:{{ c.tertiaryContainer }};color:{{ c.onTertiaryContainer }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase">{{ tui.outcome }}</span>
+              <span style="font-size:18px;line-height:28px;text-wrap:pretty">{{ td.outcome }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section id="research" style="display:{{ disp.research }};padding:{{ pad.sec }};background:{{ c.surfaceContainerLow }}">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:32px">
+    <h2 style="margin:0;font-family:{{ fontHead }};font-size:{{ pad.h2 }};line-height:1.1;font-weight:700;letter-spacing:-.03em">{{ ui.nav.research }}</h2>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <sc-for list="{{ research }}" as="r" hint-placeholder-count="1">
+        <div style="background:{{ r.bg }};color:{{ r.fg }};border-radius:36px;padding:{{ pad.card }};display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:32px;align-items:center">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase">{{ r.kind }} · {{ r.venue }}</span>
+            <h3 style="margin:0;font-family:{{ fontHead }};font-size:28px;line-height:36px;font-weight:700;letter-spacing:-.02em;text-wrap:balance">{{ r.title }}</h3>
+            <p style="margin:0;text-wrap:pretty">{{ r.summary }}</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ r.tags }}" as="t" hint-placeholder-count="3"><span style="height:28px;padding:0 12px;border-radius:8px;border:1px solid {{ r.fg }};display:flex;align-items:center;font-size:13px;font-weight:500">{{ t }}</span></sc-for></div>
+          </div>
+          <div class="stripes" style="aspect-ratio:16/10;border-radius:24px;background-color:{{ c.surface }};color:{{ c.onSurface }};display:flex;align-items:center;justify-content:center;text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;padding:16px">{{ r.fig }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div onClick="{{ toggleRes }}" role="button" tabindex="0" style="cursor:pointer;align-self:center;height:48px;padding:0 24px 0 28px;border-radius:24px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:{{ resMoreDisp }};align-items:center;gap:8px;font-size:16px;font-weight:500" style-hover="opacity:.92">{{ resMoreLabel }}<span class="ms" style="font-size:20px">{{ resIcon }}</span></div>
+  </div>
+</section>
+
+<section id="education" style="display:{{ disp.education }};padding:{{ pad.sec }}">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:32px">
+    <h2 style="margin:0;font-family:{{ fontHead }};font-size:{{ pad.h2 }};line-height:1.1;font-weight:700;letter-spacing:-.03em">{{ ui.eduTitle }}</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px">
+      <sc-for list="{{ edu }}" as="e" hint-placeholder-count="4">
+        <div style="background:{{ e.bg }};color:{{ e.fg }};border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:6px;border:1px solid {{ e.border }}">
+          <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase">{{ e.tag }}</span>
+          <span style="font-size:20px;line-height:28px;font-weight:500;text-wrap:pretty">{{ e.level }}</span>
+          <span style="font-size:15px">{{ e.inst }}</span>
+          <span style="font-size:15px;font-weight:500;margin-top:6px">{{ e.result }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;background:{{ c.surfaceContainerHigh }};border-radius:24px;padding:20px 24px">
+      <div style="width:48px;height:48px;border-radius:24px;background:{{ c.primaryContainer }};color:{{ c.onPrimaryContainer }};display:flex;align-items:center;justify-content:center;flex:none"><span class="ms">emoji_events</span></div>
+      <div style="display:flex;flex-direction:column"><span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }}">{{ ui.achievements }}</span><span style="font-size:18px;font-weight:500">ICPC Asia Dhaka Regional — {{ ui.honorable }}</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="display:{{ disp.contact }};padding:{{ pad.sec }};background:{{ c.surfaceContainerLow }}">
+  <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-family:{{ fontHead }};font-size:clamp(40px,7vw,64px);line-height:1;letter-spacing:-.03em;font-weight:700">{{ ui.contactTitle }}</h2>
+      <p style="margin:0;font-size:18px;line-height:28px;color:{{ c.onSurfaceVariant }};max-width:26em;text-wrap:pretty">{{ ui.contactSub }}</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="mailto:hello@example.com" style="height:48px;padding:0 24px 0 20px;border-radius:24px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;gap:8px;font-weight:500;text-decoration:none" style-hover="opacity:.92"><span class="ms" style="font-size:20px">mail</span>{{ ui.emailMe }}</a>
+        <div onClick="{{ copyEmail }}" role="button" tabindex="0" style="height:48px;padding:0 24px 0 20px;border-radius:24px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;gap:8px;font-weight:500;cursor:pointer" style-hover="opacity:.92"><span class="ms" style="font-size:20px">{{ copyIcon }}</span>{{ copyLabel }}</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;background:{{ c.surfaceContainerHigh }};border-radius:28px;padding:8px 0;overflow:hidden">
+      <sc-for list="{{ contacts }}" as="k" hint-placeholder-count="3">
+        <a href="{{ k.url }}" target="{{ k.target }}" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:16px 24px;text-decoration:none;color:{{ c.onSurface }}" style-hover="background:{{ c.surfaceContainerHighest }}">
+          <span class="ms" style="color:{{ c.primary }}">{{ k.icon }}</span>
+          <div style="display:flex;flex-direction:column;flex:1;min-width:0"><span style="font-size:12px;letter-spacing:.4px;color:{{ c.onSurfaceVariant }}">{{ k.label }}</span><span style="font-size:16px;overflow:hidden;text-overflow:ellipsis">{{ k.value }}</span></div>
+          <span class="ms" style="color:{{ c.onSurfaceVariant }}">north_east</span>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer style="display:{{ mainDisp }};padding:32px 16px;text-align:center;font-size:14px;color:{{ c.onSurfaceVariant }};background:{{ c.surface }}">© 2026 Md. Sakif Rahaman Mishad · mishad01.github.io</footer>
+
+<sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-modal="true" aria-label="{{ lb.title }}" style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px">
+  <div onClick="{{ closeLb }}" style="position:absolute;inset:0;background:rgba(0,0,0,.72)"></div>
+  <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:16px;max-height:100%">
+    <div class="stripes" style="height:min(70vh,640px);aspect-ratio:9/19.5;border-radius:32px;background-color:{{ c.primaryContainer }};color:{{ c.onPrimaryContainer }};display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:18px">{{ lb.label }}</div>
+    <div style="display:flex;align-items:center;gap:8px;background:{{ c.surfaceContainerHigh }};color:{{ c.onSurface }};border-radius:28px;padding:4px 8px">
+      <div onClick="{{ lbPrev }}" role="button" tabindex="0" aria-label="Previous" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">chevron_left</span></div>
+      <span style="font-size:14px;font-weight:500;min-width:120px;text-align:center">{{ lb.title }} · {{ lb.pos }}</span>
+      <div onClick="{{ lbNext }}" role="button" tabindex="0" aria-label="Next" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">chevron_right</span></div>
+      <div onClick="{{ closeLb }}" role="button" tabindex="0" aria-label="Close" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">close</span></div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'bn'|'de'&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;bn&quot;,&quot;de&quot;],&quot;section&quot;:&quot;Site&quot;},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Site&quot;},&quot;tv&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;'home'|'list'|'detail'&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;list&quot;,&quot;detail&quot;],&quot;section&quot;:&quot;Teaching&quot;},&quot;tsel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teaching&quot;}}">
+class Component extends DCLogic {
+  state = { resAll: false, only: '', expAll: false, tv: 'home', tsel: null, tTopic: 'All', showAll: false, menu: false, active: '', lang: 'en', dark: false, w: 1000, filter: 'All', lb: null, copied: false };
+  componentDidMount() {
+    let lang = this.props.lang || 'en', dark = !!this.props.dark;
+    const q = new URLSearchParams(location.search); this._fixed = q.has('lang') || q.has('dark');
+    const tv0 = q.get('tv') || this.props.tv;
+    if (tv0 && tv0 !== 'home') this.setState({ tv: tv0, tsel: q.get('tsel') || this.props.tsel || null });
+    const o = q.get('only'); if (o) { const id = o === '1' ? 'teaching' : o; this.setState({ only: id, expAll: id === 'experience', showAll: id === 'projects', resAll: id === 'research' }); }
+    if (q.get('focus')) { setTimeout(() => { const el = document.getElementById('teaching'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70 }); }, 400); }
+    try { lang = localStorage.getItem('pfLang') || lang; const d = localStorage.getItem('pfDark'); if (d !== null) dark = d === '1'; } catch (e) {}
+    if (q.has('lang')) lang = q.get('lang'); if (q.has('dark')) dark = q.get('dark') === '1';
+    this.setState({ lang, dark, w: window.innerWidth });
+    this._r = () => this.setState({ w: window.innerWidth });
+    this._k = e => { if (!this.state.lb) return; if (e.key === 'Escape') this.setState({ lb: null }); if (e.key === 'ArrowRight') this.step(1); if (e.key === 'ArrowLeft') this.step(-1); };
+    this._s = () => { let a = ''; ['now','experience','projects','teaching','research','education','contact'].forEach(id => { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < 140) a = id; }); if (a !== this.state.active) this.setState({ active: a }); };
+    window.addEventListener('scroll', this._s, { passive: true }); this._s(); this._t = setInterval(() => this.report(), 500);
+    window.addEventListener('resize', this._r); window.addEventListener('keydown', this._k);
+  }
+  componentWillUnmount() { clearInterval(this._t); window.removeEventListener('scroll', this._s); window.removeEventListener('resize', this._r); window.removeEventListener('keydown', this._k); }
+  componentDidUpdate() { document.documentElement.lang = this.state.lang; this.report(); }
+  report() { if (window.parent === window) return; const f = this.state.only ? document.getElementById(this.state.only) : document.querySelector('footer'); if (!f) return; const H = Math.ceil(f.getBoundingClientRect().bottom + window.scrollY); if (H !== this._H) { this._H = H; window.parent.postMessage({ pfHeight: H }, '*'); } }
+  pal(d) {
+    return d ? { primary:'#80D5D4', onPrimary:'#003737', primaryContainer:'#004F4F', onPrimaryContainer:'#9CF1F0', secondaryContainer:'#304B4B', onSecondaryContainer:'#CCE8E7', tertiaryContainer:'#334863', onTertiaryContainer:'#D3E4FF', surface:'#0E1514', surfaceContainerLow:'#161D1D', surfaceContainer:'#1A2121', surfaceContainerHigh:'#252B2B', surfaceContainerHighest:'#303636', onSurface:'#DDE4E3', onSurfaceVariant:'#BEC9C8', outline:'#899392', outlineVariant:'#3F4948' }
+      : { primary:'#006A6A', onPrimary:'#FFFFFF', primaryContainer:'#9CF1F0', onPrimaryContainer:'#002020', secondaryContainer:'#CCE8E7', onSecondaryContainer:'#051F1F', tertiaryContainer:'#D3E4FF', onTertiaryContainer:'#041C35', surface:'#F4FAF9', surfaceContainerLow:'#EEF5F4', surfaceContainer:'#E8EFEE', surfaceContainerHigh:'#E3E9E8', surfaceContainerHighest:'#DDE4E3', onSurface:'#161D1D', onSurfaceVariant:'#3F4948', outline:'#6F7979', outlineVariant:'#BEC9C8' };
+  }
+  step(d) { this.setState(s => { if (!s.lb) return null; const p = this.D().projects.find(x => x.id === s.lb.id); return { lb: { id: s.lb.id, i: (s.lb.i + d + p.images) % p.images } }; }); }
+  D() {
+    if (this._d) return this._d;
+    const T = (en, bn, de) => ({ en, bn, de });
+    this._d = {
+      S: {
+        en: { showLess:'Show less', classes:'Classes', viewAll:'View all', loadMore:'Load more', more:'more', backPortfolio:'Back to portfolio', skip:'Skip to content', shortName:'Mishad', displayName:'Mishad', fullName:'Md. Sakif Rahaman Mishad', avail:'Open to Werkstudent roles in Germany from 2027', heroPos:'Full-stack engineer. I ship production mobile apps with Flutter, build the backends behind them — and teach others to do the same.', heroRole:'Full-stack software engineer · Brain Station 23, Dhaka', cv:'Download CV', contact:'Contact', theme:'Toggle theme',
+          nowTitle:'Right now', updated:'Updated', experienceT:'Experience', present:'Present', datesTbd:'[dates]', current:'CURRENT', all:'All', displayOnly:'Display only', platform:'Platform', batches:'Batches', topics:'Topics', sessions:'Sessions & talks', teachRole:'Part-time instructor', thesis:'Undergraduate thesis', thesisTitle:'MIRNet-based low-light image enhancement with PairLIE-inspired consistency regularization', thesisSummary:'Brightening dark photos without amplifying noise or colour shifts — combining a MIRNet backbone with a consistency constraint inspired by PairLIE.', eduTitle:'Education & achievements', achievements:'Achievements', honorable:'Honorable Mention', upcoming:'UPCOMING', contactTitle:'Let’s talk.', contactSub:'Open to Werkstudent roles, freelance projects and academic conversations.', emailMe:'Email me', copyEmail:'Copy email', copied:'Copied', screenshots:'screenshots',
+          nav:{ now:'Now', experience:'Experience', projects:'Projects', teaching:'Teaching', research:'Research', education:'Education', contact:'Contact' } },
+        bn: { showLess:'কম দেখুন', classes:'ক্লাস', viewAll:'সব দেখুন', loadMore:'আরও দেখুন', more:'টি আরও', backPortfolio:'পোর্টফোলিওতে ফিরুন', skip:'মূল অংশে যান', shortName:'মিশাদ', displayName:'মিশাদ', avail:'২০২৭ থেকে জার্মানিতে ওয়ার্কস্টুডেন্ট পদের জন্য উন্মুক্ত', heroPos:'ফুল-স্ট্যাক ইঞ্জিনিয়ার। ফ্লাটার দিয়ে প্রোডাকশন মোবাইল অ্যাপ বানাই, তার ব্যাকএন্ডও গড়ি — এবং অন্যদের শেখাই।', heroRole:'ফুল-স্ট্যাক সফটওয়্যার ইঞ্জিনিয়ার · ব্রেইন স্টেশন ২৩, ঢাকা', cv:'সিভি ডাউনলোড', contact:'যোগাযোগ', theme:'থিম পরিবর্তন',
+          nowTitle:'এই মুহূর্তে', updated:'হালনাগাদ', present:'বর্তমান', current:'চলমান', all:'সব', displayOnly:'শুধু প্রদর্শন', platform:'প্ল্যাটফর্ম', batches:'ব্যাচ', topics:'বিষয়', sessions:'সেশন ও টক', teachRole:'খণ্ডকালীন ইন্সট্রাক্টর', thesis:'স্নাতক থিসিস', eduTitle:'শিক্ষা ও অর্জন', achievements:'অর্জন', honorable:'অনারেবল মেনশন', upcoming:'আসছে', contactTitle:'কথা বলি।', contactSub:'ওয়ার্কস্টুডেন্ট পদ, ফ্রিল্যান্স প্রজেক্ট ও একাডেমিক আলোচনার জন্য উন্মুক্ত।', emailMe:'ইমেইল করুন', copyEmail:'ইমেইল কপি', copied:'কপি হয়েছে', screenshots:'স্ক্রিনশট',
+          nav:{ now:'এখন', experience:'অভিজ্ঞতা', projects:'প্রজেক্ট', teaching:'শিক্ষকতা', research:'গবেষণা', education:'শিক্ষা', contact:'যোগাযোগ' } },
+        de: { showLess:'Weniger anzeigen', classes:'Kurse', viewAll:'Alle ansehen', loadMore:'Mehr laden', more:'weitere', backPortfolio:'Zurück zum Portfolio', skip:'Zum Inhalt springen', shortName:'Mishad', avail:'Offen für Werkstudentenstellen in Deutschland ab 2027', heroPos:'Full-Stack-Entwickler. Ich liefere produktive Mobile-Apps mit Flutter, baue die Backends dazu – und bringe anderen bei, es auch zu tun.', heroRole:'Full-Stack Software Engineer · Brain Station 23, Dhaka', cv:'Lebenslauf laden', contact:'Kontakt', theme:'Design wechseln',
+          nowTitle:'Gerade jetzt', updated:'Aktualisiert', present:'Heute', current:'AKTUELL', all:'Alle', displayOnly:'Nur Ansicht', platform:'Plattform', batches:'Batches', topics:'Themen', sessions:'Sessions & Vorträge', teachRole:'Dozent in Teilzeit', thesis:'Bachelorarbeit', eduTitle:'Ausbildung & Erfolge', achievements:'Erfolge', honorable:'Ehrenvolle Erwähnung', upcoming:'GEPLANT', contactTitle:'Sprechen wir.', contactSub:'Offen für Werkstudentenstellen, Freelance-Projekte und akademischen Austausch.', emailMe:'E-Mail schreiben', copyEmail:'E-Mail kopieren', copied:'Kopiert', screenshots:'Screenshots',
+          nav:{ now:'Aktuell', experience:'Erfahrung', projects:'Projekte', teaching:'Lehre', research:'Forschung', education:'Ausbildung', contact:'Kontakt' } }
+      },
+      now: [
+        { icon:'work', label:T('Building','নির্মাণ','Entwickle'), text:T('Production Flutter apps at Brain Station 23.','ব্রেইন স্টেশন ২৩-এ প্রোডাকশন ফ্লাটার অ্যাপ।','Produktive Flutter-Apps bei Brain Station 23.'), k:'primary' },
+        { icon:'school', label:T('Teaching','শেখাচ্ছি','Lehre'), text:T('Flutter & Dart as an instructor at Ostad.','ওস্তাদে ফ্লাটার ও ডার্ট শেখাচ্ছি।','Flutter & Dart als Dozent bei Ostad.'), k:'secondary' },
+        { icon:'rocket_launch', label:T('Side project','সাইড প্রজেক্ট','Nebenprojekt'), text:T('EduBridge — a free, open-source learning platform.','এডুব্রিজ — বিনামূল্যের ওপেন-সোর্স লার্নিং প্ল্যাটফর্ম।','EduBridge – eine kostenlose Open-Source-Lernplattform.'), k:'tertiary' },
+        { icon:'menu_book', label:T('Learning','শিখছি','Lerne'), text:T('[Current learning topic]'), k:'secondary' },
+        { icon:'flight_takeoff', label:T('Next','পরবর্তী ধাপ','Als Nächstes'), text:T('MSc Software Engineering in Germany, Summer 2027.','জার্মানিতে এমএসসি সফটওয়্যার ইঞ্জিনিয়ারিং, গ্রীষ্ম ২০২৭।','MSc Software Engineering in Deutschland, Sommer 2027.'), k:'primary' }
+      ],
+      classes: [
+        { id:'flutter-fundamentals', icon:'flutter_dash', name:'Flutter Fundamentals', level:'Beginner', weeks:8, batches:3, students:'[120]', topics:['Flutter','Dart','Widgets'], desc:'From Dart basics to a working multi-screen app: layouts, navigation, forms and local storage.', modules:['Dart language essentials','Widgets & layout','Navigation & routing','Forms & validation','Local storage','Capstone app'], outcome:'A multi-screen to-do and notes app published as an APK.' },
+        { id:'state-management', icon:'account_tree', name:'State Management', level:'Intermediate', weeks:4, batches:2, students:'[70]', topics:['Provider','GetX','Bloc'], desc:'Choosing and applying state management patterns so apps stay predictable as they grow.', modules:['setState and its limits','Provider','GetX','Bloc / Cubit','Comparing trade-offs'], outcome:'The same app rebuilt with three approaches, with a written comparison.' },
+        { id:'flutter-firebase', icon:'cloud', name:'Flutter + Firebase', level:'Intermediate', weeks:6, batches:2, students:'[85]', topics:['Firebase','REST APIs','Auth'], desc:'Authentication, Firestore, storage and push notifications wired into a real Flutter app.', modules:['Firebase setup','Authentication','Firestore CRUD','Storage & images','Push notifications','Deploy'], outcome:'A social feed app with login, posts, profiles and image sharing.' },
+        { id:'clean-architecture', icon:'architecture', name:'Clean Architecture', level:'Advanced', weeks:5, batches:1, students:'[40]', topics:['Clean Architecture','MVVM','Testing'], desc:'Layering, dependency injection and testing for apps that more than one person will maintain.', modules:['Layers & boundaries','Repositories & use cases','Dependency injection','Unit & widget tests','Refactoring a legacy app'], outcome:'A feature-complete app with a tested domain layer.' }
+      ],
+      nowUpdated: [2026, 9, 20],
+      exp: [
+        { role:T('Software Engineer (Mobile)','সফটওয়্যার ইঞ্জিনিয়ার (মোবাইল)','Software Engineer (Mobile)'), org:'Brain Station 23 PLC', start:null, end:'now', loc:T('Dhaka','ঢাকা','Dhaka'), summary:T('Building and shipping production mobile applications.','প্রোডাকশন মোবাইল অ্যাপ তৈরি ও রিলিজ।','Entwicklung und Release produktiver Mobile-Apps.'), bullets:T('[2–4 impact bullets]'), skills:['Flutter','Dart'] },
+        { role:T('Instructor (part-time)','ইন্সট্রাক্টর (খণ্ডকালীন)','Dozent (Teilzeit)'), org:'Ostad EdTech Platform', start:null, end:'now', loc:T('[location]'), summary:T('Teaching Flutter and Dart to cohorts of students.','শিক্ষার্থীদের ফ্লাটার ও ডার্ট শেখানো।','Flutter und Dart für Studierendengruppen.'), bullets:T('[2–4 impact bullets]'), skills:['Flutter','Dart'] },
+        { role:T('Apprentice, Learnathon 3.0','অ্যাপ্রেন্টিস, লার্নাথন ৩.০','Apprentice, Learnathon 3.0'), org:'Geeky Solutions · sponsored by Brain Station 23', start:[2025,0], end:[2025,3], loc:T('[location]'), summary:T('Apprenticeship programme sponsored by Brain Station 23.','ব্রেইন স্টেশন ২৩ স্পনসরড অ্যাপ্রেন্টিসশিপ প্রোগ্রাম।','Von Brain Station 23 gesponsertes Apprenticeship-Programm.'), bullets:T('[2–4 impact bullets]'), skills:[] },
+        { role:T('Software Developer Intern','সফটওয়্যার ডেভেলপার ইন্টার্ন','Software Developer Intern'), org:'Maverick Softwares', start:[2024,0], end:[2024,5], loc:T('[location]'), summary:T('[One-line summary]'), bullets:T('[2–4 impact bullets]'), skills:[] },
+        { role:T('Sub-Executive','সাব-এক্সিকিউটিভ','Sub-Executive'), org:'EDU Computer Club', start:null, end:null, loc:T('Chattogram','চট্টগ্রাম','Chattogram'), summary:T('[One-line summary]'), bullets:T('[2–4 impact bullets]'), skills:[] }
+      ],
+      projects: [
+        { id:'kedibe', name:T('Ke Dibe?','কে দিবে?','Ke Dibe?'), desc:T('Bangla Android app that tracks whose turn it is to pay — and who owes treats — in friend groups and office teams.','বন্ধুদের দল ও অফিসে কার পালা, কে ট্রিট বাকি রেখেছে — তার হিসাব রাখার বাংলা অ্যান্ড্রয়েড অ্যাপ।','Bangla-Android-App, die festhält, wer in Freundeskreisen und Büroteams als Nächstes zahlt oder noch einen Ausgeben schuldet.'), stack:['Flutter','Clean Architecture'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01'],['playstore','https://play.google.com']], images:3 },
+        { id:'edubridge', name:T('EduBridge','এডুব্রিজ','EduBridge'), desc:T('Free, open-source learning platform for Bangladeshi students.','বাংলাদেশি শিক্ষার্থীদের জন্য বিনামূল্যের ওপেন-সোর্স লার্নিং প্ল্যাটফর্ম।','Kostenlose Open-Source-Lernplattform für Studierende in Bangladesch.'), stack:['Flutter','GetX','Supabase','PostgreSQL'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01'],['website','https://mishad01.github.io']], images:2 },
+        { id:'social', name:T('Social Media App','সোশ্যাল মিডিয়া অ্যাপ','Social-Media-App'), desc:T('Ostad Pro batch project: login/signup, feed, profile, notifications and image sharing.','ওস্তাদ প্রো ব্যাচ প্রজেক্ট: লগইন/সাইনআপ, ফিড, প্রোফাইল, নোটিফিকেশন ও ছবি শেয়ার।','Projekt im Ostad-Pro-Batch: Login/Signup, Feed, Profil, Benachrichtigungen und Bildfreigabe.'), stack:['Flutter','Firebase','MVVM'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01'],['youtube','https://youtube.com']], images:3 },
+        { id:'choice', name:T('Choice Legacy','চয়েস লেগাসি','Choice Legacy'), desc:T('Shopify-based e-commerce mobile app. Client work — details are limited.','শপিফাই-ভিত্তিক ই-কমার্স মোবাইল অ্যাপ। ক্লায়েন্ট প্রজেক্ট — তথ্য সীমিত।','Shopify-basierte E-Commerce-Mobile-App. Kundenprojekt – nur begrenzte Details.'), stack:['Flutter','Shopify'], url:null, links:[], images:0 },
+        { id:'rn', name:T('React Native projects','রিয়্যাক্ট নেটিভ প্রজেক্ট','React-Native-Projekte'), desc:T('Learning projects in React Native and TypeScript.','রিয়্যাক্ট নেটিভ ও টাইপস্ক্রিপ্টে শেখার প্রজেক্ট।','Lernprojekte in React Native und TypeScript.'), stack:['React Native','TypeScript'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01']], images:0 },
+        { id:'ph6', name:T('[Project name 6]'), desc:T('[One-line description of the project.]'), stack:['Flutter','Node.js'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01']], images:0 },
+        { id:'ph7', name:T('[Project name 7]'), desc:T('[One-line description of the project.]'), stack:['Flutter','Node.js'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01']], images:0 },
+        { id:'ph8', name:T('[Project name 8]'), desc:T('[One-line description of the project.]'), stack:['Flutter','Node.js'], url:'https://github.com/mishad01', links:[['github','https://github.com/mishad01']], images:0 }
+      ],
+      edu: [
+        { tag:T('Upcoming','আসছে','Geplant'), level:T('MSc Software Engineering','এমএসসি সফটওয়্যার ইঞ্জিনিয়ারিং','MSc Software Engineering'), inst:'Germany', result:T('Starting Summer 2027','শুরু গ্রীষ্ম ২০২৭','Start Sommer 2027'), hi:true },
+        { tag:'BSc', level:T('Computer Science & Engineering','কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং','Computer Science & Engineering'), inst:'East Delta University, Chattogram', result:T('CGPA 3.60 / 4.00 · Cum Laude','সিজিপিএ ৩.৬০ / ৪.০০ · কাম লড','CGPA 3,60 / 4,00 · Cum Laude') },
+        { tag:'HSC', level:T('Higher Secondary (Science)','উচ্চ মাধ্যমিক (বিজ্ঞান)','Higher Secondary (Naturwissenschaften)'), inst:'Bangladesh Navy College, Chattogram', result:T('GPA 5.00 / 5.00','জিপিএ ৫.০০ / ৫.০০','GPA 5,00 / 5,00') },
+        { tag:'SSC', level:T('Secondary (Science)','মাধ্যমিক (বিজ্ঞান)','Secondary (Naturwissenschaften)'), inst:'Nasirabad Government High School, Chattogram', result:T('GPA 5.00 / 5.00','জিপিএ ৫.০০ / ৫.০০','GPA 5,00 / 5,00') }
+      ]
+    };
+    return this._d;
+  }
+  renderVals() {
+    const s = this.state, lang = s.lang, c = this.pal(s.dark), D = this.D(), compact = s.w < 700, narrowNav = s.w < 960;
+    const loc = { en:'en-GB', bn:'bn-BD', de:'de-DE' }[lang];
+    const t = o => o == null ? '' : typeof o === 'string' ? o : (o[lang] ?? o.en);
+    const SU = D.S[lang], SE = D.S.en, u = k => SU[k] ?? SE[k];
+    const ui = {}; Object.keys(SE).forEach(k => { if (k !== 'nav') ui[k] = u(k); });
+    ui.nav = {}; Object.keys(SE.nav).forEach(k => ui.nav[k] = (SU.nav && SU.nav[k]) || SE.nav[k]);
+    const mfmt = a => new Intl.DateTimeFormat(loc, { month: 'short', year: 'numeric' }).format(new Date(a[0], a[1]));
+    const bn = lang === 'bn';
+    const fontBody = bn ? "'Hind Siliguri','Inter',sans-serif" : "'Inter',sans-serif";
+    const fontHead = bn ? "'Hind Siliguri','Inter Tight',sans-serif" : "'Inter Tight','Inter',sans-serif";
+    const go = id => e => { if (e) e.preventDefault(); const el = document.getElementById(id); if (!el) return; const rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100, behavior: rm ? 'auto' : 'smooth' }); };
+    const navIds = ['now','experience','projects','teaching','research','education','contact'];
+    const icons = { now:'bolt', experience:'work', projects:'apps', teaching:'school', research:'science', education:'workspace_premium', contact:'mail' };
+    const nav = navIds.map(id => { const on = s.active === id; return { id, icon: icons[id], label: ui.nav[id], go: go(id), goMenu: e => { this.setState({ menu: false }); go(id)(e); }, current: on ? 'true' : 'false', bg: on ? c.secondaryContainer : 'transparent', color: on ? c.onSecondaryContainer : c.onSurfaceVariant }; });
+    const langs = [['en','EN'],['bn','বাং'],['de','DE']].map(([k, label], i) => { const a = s.lang === k; return { label, on: a, checkDisp: 'none',
+      radius: i === 0 ? '18px 0 0 18px' : i === 2 ? '0 18px 18px 0' : '0', bg: a ? c.secondaryContainer : 'transparent', color: a ? c.onSecondaryContainer : c.onSurface,
+      pick: () => { this.setState({ lang: k }); if (!this._fixed) try { localStorage.setItem('pfLang', k); } catch (e) {} } }; });
+    const kc = { primary:[c.primaryContainer,c.onPrimaryContainer], secondary:[c.secondaryContainer,c.onSecondaryContainer], tertiary:[c.tertiaryContainer,c.onTertiaryContainer] };
+    const now = D.now.map(n => ({ icon:n.icon, label:t(n.label), text:t(n.text), bg:kc[n.k][0], fg:kc[n.k][1] }));
+    const exp = (s.expAll ? D.exp : D.exp.slice(0, 3)).map(e => { const cur = e.end === 'now'; const start = e.start ? mfmt(e.start) : ui.datesTbd; const end = cur ? ui.present : e.end ? mfmt(e.end) : ui.datesTbd;
+      const sk = e.skills || []; return { role:t(e.role), org:e.org, loc:t(e.loc), summary:t(e.summary), bullets:[t(e.bullets)], skills:sk, skillsDisp: sk.length ? 'flex' : 'none',
+      dates: start + ' – ' + end, curDisp: cur ? 'flex' : 'none', bg: cur ? c.surfaceContainerLow : 'transparent', border: cur ? c.outlineVariant : c.outlineVariant, dateColor: cur ? c.primary : c.onSurface }; });
+    const counts = {}; D.projects.forEach(p => p.stack.forEach(x => counts[x] = (counts[x] || 0) + 1));
+    const techs = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+    const chips = ['All', ...techs].map(k => { const a = s.filter === k; return { label: k === 'All' ? ui.all : k, on: a, pick: () => this.setState({ filter: k, showAll: false }), checkDisp: a ? 'inline-block' : 'none',
+      bg: a ? c.secondaryContainer : 'transparent', border: a ? 'transparent' : c.outline, color: a ? c.onSecondaryContainer : c.onSurfaceVariant }; });
+    const ic = { github:'code', linkedin:'badge', facebook:'groups', youtube:'smart_display', playstore:'android', appstore:'phone_iphone', website:'language', other:'link' };
+    const tt = { github:'GitHub', linkedin:'LinkedIn', facebook:'Facebook', youtube:'YouTube', playstore:'Play Store', appstore:'App Store', website:'Website', other:'Link' };
+    const filtered = D.projects.filter(p => s.filter === 'All' || p.stack.includes(s.filter));
+    const hidden = s.showAll ? 0 : Math.max(0, filtered.length - 6);
+    const cards = (s.showAll ? filtered : filtered.slice(0, 6)).map(p => ({
+      name: t(p.name), desc: t(p.desc), stack: p.stack, cursor: p.url ? 'pointer' : 'default',
+      open: () => { if (p.url) window.open(p.url, '_blank', 'noopener'); },
+      coverBg: p.images ? c.primaryContainer : c.surfaceContainerHighest, coverLabel: p.images ? 'project screenshots' : 'no images yet',
+      imgDisp: p.images ? 'flex' : 'none', imgCount: p.images, openImgs: e => { e.stopPropagation(); this.setState({ lb: { id: p.id, i: 0 } }); },
+      links: p.links.map(([k, url]) => ({ url, icon: ic[k], title: tt[k], stop: e => e.stopPropagation() })),
+      dispOnlyDisp: p.url ? 'none' : 'inline', arrowDisp: p.url ? 'inline-block' : 'none' }));
+    const edu = D.edu.map(e => ({ tag: t(e.tag), level: t(e.level), inst: e.inst, result: t(e.result),
+      bg: e.hi ? c.tertiaryContainer : 'transparent', fg: e.hi ? c.onTertiaryContainer : c.onSurface, border: e.hi ? 'transparent' : c.outlineVariant }));
+    let lb = { title: '', label: '', pos: '' };
+    if (s.lb) { const p = D.projects.find(x => x.id === s.lb.id); lb = { title: t(p.name), label: t(p.name) + ' — screenshot ' + (s.lb.i + 1), pos: (s.lb.i + 1) + ' / ' + p.images }; }
+    
+    const TT = (en, bn, de) => ({ en, bn, de }), tl = o => o[lang] || o.en;
+    const TU = { title:TT('Teaching','শিক্ষকতা','Lehre'), classes:TT('Classes','ক্লাস','Kurse'), back:TT('Back','ফিরুন','Zurück'), backAll:TT('All classes','সব ক্লাস','Alle Kurse'), intro:TT('Courses I teach at Ostad. Open a class for the syllabus, topics and outcomes.','ওস্তাদে আমার পড়ানো কোর্স। সিলেবাস, বিষয় ও ফলাফল দেখতে ক্লাসে ক্লিক করুন।','Kurse, die ich bei Ostad unterrichte. Öffne einen Kurs für Lehrplan, Themen und Ergebnisse.'), syllabus:TT('Syllabus','সিলেবাস','Lehrplan'), outcome:TT('What students build','শিক্ষার্থীরা যা বানায়','Was Studierende bauen'), weeks:TT('weeks','সপ্তাহ','Wochen'), batches:TT('batches','ব্যাচ','Batches'), duration:TT('Duration','মেয়াদ','Dauer'), students:TT('Students','শিক্ষার্থী','Studierende'), level:TT('Level','লেভেল','Level'), format:TT('Format','ধরন','Format'), live:TT('Live online','লাইভ অনলাইন','Live online') };
+    const tui = {}; Object.keys(TU).forEach(k => tui[k] = tl(TU[k]));
+    const K = D.classes, tone = i => [[c.primaryContainer, c.onPrimaryContainer], [c.secondaryContainer, c.onSecondaryContainer], [c.tertiaryContainer, c.onTertiaryContainer]][i % 3];
+    const tTops = ['All', ...Array.from(new Set(K.flatMap(k => k.topics)))];
+    const tChips = tTops.map(k => { const a = s.tTopic === k; return { label: k === 'All' ? ui.all : k, on: a, pick: () => this.setState({ tTopic: k }), checkDisp: a ? 'inline-block' : 'none', bg: a ? c.secondaryContainer : 'transparent', border: a ? 'transparent' : c.outline, color: a ? c.onSecondaryContainer : c.onSurfaceVariant }; });
+    const toTeaching = () => go('teaching')();
+    const tCards = K.filter(k => s.tTopic === 'All' || k.topics.includes(s.tTopic)).map(k => { const [bg, fg] = tone(K.indexOf(k)); return { name:k.name, desc:k.desc, icon:k.icon, level:k.level, topics:k.topics, weeks:k.weeks + ' ' + tui.weeks, batches:k.batches + ' ' + tui.batches, coverBg:bg, coverFg:fg, open: () => { this.setState({ tv:'detail', tsel:k.id }); setTimeout(toTeaching, 30); } }; });
+    const kk = K.find(x => x.id === s.tsel); let td = { facts: [], modules: [], topics: [] };
+    if (kk) { const [bg, fg] = tone(K.indexOf(kk)); td = { ...kk, coverBg:bg, coverFg:fg, facts: [{ label:tui.duration, value:kk.weeks + ' ' + tui.weeks }, { label:tui.students, value:kk.students }, { label:tui.level, value:kk.level }, { label:tui.format, value:tui.live }], modules: kk.modules.map((m, i) => ({ n: i + 1, title: m })) }; }
+    const tv = s.tv;
+    const RS = [
+      { kind: ui.thesis, venue: 'East Delta University', title: ui.thesisTitle, summary: ui.thesisSummary, tags: ['MIRNet','PairLIE','Low-light enhancement'], fig: 'before / after low-light result\nthesis PDF link goes here', bg: c.tertiaryContainer, fg: c.onTertiaryContainer },
+      { kind: 'Paper', venue: '[Venue / year]', title: '[Paper title]', summary: '[Two-line abstract in plain language.]', tags: ['[keyword]','[keyword]'], fig: 'key figure\npaper link goes here', bg: c.secondaryContainer, fg: c.onSecondaryContainer },
+      { kind: 'Project', venue: '[Course / lab]', title: '[Research project title]', summary: '[Two-line summary of the question and result.]', tags: ['[keyword]','[keyword]'], fig: 'key figure\nreport link goes here', bg: c.primaryContainer, fg: c.onPrimaryContainer }
+    ].map(r => ({ ...r, fig: r.fig.replace('\\n', ' · ') }));
+    const email = 'hello@example.com';
+    const contacts = [
+      { icon:'mail', label:'Email', value:email, url:'mailto:' + email, target:'_self' },
+      { icon:'code', label:'GitHub', value:'github.com/mishad01', url:'https://github.com/mishad01', target:'_blank' },
+      { icon:'badge', label:'LinkedIn', value:'linkedin.com/in/[handle]', url:'https://linkedin.com', target:'_blank' }];
+    const u0 = D.nowUpdated, nowDate = new Intl.DateTimeFormat(loc, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(u0[0], u0[1], u0[2]));
+    return {
+      moreDisp: D.exp.length > 3 && !s.only ? 'flex' : 'none', moreLabel: s.expAll ? ui.showLess : ui.loadMore + ' · ' + (D.exp.length - 3) + ' ' + ui.more, expIcon: s.expAll ? 'expand_less' : 'expand_more', toggleExp: () => this.setState({ expAll: !s.expAll }),
+      projMoreDisp: hidden && !s.only ? 'flex' : 'none', projMoreLabel: ui.loadMore + ' · ' + hidden + ' ' + ui.more, showMore: () => this.setState({ showAll: true }),
+      research: (s.resAll ? RS : RS.slice(0, 1)), resMoreDisp: RS.length > 1 && !s.only ? 'flex' : 'none', resIcon: s.resAll ? 'expand_less' : 'expand_more', toggleRes: () => this.setState({ resAll: !s.resAll }),
+      resMoreLabel: s.resAll ? ui.showLess : ui.loadMore + ' · ' + (RS.length - 1) + ' ' + ui.more,
+      c, ui, fontBody, fontHead, nav, langs, now, exp, chips, cards, edu, contacts, nowDate,
+      pad: compact ? { hdr:'8px 12px', navDisp:'none', menuDisp:'flex', brandFlex:'1', navOrder:'3', navFlex:'1 1 100%', navJustify:'flex-start', hero:'24px 20px 48px', sec:'48px 20px', h2:'32px', card:'24px', heroGap:'28px', photoOrder:-1, photoMax:'168px', photoRadius:'32px 32px 96px 32px', expSpan:'span 1', expPad:'20px', coverH:'140px', heroSub:'18px', heroSubLh:'28px' } : { hdr:'12px 24px', navDisp: narrowNav ? 'none' : 'flex', menuDisp: narrowNav ? 'flex' : 'none', brandFlex:'none', navOrder:'2', navFlex:'1', navJustify:'center', hero:'72px 24px 96px', sec:'88px 24px', h2:'45px', card:'48px', heroGap:'48px', photoOrder:0, photoMax:'440px', photoRadius:'48px 48px 160px 48px', expSpan:'span 2', expPad:'24px', coverH:'168px', heroSub:'22px', heroSubLh:'32px' },
+      heroStack: ['Flutter','Dart','TypeScript','Node.js','Supabase','SQL'], wordOp: s.active ? 1 : 0,
+      topics: ['Flutter','Dart','State management','Clean Architecture','Firebase','REST APIs'],
+      classCount: K.length, classPreview: K.slice(0, 3).map(k => ({ icon: k.icon, name: k.name })), tui, tChips, tCards, td, mainDisp: s.only ? 'none' : 'block', disp: Object.fromEntries(['hero','now','experience','projects','teaching','research','education','contact'].map(id => [id, (!s.only || s.only === id) ? 'block' : 'none'])), tHome: tv === 'home', tList: tv === 'list', tDetail: tv === 'detail', tTitle: tv === 'detail' ? '' : (tv === 'list' ? tui.classes : ui.nav.teaching),
+      tBackDisp: tv === 'home' ? 'none' : 'flex', tBackLabel: tv === 'detail' ? tui.backAll : tui.back,
+      tBack: () => { this.setState(tv === 'detail' ? { tv:'list', tsel:null } : { tv:'home' }); setTimeout(toTeaching, 30); },
+      openClasses: () => { this.setState({ tv:'list' }); setTimeout(toTeaching, 30); }, classMore: ui.viewAll + ' →',
+      menuOpen: s.menu, menuIcon: s.menu ? 'close' : 'menu', toggleMenu: () => this.setState({ menu: !s.menu }),
+      themeIcon: s.dark ? 'light_mode' : 'dark_mode',
+      toggleDark: () => { const v = !s.dark; this.setState({ dark: v }); if (!this._fixed) try { localStorage.setItem('pfDark', v ? '1' : '0'); } catch (e) {} },
+      goTop: () => window.scrollTo({ top: 0 }), goContact: go('contact'),
+      lbOpen: !!s.lb, lb, closeLb: () => this.setState({ lb: null }), lbPrev: () => this.step(-1), lbNext: () => this.step(1),
+      copyIcon: s.copied ? 'check' : 'content_copy', copyLabel: s.copied ? ui.copied : ui.copyEmail,
+      copyEmail: () => { try { navigator.clipboard.writeText(email); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); }
+    };
+  }
+}
+</script>
+</body>
+</html>

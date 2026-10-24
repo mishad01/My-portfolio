@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#006A6A}a:hover{color:#004F4F}
+.ms{font-family:'Material Symbols Outlined';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;-webkit-font-smoothing:antialiased;font-size:24px;flex:none}
+.stripes{background-image:repeating-linear-gradient(135deg,transparent 0 10px,rgba(127,127,127,.14) 10px 11px)}
+input,textarea{font-family:inherit}
+</style>
+</helmet>
+<div style="min-height:100vh;background:{{ c.surface }};color:{{ c.onSurface }};font-family:'Inter',sans-serif;font-size:16px;line-height:24px;display:flex">
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box">
+  <div style="width:100%;max-width:400px;background:{{ c.surfaceContainerLow }};border-radius:28px;padding:36px;display:flex;flex-direction:column;gap:20px;box-sizing:border-box">
+    <div style="display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:14px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:24px;letter-spacing:-.03em">M</div><span style="font-size:14px;font-weight:500;color:{{ c.onSurfaceVariant }}">Portfolio admin</span></div>
+    <h1 style="margin:0;font-family:'Inter Tight',sans-serif;font-size:36px;line-height:40px;font-weight:700;letter-spacing:-.03em">Sign in</h1>
+    <label style="border:1px solid {{ c.outline }};border-radius:12px;padding:8px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:{{ c.onSurfaceVariant }}">Email</span><input value="{{ loginEmail }}" onChange="{{ setLoginEmail }}" style="border:0;outline:0;background:transparent;font-size:16px;color:{{ c.onSurface }};padding:0;width:100%"></label>
+    <label style="border:1px solid {{ c.outline }};border-radius:12px;padding:8px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:{{ c.onSurfaceVariant }}">Password</span><input type="password" value="password" style="border:0;outline:0;background:transparent;font-size:16px;color:{{ c.onSurface }};padding:0;width:100%"></label>
+    <div onClick="{{ signIn }}" role="button" tabindex="0" style="height:48px;border-radius:24px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;justify-content:center;font-weight:500;cursor:pointer" style-hover="opacity:.92">Sign in</div>
+    <span style="font-size:13px;color:{{ c.onSurfaceVariant }}">Prototype — any credentials work.</span>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+<aside style="width:280px;flex:none;position:sticky;top:0;height:100vh;box-sizing:border-box;background:{{ c.surfaceContainerLow }};padding:20px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto">
+  <div style="display:flex;align-items:center;gap:12px;padding:0 16px 16px"><div style="width:40px;height:40px;border-radius:12px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:20px">M</div><div style="display:flex;flex-direction:column"><span style="font-family:'Inter Tight',sans-serif;font-weight:700;font-size:18px;line-height:22px;letter-spacing:-.02em">Portfolio</span><span style="font-size:12px;color:{{ c.onSurfaceVariant }}">Admin</span></div></div>
+  <sc-for list="{{ navTop }}" as="n" hint-placeholder-count="2">
+    <div onClick="{{ n.go }}" role="button" tabindex="0" style="height:56px;border-radius:28px;padding:0 16px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:14px;font-weight:500;background:{{ n.bg }};color:{{ n.color }}" style-hover="background:{{ n.hover }}"><span class="ms" style="font-size:24px">{{ n.icon }}</span>{{ n.label }}</div>
+  </sc-for>
+  <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }};padding:20px 16px 8px">Content</span>
+  <sc-for list="{{ navSecs }}" as="n" hint-placeholder-count="8">
+    <div onClick="{{ n.go }}" role="button" tabindex="0" style="height:48px;border-radius:24px;padding:0 16px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:14px;font-weight:500;background:{{ n.bg }};color:{{ n.color }}" style-hover="background:{{ n.hover }}"><span class="ms" style="font-size:22px">{{ n.icon }}</span><span style="flex:1">{{ n.label }}</span><span style="font-size:12px;opacity:.8;display:{{ n.badgeDisp }}">{{ n.badge }}</span></div>
+  </sc-for>
+  <div style="flex:1"></div>
+  <a href="Portfolio M3.dc.html" target="_blank" rel="noopener" style="height:48px;border-radius:24px;padding:0 16px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;color:{{ c.onSurfaceVariant }};text-decoration:none" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms" style="font-size:22px">open_in_new</span>View site</a>
+  <div onClick="{{ signOut }}" role="button" tabindex="0" style="height:48px;border-radius:24px;padding:0 16px;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;color:{{ c.onSurfaceVariant }};cursor:pointer" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms" style="font-size:22px">logout</span>Sign out</div>
+</aside>
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+  <header style="position:sticky;top:0;z-index:10;background:{{ c.surface }};padding:16px 32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <div onClick="{{ back }}" role="button" tabindex="0" aria-label="Back" style="display:{{ backDisp }};width:40px;height:40px;border-radius:20px;align-items:center;justify-content:center;cursor:pointer;color:{{ c.onSurfaceVariant }}" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">arrow_back</span></div>
+    <h1 style="margin:0;flex:1;min-width:200px;font-family:'Inter Tight',sans-serif;font-size:28px;line-height:36px;font-weight:700;letter-spacing:-.02em">{{ pageTitle }}</h1>
+    <div style="height:32px;padding:0 12px;border-radius:8px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;background:{{ pubBg }};color:{{ pubColor }}"><span class="ms" style="font-size:18px">{{ pubIcon }}</span>{{ pubLabel }}</div>
+    <div onClick="{{ toggleDark }}" role="button" tabindex="0" aria-label="Theme" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ c.onSurfaceVariant }}" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">{{ themeIcon }}</span></div>
+    <div onClick="{{ publish }}" role="button" tabindex="0" style="height:40px;padding:0 24px;border-radius:20px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:{{ publishCursor }};background:{{ publishBg }};color:{{ publishColor }}"><span class="ms" style="font-size:20px">rocket_launch</span>Publish</div>
+  </header>
+
+  <main style="padding:8px 32px 120px;display:flex;flex-direction:column;gap:24px">
+
+  <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <div onClick="{{ goInline }}" role="button" tabindex="0" style="background:{{ c.primaryContainer }};color:{{ c.onPrimaryContainer }};border-radius:28px;padding:28px;display:flex;align-items:center;gap:20px;cursor:pointer;flex-wrap:wrap" style-hover="opacity:.95">
+        <span class="ms" style="font-size:40px">edit_note</span>
+        <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:4px"><span style="font-family:'Inter Tight',sans-serif;font-size:24px;line-height:32px;font-weight:700;letter-spacing:-.02em">Edit on page</span><span>Click any text on a live copy of the page — hero, name, Now cards — and type.</span></div>
+        <span class="ms">arrow_forward</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="8">
+          <div onClick="{{ s.go }}" role="button" tabindex="0" style="background:{{ c.surfaceContainerHigh }};border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:16px;cursor:pointer" style-hover="background:{{ c.surfaceContainerHighest }}">
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:14px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;justify-content:center"><span class="ms">{{ s.icon }}</span></div><span style="font-size:16px;font-weight:500">{{ s.name }}</span></div>
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:'Inter Tight',sans-serif;font-size:36px;line-height:40px;font-weight:700;letter-spacing:-.02em">{{ s.count }}</span><span style="font-size:13px;color:{{ c.onSurfaceVariant }}">{{ s.detail }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <span style="flex:1;min-width:220px;color:{{ c.onSurfaceVariant }};display:flex;align-items:center;gap:8px"><span class="ms" style="font-size:20px">drag_indicator</span>Drag rows to reorder · tap a status to switch Draft / Published</span>
+        <div onClick="{{ addNew }}" role="button" tabindex="0" style="height:56px;padding:0 24px 0 16px;border-radius:16px;background:{{ c.primaryContainer }};color:{{ c.onPrimaryContainer }};display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)" style-hover="opacity:.94"><span class="ms">add</span><span>Add {{ secSingular }}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+          <div draggable="true" onDragStart="{{ r.dragStart }}" onDragOver="{{ r.dragOver }}" onDrop="{{ r.drop }}" onDragEnd="{{ r.dragEnd }}" style="display:flex;align-items:center;gap:16px;padding:12px 16px 12px 8px;border-radius:20px;background:{{ r.bg }};border:2px solid {{ r.border }};opacity:{{ r.opacity }}">
+            <span class="ms" style="cursor:grab;color:{{ c.onSurfaceVariant }}">drag_indicator</span>
+            <div style="width:44px;height:44px;border-radius:14px;background:{{ c.secondaryContainer }};color:{{ c.onSecondaryContainer }};display:flex;align-items:center;justify-content:center;flex:none"><span class="ms">{{ r.icon }}</span></div>
+            <div onClick="{{ r.edit }}" style="flex:1;min-width:0;display:flex;flex-direction:column;cursor:pointer"><span style="font-size:16px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.title }}</span><span style="font-size:14px;color:{{ c.onSurfaceVariant }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.sub }}</span></div>
+            <div onClick="{{ r.toggle }}" role="button" tabindex="0" style="height:32px;padding:0 14px;border-radius:8px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;cursor:pointer;flex:none;background:{{ r.stBg }};color:{{ r.stColor }};border:1px solid {{ r.stBorder }}"><span class="ms" style="font-size:16px">{{ r.stIcon }}</span>{{ r.stLabel }}</div>
+            <div onClick="{{ r.edit }}" role="button" tabindex="0" aria-label="Edit" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ c.onSurfaceVariant }};flex:none" style-hover="background:{{ c.surfaceContainerHighest }}"><span class="ms">edit</span></div>
+            <div onClick="{{ r.del }}" role="button" tabindex="0" aria-label="Delete" style="width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ c.error }};flex:none" style-hover="background:{{ c.errorContainer }}"><span class="ms">delete</span></div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><div style="padding:48px;text-align:center;color:{{ c.onSurfaceVariant }};background:{{ c.surfaceContainerLow }};border-radius:24px">Nothing here yet. Add the first one.</div></sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:24px;align-items:start">
+      <div style="background:{{ c.surfaceContainerLow }};border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:16px">
+        <sc-for list="{{ formFields }}" as="f" hint-placeholder-count="5">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}"><label style="border:1px solid {{ c.outline }};border-radius:12px;padding:8px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:{{ c.onSurfaceVariant }}">{{ f.label }}</span><input value="{{ f.value }}" onChange="{{ f.input }}" style="border:0;outline:0;background:transparent;font-size:16px;line-height:24px;color:{{ c.onSurface }};padding:0;width:100%"></label></sc-if>
+            <sc-if value="{{ f.isTags }}" hint-placeholder-val="{{ false }}"><label style="border:1px solid {{ c.outline }};border-radius:12px;padding:8px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:{{ c.onSurfaceVariant }}">{{ f.label }} · comma-separated</span><input value="{{ f.value }}" onChange="{{ f.input }}" style="border:0;outline:0;background:transparent;font-size:16px;line-height:24px;color:{{ c.onSurface }};padding:0;width:100%"></label></sc-if>
+            <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}"><label style="border:1px solid {{ c.outline }};border-radius:12px;padding:8px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:{{ c.onSurfaceVariant }}">{{ f.label }}</span><textarea rows="3" value="{{ f.value }}" onChange="{{ f.input }}" style="border:0;outline:0;background:transparent;font-size:16px;line-height:24px;color:{{ c.onSurface }};padding:0;width:100%;resize:vertical"></textarea></label></sc-if>
+            <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:12px;color:{{ c.onSurfaceVariant }};padding-left:4px">{{ f.label }}</span>
+              <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ f.opts }}" as="o" hint-placeholder-count="3"><div onClick="{{ o.pick }}" role="button" tabindex="0" style="height:32px;box-sizing:border-box;border-radius:8px;padding:0 14px;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;font-weight:500;background:{{ o.bg }};border:1px solid {{ o.border }};color:{{ o.color }}"><span class="ms" style="font-size:18px;display:{{ o.checkDisp }}">check</span>{{ o.label }}</div></sc-for></div>
+            </sc-if>
+            <sc-if value="{{ f.isImage }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:12px;color:{{ c.onSurfaceVariant }};padding-left:4px">{{ f.label }}</span>
+              <label onDragOver="{{ f.over }}" onDrop="{{ f.drop }}" style="height:160px;border-radius:20px;border:2px dashed {{ c.outline }};display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;color:{{ c.onSurfaceVariant }};background-image:{{ f.bgImg }};background-size:cover;background-position:center;position:relative;overflow:hidden" style-hover="background-color:{{ c.surfaceContainer }}">
+                <span class="ms" style="font-size:32px;display:{{ f.emptyDisp }}">upload</span><span style="font-size:14px;display:{{ f.emptyDisp }}">Drop an image or click to browse</span>
+                <input type="file" accept="image/*" onChange="{{ f.upload }}" style="display:none">
+              </label>
+              <div onClick="{{ f.clear }}" role="button" tabindex="0" style="display:{{ f.clearDisp }};align-self:flex-start;height:32px;padding:0 12px;border-radius:8px;align-items:center;gap:6px;font-size:13px;font-weight:500;color:{{ c.error }};cursor:pointer"><span class="ms" style="font-size:18px">delete</span>Remove image</div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ hasStatus }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ toggleDraftStatus }}" role="button" tabindex="0" style="display:flex;align-items:center;gap:16px;padding:12px 4px;cursor:pointer;border-top:1px solid {{ c.outlineVariant }};margin-top:4px">
+            <div style="flex:1;display:flex;flex-direction:column"><span style="font-weight:500">{{ statusTitle }}</span><span style="font-size:14px;color:{{ c.onSurfaceVariant }}">{{ statusSub }}</span></div>
+            <div style="width:52px;height:32px;border-radius:16px;box-sizing:border-box;background:{{ swTrack }};border:2px solid {{ swBorder }};position:relative;flex:none;transition:background .2s"><div style="position:absolute;top:50%;left:{{ swLeft }};width:{{ swSize }};height:{{ swSize }};border-radius:50%;background:{{ swThumb }};transform:translateY(-50%);transition:all .2s;display:flex;align-items:center;justify-content:center;color:{{ c.onPrimaryContainer }}"><span class="ms" style="font-size:16px;font-weight:700;display:{{ swCheck }}">check</span></div></div>
+          </div>
+        </sc-if>
+        <div style="display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px">
+          <div onClick="{{ discard }}" role="button" tabindex="0" style="height:40px;padding:0 24px;border-radius:20px;border:1px solid {{ c.outline }};color:{{ c.primary }};display:flex;align-items:center;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:{{ c.surfaceContainer }}">Discard</div>
+          <div onClick="{{ save }}" role="button" tabindex="0" style="height:40px;padding:0 24px;border-radius:20px;background:{{ c.primary }};color:{{ c.onPrimary }};display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;cursor:pointer" style-hover="opacity:.92"><span class="ms" style="font-size:20px">check</span>Save</div>
+        </div>
+      </div>
+
+      <div style="position:sticky;top:88px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:{{ c.onSurfaceVariant }}"><span class="ms" style="font-size:18px">visibility</span>Live preview · as visitors see it</div>
+        <div style="display:{{ prevDraftDisp }};align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:12px;background:{{ c.surfaceContainerHighest }};font-size:13px;font-weight:500"><span class="ms" style="font-size:18px">visibility_off</span>Draft — hidden from the site</div>
+        <div style="background:{{ pv.bg }};color:{{ pv.fg }};border-radius:28px;overflow:hidden;border:1px solid {{ pv.border }};display:flex;flex-direction:column">
+          <div class="stripes" style="display:{{ pv.coverDisp }};height:160px;background-color:{{ c.primaryContainer }};background-image:{{ pv.coverImg }};background-size:cover;background-position:center;color:{{ c.onPrimaryContainer }};align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px"><span style="display:{{ pv.coverEmptyDisp }}">no image yet</span></div>
+          <div style="padding:24px;display:flex;flex-direction:column;gap:12px">
+            <span class="ms" style="font-size:32px;display:{{ pv.iconDisp }}">{{ pv.icon }}</span>
+            <span style="font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;display:{{ pv.kickerDisp }}">{{ pv.kicker }}</span>
+            <span style="font-family:'Inter Tight',sans-serif;font-size:{{ pv.titleSize }};line-height:1.15;font-weight:700;letter-spacing:-.02em;display:{{ pv.titleDisp }};text-wrap:balance">{{ pv.title }}</span>
+            <span style="text-wrap:pretty;display:{{ pv.bodyDisp }}">{{ pv.body }}</span>
+            <span style="font-size:14px;opacity:.85;display:{{ pv.metaDisp }}">{{ pv.meta }}</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ pv.tags }}" as="t" hint-placeholder-count="3"><span style="height:26px;padding:0 10px;border-radius:8px;border:1px solid {{ pv.fg }};display:flex;align-items:center;font-size:12px;font-weight:500">{{ t }}</span></sc-for></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isInline }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:12px;background:{{ c.tertiaryContainer }};color:{{ c.onTertiaryContainer }};border-radius:16px;padding:12px 20px;font-size:14px;font-weight:500"><span class="ms">ads_click</span>Click any text below to edit it. Changes are saved as unpublished edits until you press Publish.</div>
+      <div style="background:{{ c.surface }};border:1px solid {{ c.outlineVariant }};border-radius:28px;overflow:hidden">
+        <div style="padding:48px 40px;display:flex;flex-direction:column;gap:20px;align-items:flex-start">
+          <div style="display:flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 8px;border-radius:8px;background:{{ c.tertiaryContainer }};color:{{ c.onTertiaryContainer }};font-size:14px;font-weight:500"><span class="ms" style="font-size:18px">flight_takeoff</span><input value="{{ prof.avail }}" onChange="{{ setAvail }}" style="border:0;outline:0;background:transparent;font-size:14px;font-weight:500;color:inherit;padding:0;width:{{ availW }}"></div>
+          <input value="{{ prof.displayName }}" onChange="{{ setName }}" style="width:100%;border:0;outline:0;background:transparent;border-radius:12px;font-family:'Inter Tight',sans-serif;font-size:88px;line-height:1;font-weight:700;letter-spacing:-.03em;color:{{ c.onSurface }};padding:0" style-hover="box-shadow:0 0 0 2px {{ c.primary }}" style-focus="box-shadow:0 0 0 2px {{ c.primary }}">
+          <input value="{{ prof.heroRole }}" onChange="{{ setRole }}" style="width:100%;border:0;outline:0;background:transparent;border-radius:8px;font-size:18px;font-weight:500;color:{{ c.primary }};padding:0" style-hover="box-shadow:0 0 0 2px {{ c.primary }}" style-focus="box-shadow:0 0 0 2px {{ c.primary }}">
+          <textarea rows="3" value="{{ prof.heroPos }}" onChange="{{ setPos }}" style="width:100%;max-width:720px;border:0;outline:0;background:transparent;border-radius:8px;font-size:22px;line-height:32px;color:{{ c.onSurface }};padding:0;resize:none" style-hover="box-shadow:0 0 0 2px {{ c.primary }}" style-focus="box-shadow:0 0 0 2px {{ c.primary }}"></textarea>
+        </div>
+        <div style="padding:40px;background:{{ c.surfaceContainerLow }};display:flex;flex-direction:column;gap:24px">
+          <span style="font-family:'Inter Tight',sans-serif;font-size:36px;line-height:44px;font-weight:700;letter-spacing:-.03em">Right now</span>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+            <sc-for list="{{ nowInline }}" as="n" hint-placeholder-count="5">
+              <div style="background:{{ n.bg }};color:{{ n.fg }};border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:12px;opacity:{{ n.opacity }}">
+                <span class="ms" style="font-size:28px">{{ n.icon }}</span>
+                <input value="{{ n.label }}" onChange="{{ n.setLabel }}" style="border:0;outline:0;background:transparent;border-radius:6px;font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:inherit;padding:0;width:100%" style-hover="box-shadow:0 0 0 2px {{ n.fg }}" style-focus="box-shadow:0 0 0 2px {{ n.fg }}">
+                <textarea rows="3" value="{{ n.text }}" onChange="{{ n.setText }}" style="border:0;outline:0;background:transparent;border-radius:6px;font-size:18px;line-height:26px;color:inherit;padding:0;width:100%;resize:none" style-hover="box-shadow:0 0 0 2px {{ n.fg }}" style-focus="box-shadow:0 0 0 2px {{ n.fg }}"></textarea>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  </main>
+</div>
+</sc-if>
+
+<sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:50;min-height:48px;padding:0 8px 0 20px;border-radius:12px;background:{{ c.inverse }};color:{{ c.onInverse }};display:flex;align-items:center;gap:16px;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.3)">
+  <span>{{ toastMsg }}</span>
+  <div onClick="{{ toastUndo }}" role="button" tabindex="0" style="display:{{ toastUndoDisp }};height:36px;padding:0 12px;border-radius:18px;align-items:center;font-weight:600;color:{{ c.inversePrimary }};cursor:pointer">Undo</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;login&quot;,&quot;tsType&quot;:&quot;'login'|'dashboard'|'list'|'edit'|'inline'&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;dashboard&quot;,&quot;list&quot;,&quot;edit&quot;,&quot;inline&quot;],&quot;section&quot;:&quot;Admin&quot;},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Admin&quot;}}">
+class Component extends DCLogic {
+  state = this.init();
+  init() {
+    const q = new URLSearchParams(location.search), data = this.seed();
+    const screen = q.get('screen') || this.props.screen || 'login', sec = q.get('sec') || 'experience';
+    const st = { screen, sec, editId: null, draft: null, data, changed: q.get('changed') === '1', dark: q.get('dark') === '1' || !!this.props.dark, toast: null, dragId: null, overId: null, last: null, loginEmail: 'mishad@example.com' };
+    if (screen === 'edit') {
+      const m = this.meta().find(x => x.k === sec);
+      if (m && m.single) { st.editId = 'single'; st.draft = { ...data[sec] }; }
+      else { const it = data[sec].find(x => x.id === q.get('id')) || data[sec][0]; st.editId = it.id; st.draft = { ...it }; }
+    }
+    return st;
+  }
+  meta() {
+    return [
+      { k:'profile', name:'Profile & hero', one:'profile', icon:'person', single:true },
+      { k:'now', name:'Now cards', one:'card', icon:'bolt' },
+      { k:'experience', name:'Experience', one:'role', icon:'work' },
+      { k:'projects', name:'Projects', one:'project', icon:'apps' },
+      { k:'classes', name:'Classes', one:'class', icon:'school' },
+      { k:'research', name:'Research', one:'paper', icon:'science' },
+      { k:'education', name:'Education', one:'entry', icon:'workspace_premium' },
+      { k:'contact', name:'Contact & links', one:'link', icon:'alternate_email', single:true }
+    ];
+  }
+  fields(sec) {
+    const T = (k, label) => ({ k, label, type:'text' }), A = (k, label) => ({ k, label, type:'area' }), G = (k, label) => ({ k, label, type:'tags' });
+    return ({
+      profile: [T('displayName','Display name'), T('heroRole','Role line'), A('heroPos','Positioning sentence'), T('avail','Availability badge'), G('stack','Stack chips')],
+      now: [T('label','Label'), { k:'icon', label:'Icon', type:'select', options:['work','school','rocket_launch','menu_book','flight_takeoff','bolt'] }, A('text','Text')],
+      experience: [T('role','Role'), T('org','Organisation'), T('start','Start'), T('end','End (or Present)'), T('location','Location'), A('summary','Summary'), A('bullets','Impact bullets'), G('skills','Skills')],
+      projects: [T('name','Name'), A('desc','Description'), G('stack','Stack'), T('github','GitHub URL'), T('live','Live / store URL'), { k:'image', label:'Cover image', type:'image' }],
+      classes: [T('name','Class name'), { k:'level', label:'Level', type:'select', options:['Beginner','Intermediate','Advanced'] }, T('weeks','Weeks'), T('batches','Batches'), A('desc','Description'), G('topics','Topics'), A('outcome','What students build')],
+      research: [{ k:'kind', label:'Type', type:'select', options:['Thesis','Paper','Project'] }, T('venue','Venue / institution'), T('title','Title'), A('summary','Summary'), G('tags','Keywords'), T('link','PDF / link'), { k:'image', label:'Figure', type:'image' }],
+      education: [{ k:'tag', label:'Level tag', type:'select', options:['BSc','MSc','HSC','SSC'] }, T('level','Programme'), T('inst','Institution'), T('result','Result')],
+      contact: [T('email','Email'), T('github','GitHub'), T('linkedin','LinkedIn'), T('cv','CV file path')]
+    })[sec];
+  }
+  seed() {
+    const S = (o) => ({ status:'published', ...o });
+    return {
+      profile: { displayName:'Mishad', heroRole:'Full-stack software engineer · Brain Station 23, Dhaka', heroPos:'Full-stack engineer. I ship production mobile apps with Flutter, build the backends behind them — and teach others to do the same.', avail:'Open to Werkstudent roles in Germany from 2027', stack:'Flutter, Dart, TypeScript, Node.js, Supabase, SQL' },
+      contact: { email:'hello@example.com', github:'github.com/mishad01', linkedin:'linkedin.com/in/[handle]', cv:'/cv.pdf' },
+      now: [
+        S({ id:'n1', label:'Building', icon:'work', text:'Production Flutter apps at Brain Station 23.' }),
+        S({ id:'n2', label:'Teaching', icon:'school', text:'Flutter & Dart as an instructor at Ostad.' }),
+        S({ id:'n3', label:'Side project', icon:'rocket_launch', text:'EduBridge — a free, open-source learning platform.' }),
+        S({ id:'n4', label:'Learning', icon:'menu_book', text:'[Current learning topic]', status:'draft' }),
+        S({ id:'n5', label:'Next', icon:'flight_takeoff', text:'MSc Software Engineering in Germany, Summer 2027.' })
+      ],
+      experience: [
+        S({ id:'e1', role:'Software Engineer (Mobile)', org:'Brain Station 23 PLC', start:'[start]', end:'Present', location:'Dhaka', summary:'Building and shipping production mobile applications.', bullets:'[2–4 impact bullets]', skills:'Flutter, Dart' }),
+        S({ id:'e2', role:'Instructor (part-time)', org:'Ostad EdTech Platform', start:'[start]', end:'Present', location:'[location]', summary:'Teaching Flutter and Dart to cohorts of students.', bullets:'[2–4 impact bullets]', skills:'Flutter, Dart' }),
+        S({ id:'e3', role:'Apprentice, Learnathon 3.0', org:'Geeky Solutions', start:'Jan 2025', end:'Apr 2025', location:'[location]', summary:'Apprenticeship programme sponsored by Brain Station 23.', bullets:'', skills:'' }),
+        S({ id:'e4', role:'Software Developer Intern', org:'Maverick Softwares', start:'Jan 2024', end:'Jun 2024', location:'[location]', summary:'[One-line summary]', bullets:'', skills:'', status:'draft' }),
+        S({ id:'e5', role:'Sub-Executive', org:'EDU Computer Club', start:'[start]', end:'[end]', location:'Chattogram', summary:'[One-line summary]', bullets:'', skills:'', status:'draft' })
+      ],
+      projects: [
+        S({ id:'p1', name:'Ke Dibe?', desc:'Bangla Android app that tracks whose turn it is to pay in friend groups and office teams.', stack:'Flutter, Clean Architecture', github:'github.com/mishad01', live:'play.google.com', image:'' }),
+        S({ id:'p2', name:'EduBridge', desc:'Free, open-source learning platform for Bangladeshi students.', stack:'Flutter, GetX, Supabase, PostgreSQL', github:'github.com/mishad01', live:'mishad01.github.io', image:'' }),
+        S({ id:'p3', name:'Social Media App', desc:'Ostad Pro batch project: login, feed, profile, notifications and image sharing.', stack:'Flutter, Firebase, MVVM', github:'github.com/mishad01', live:'', image:'' }),
+        S({ id:'p4', name:'Choice Legacy', desc:'Shopify-based e-commerce mobile app. Client work — details are limited.', stack:'Flutter, Shopify', github:'', live:'', image:'' }),
+        S({ id:'p5', name:'React Native projects', desc:'Learning projects in React Native and TypeScript.', stack:'React Native, TypeScript', github:'github.com/mishad01', live:'', image:'' })
+      ],
+      classes: [
+        S({ id:'c1', name:'Flutter Fundamentals', level:'Beginner', weeks:'8', batches:'3', desc:'From Dart basics to a working multi-screen app.', topics:'Flutter, Dart, Widgets', outcome:'A multi-screen to-do and notes app published as an APK.' }),
+        S({ id:'c2', name:'State Management', level:'Intermediate', weeks:'4', batches:'2', desc:'Choosing and applying state management patterns.', topics:'Provider, GetX, Bloc', outcome:'The same app rebuilt with three approaches.' }),
+        S({ id:'c3', name:'Flutter + Firebase', level:'Intermediate', weeks:'6', batches:'2', desc:'Authentication, Firestore, storage and push notifications.', topics:'Firebase, REST APIs, Auth', outcome:'A social feed app with login, posts and profiles.' }),
+        S({ id:'c4', name:'Clean Architecture', level:'Advanced', weeks:'5', batches:'1', desc:'Layering, dependency injection and testing.', topics:'Clean Architecture, MVVM, Testing', outcome:'A feature-complete app with a tested domain layer.' })
+      ],
+      research: [
+        S({ id:'r1', kind:'Thesis', venue:'East Delta University', title:'MIRNet-based low-light image enhancement with PairLIE-inspired consistency regularization', summary:'Brightening dark photos without amplifying noise or colour shifts.', tags:'MIRNet, PairLIE, Low-light enhancement', link:'', image:'' }),
+        S({ id:'r2', kind:'Paper', venue:'[Venue / year]', title:'[Paper title]', summary:'[Two-line abstract in plain language.]', tags:'', link:'', image:'', status:'draft' }),
+        S({ id:'r3', kind:'Project', venue:'[Course / lab]', title:'[Research project title]', summary:'[Two-line summary.]', tags:'', link:'', image:'', status:'draft' })
+      ],
+      education: [
+        S({ id:'d1', tag:'MSc', level:'MSc Software Engineering', inst:'Germany', result:'Starting Summer 2027', status:'published' }),
+        S({ id:'d2', tag:'BSc', level:'Computer Science & Engineering', inst:'East Delta University, Chattogram', result:'CGPA 3.60 / 4.00 · Cum Laude' }),
+        S({ id:'d3', tag:'HSC', level:'Higher Secondary (Science)', inst:'Bangladesh Navy College, Chattogram', result:'GPA 5.00 / 5.00' }),
+        S({ id:'d4', tag:'SSC', level:'Secondary (Science)', inst:'Nasirabad Government High School, Chattogram', result:'GPA 5.00 / 5.00' })
+      ]
+    };
+  }
+  pal(d) {
+    return d ? { primary:'#80D5D4', onPrimary:'#003737', primaryContainer:'#004F4F', onPrimaryContainer:'#9CF1F0', secondaryContainer:'#304B4B', onSecondaryContainer:'#CCE8E7', tertiaryContainer:'#334863', onTertiaryContainer:'#D3E4FF', surface:'#0E1514', surfaceContainerLow:'#161D1D', surfaceContainer:'#1A2121', surfaceContainerHigh:'#252B2B', surfaceContainerHighest:'#303636', onSurface:'#DDE4E3', onSurfaceVariant:'#BEC9C8', outline:'#899392', outlineVariant:'#3F4948', error:'#F2B8B5', errorContainer:'#601410', inverse:'#DDE4E3', onInverse:'#161D1D', inversePrimary:'#006A6A' }
+      : { primary:'#006A6A', onPrimary:'#FFFFFF', primaryContainer:'#9CF1F0', onPrimaryContainer:'#002020', secondaryContainer:'#CCE8E7', onSecondaryContainer:'#051F1F', tertiaryContainer:'#D3E4FF', onTertiaryContainer:'#041C35', surface:'#F4FAF9', surfaceContainerLow:'#EEF5F4', surfaceContainer:'#E8EFEE', surfaceContainerHigh:'#E3E9E8', surfaceContainerHighest:'#DDE4E3', onSurface:'#161D1D', onSurfaceVariant:'#3F4948', outline:'#6F7979', outlineVariant:'#BEC9C8', error:'#B3261E', errorContainer:'#F9DEDC', inverse:'#2B3231', onInverse:'#EBF2F1', inversePrimary:'#80D5D4' };
+  }
+  titleOf(sec, it) { return ({ now: it.label, experience: it.role, projects: it.name, classes: it.name, research: it.title, education: it.level })[sec] || ''; }
+  subOf(sec, it) { return ({ now: it.text, experience: it.org + ' · ' + it.start + ' – ' + it.end, projects: it.stack, classes: it.level + ' · ' + it.weeks + ' weeks', research: it.kind + ' · ' + it.venue, education: it.inst })[sec] || ''; }
+  tags(v) { return (v || '').split(',').map(x => x.trim()).filter(Boolean); }
+  toast(msg, undo) { clearTimeout(this._tt); this.setState({ toast: { msg, undo } }); this._tt = setTimeout(() => this.setState({ toast: null }), 3200); }
+  componentWillUnmount() { clearTimeout(this._tt); }
+  setField(k, v) { this.setState(s => ({ draft: { ...s.draft, [k]: v } })); }
+  patch(sec, id, k, v) { this.setState(s => ({ changed: true, data: { ...s.data, [sec]: s.data[sec].map(x => x.id === id ? { ...x, [k]: v } : x) } })); }
+  setProf(k, v) { this.setState(s => ({ changed: true, data: { ...s.data, profile: { ...s.data.profile, [k]: v } } })); }
+  openSec(k) {
+    const m = this.meta().find(x => x.k === k);
+    if (m.single) this.setState(s => ({ screen: 'edit', sec: k, editId: 'single', draft: { ...s.data[k] } }));
+    else this.setState({ screen: 'list', sec: k });
+  }
+  readFile(file, k) { if (!file) return; const r = new FileReader(); r.onload = () => this.setField(k, r.result); r.readAsDataURL(file); }
+  reorder(sec, from, to) {
+    if (!from || !to || from === to) return;
+    this.setState(s => { const a = [...s.data[sec]], i = a.findIndex(x => x.id === from), j = a.findIndex(x => x.id === to); const [m] = a.splice(i, 1); a.splice(j, 0, m); return { changed: true, dragId: null, overId: null, data: { ...s.data, [sec]: a } }; });
+  }
+  renderVals() {
+    const s = this.state, c = this.pal(s.dark), meta = this.meta(), sec = s.sec, m = meta.find(x => x.k === sec), data = s.data;
+    const isLogin = s.screen === 'login', isApp = !isLogin;
+    const count = k => { const a = data[k]; return Array.isArray(a) ? a : null; };
+    const navTop = [['dashboard','Dashboard','dashboard'], ['inline','Edit on page','edit_note']].map(([id, label, icon]) => { const on = s.screen === id; return { label, icon, go: () => this.setState({ screen: id }), bg: on ? c.secondaryContainer : 'transparent', color: on ? c.onSecondaryContainer : c.onSurfaceVariant, hover: on ? c.secondaryContainer : c.surfaceContainerHighest }; });
+    const navSecs = meta.map(x => { const on = (s.screen === 'list' || s.screen === 'edit') && s.sec === x.k; const a = count(x.k); const dr = a ? a.filter(i => i.status === 'draft').length : 0;
+      return { label: x.name, icon: x.icon, go: () => this.openSec(x.k), bg: on ? c.secondaryContainer : 'transparent', color: on ? c.onSecondaryContainer : c.onSurfaceVariant, hover: on ? c.secondaryContainer : c.surfaceContainerHighest, badge: dr ? dr + ' draft' : '', badgeDisp: dr ? 'inline' : 'none' }; });
+    const stats = meta.map(x => { const a = count(x.k); const pub = a ? a.filter(i => i.status === 'published').length : 1; const dr = a ? a.length - pub : 0;
+      return { name: x.name, icon: x.icon, go: () => this.openSec(x.k), count: a ? a.length : 1, detail: a ? (pub + ' published' + (dr ? ' · ' + dr + ' draft' : '')) : 'single record' }; });
+    // list rows
+    const list = count(sec) || [];
+    const rows = list.map(it => { const pub = it.status === 'published', drag = s.dragId === it.id, over = s.overId === it.id && s.dragId && s.dragId !== it.id;
+      return { title: this.titleOf(sec, it), sub: this.subOf(sec, it), icon: sec === 'now' ? it.icon : m.icon,
+        stLabel: pub ? 'Published' : 'Draft', stIcon: pub ? 'public' : 'edit_off', stBg: pub ? c.secondaryContainer : 'transparent', stColor: pub ? c.onSecondaryContainer : c.onSurfaceVariant, stBorder: pub ? 'transparent' : c.outline,
+        toggle: () => { this.patch(sec, it.id, 'status', pub ? 'draft' : 'published'); this.toast(pub ? 'Moved to drafts' : 'Marked published'); },
+        edit: () => this.setState({ screen: 'edit', editId: it.id, draft: { ...it } }),
+        del: () => { const idx = list.findIndex(x => x.id === it.id); this.setState(st => ({ changed: true, last: { sec, it, idx }, data: { ...st.data, [sec]: st.data[sec].filter(x => x.id !== it.id) } })); this.toast('Deleted “' + this.titleOf(sec, it) + '”', true); },
+        bg: over ? c.primaryContainer : c.surfaceContainerLow, border: over ? c.primary : 'transparent', opacity: drag ? .4 : 1,
+        dragStart: e => { try { e.dataTransfer.setData('text/plain', it.id); } catch (x) {} this.setState({ dragId: it.id }); },
+        dragOver: e => { e.preventDefault(); if (this.state.overId !== it.id) this.setState({ overId: it.id }); },
+        drop: e => { e.preventDefault(); this.reorder(sec, this.state.dragId, it.id); }, dragEnd: () => this.setState({ dragId: null, overId: null }) }; });
+    // edit form
+    const d = s.draft || {};
+    const formFields = s.screen === 'edit' ? this.fields(sec).map(f => { const v = d[f.k] || '';
+      return { label: f.label, value: v, isText: f.type === 'text', isArea: f.type === 'area', isTags: f.type === 'tags', isSelect: f.type === 'select', isImage: f.type === 'image',
+        input: e => this.setField(f.k, e.target.value),
+        opts: (f.options || []).map(o => { const a = v === o; return { label: o, pick: () => this.setField(f.k, o), checkDisp: a ? 'inline-block' : 'none', bg: a ? c.secondaryContainer : 'transparent', border: a ? 'transparent' : c.outline, color: a ? c.onSecondaryContainer : c.onSurfaceVariant }; }),
+        bgImg: v ? 'url(' + v + ')' : 'none', emptyDisp: v ? 'none' : 'flex', clearDisp: v ? 'flex' : 'none', clear: () => this.setField(f.k, ''),
+        upload: e => this.readFile(e.target.files && e.target.files[0], f.k), over: e => e.preventDefault(), drop: e => { e.preventDefault(); this.readFile(e.dataTransfer.files && e.dataTransfer.files[0], f.k); } }; }) : [];
+    const hasStatus = !(m && m.single), pubNow = d.status === 'published';
+    // preview
+    const tg = this.tags;
+    let pv = { bg: c.surfaceContainerLow, fg: c.onSurface, border: c.outlineVariant, kicker: '', title: '', body: '', meta: '', tags: [], icon: '', cover: false, img: '', titleSize: '24px' };
+    const set = o => { pv = { ...pv, ...o }; };
+    if (sec === 'profile') set({ bg: c.primaryContainer, fg: c.onPrimaryContainer, border: 'transparent', kicker: d.avail, title: d.displayName, titleSize: '56px', body: d.heroPos, meta: d.heroRole, tags: tg(d.stack) });
+    if (sec === 'now') set({ bg: c.primaryContainer, fg: c.onPrimaryContainer, border: 'transparent', icon: d.icon, kicker: d.label, body: d.text });
+    if (sec === 'experience') set({ kicker: (d.start || '') + ' – ' + (d.end || ''), title: d.role, body: d.summary, meta: (d.org || '') + (d.location ? ' · ' + d.location : ''), tags: tg(d.skills) });
+    if (sec === 'projects') set({ bg: c.surfaceContainerHigh, border: 'transparent', cover: true, img: d.image, title: d.name, body: d.desc, tags: tg(d.stack) });
+    if (sec === 'classes') set({ bg: c.surfaceContainerHigh, border: 'transparent', kicker: (d.level || '') + ' · ' + (d.weeks || '–') + ' weeks · ' + (d.batches || '–') + ' batches', title: d.name, body: d.desc, meta: d.outcome ? 'Students build: ' + d.outcome : '', tags: tg(d.topics) });
+    if (sec === 'research') set({ bg: c.tertiaryContainer, fg: c.onTertiaryContainer, border: 'transparent', cover: true, img: d.image, kicker: (d.kind || '') + ' · ' + (d.venue || ''), title: d.title, body: d.summary, tags: tg(d.tags) });
+    if (sec === 'education') set({ kicker: d.tag, title: d.level, body: d.inst, meta: d.result });
+    if (sec === 'contact') set({ bg: c.secondaryContainer, fg: c.onSecondaryContainer, border: 'transparent', kicker: 'Contact', title: d.email, titleSize: '28px', body: (d.github || '') + '\n' + (d.linkedin || ''), meta: d.cv });
+    const sh = v => v ? 'block' : 'none';
+    const pvv = { bg: pv.bg, fg: pv.fg, border: pv.border, kicker: pv.kicker, title: pv.title, body: pv.body, meta: pv.meta, tags: pv.tags, icon: pv.icon, titleSize: pv.titleSize,
+      kickerDisp: sh(pv.kicker), titleDisp: sh(pv.title), bodyDisp: sh(pv.body), metaDisp: sh(pv.meta), iconDisp: pv.icon ? 'inline-block' : 'none',
+      coverDisp: pv.cover ? 'flex' : 'none', coverImg: pv.img ? 'url(' + pv.img + ')' : 'none', coverEmptyDisp: pv.img ? 'none' : 'inline' };
+    // inline
+    const prof = data.profile;
+    const nowInline = data.now.map(n => ({ label: n.label, text: n.text, icon: n.icon, bg: c.primaryContainer, fg: c.onPrimaryContainer, opacity: n.status === 'draft' ? .55 : 1,
+      setLabel: e => this.patch('now', n.id, 'label', e.target.value), setText: e => this.patch('now', n.id, 'text', e.target.value) }));
+    // header state
+    const titles = { dashboard: 'Dashboard', inline: 'Edit on page', list: m.name, edit: m.single ? m.name : (s.editId ? 'Edit ' + m.one : 'New ' + m.one) };
+    const ch = s.changed;
+    const t = s.toast;
+    const goBack = () => { if (s.screen === 'edit') this.setState({ screen: m.single ? 'dashboard' : 'list' }); else this.setState({ screen: 'dashboard' }); };
+    return {
+      c, isLogin, isApp, isDash: s.screen === 'dashboard', isList: s.screen === 'list', isEdit: s.screen === 'edit', isInline: s.screen === 'inline',
+      navTop, navSecs, stats, rows, noRows: rows.length === 0, formFields, hasStatus, pv: pvv, prof, nowInline, availW: Math.max(120, (prof.avail || '').length * 8) + 'px',
+      pageTitle: titles[s.screen] || '', back: goBack, backDisp: s.screen === 'dashboard' ? 'none' : 'flex', secSingular: m ? m.one : '',
+      pubBg: ch ? c.tertiaryContainer : c.secondaryContainer, pubColor: ch ? c.onTertiaryContainer : c.onSecondaryContainer, pubIcon: ch ? 'pending' : 'check_circle', pubLabel: ch ? 'Unpublished changes' : 'All changes published',
+      publishBg: ch ? c.primary : c.surfaceContainerHighest, publishColor: ch ? c.onPrimary : c.onSurfaceVariant, publishCursor: ch ? 'pointer' : 'default',
+      publish: () => { if (!s.changed) return; this.setState({ changed: false }); this.toast('Published to mishad01.github.io'); },
+      themeIcon: s.dark ? 'light_mode' : 'dark_mode', toggleDark: () => this.setState({ dark: !s.dark }),
+      goInline: () => this.setState({ screen: 'inline' }), signIn: () => this.setState({ screen: 'dashboard' }), signOut: () => this.setState({ screen: 'login' }),
+      loginEmail: s.loginEmail, setLoginEmail: e => this.setState({ loginEmail: e.target.value }),
+      addNew: () => { const f = {}; this.fields(sec).forEach(x => f[x.k] = ''); if (sec === 'now') f.icon = 'bolt'; if (sec === 'classes') f.level = 'Beginner'; if (sec === 'research') f.kind = 'Paper'; if (sec === 'education') f.tag = 'BSc'; this.setState({ screen: 'edit', editId: null, draft: { id: null, status: 'draft', ...f } }); },
+      discard: () => { this.setState({ screen: m.single ? 'dashboard' : 'list' }); },
+      save: () => {
+        const dr = s.draft;
+        if (m.single) { this.setState(st => ({ changed: true, data: { ...st.data, [sec]: { ...dr } } })); this.toast('Saved · publish to go live'); return; }
+        const id = dr.id || sec[0] + Date.now();
+        this.setState(st => { const a = st.data[sec], item = { ...dr, id }; const next = dr.id ? a.map(x => x.id === id ? item : x) : [...a, item]; return { screen: 'list', changed: true, data: { ...st.data, [sec]: next } }; });
+        this.toast(dr.status === 'published' ? 'Saved · publish to go live' : 'Saved as draft');
+      },
+      toggleDraftStatus: () => this.setField('status', pubNow ? 'draft' : 'published'),
+      statusTitle: pubNow ? 'Published' : 'Draft', statusSub: pubNow ? 'Visible on the live site after you publish' : 'Hidden from the site',
+      swTrack: pubNow ? c.primary : c.surfaceContainerHighest, swBorder: pubNow ? c.primary : c.outline, swLeft: pubNow ? '22px' : '6px', swSize: pubNow ? '24px' : '16px', swThumb: pubNow ? c.onPrimary : c.outline, swCheck: pubNow ? 'inline-block' : 'none',
+      prevDraftDisp: hasStatus && !pubNow ? 'flex' : 'none',
+      setAvail: e => this.setProf('avail', e.target.value), setName: e => this.setProf('displayName', e.target.value), setRole: e => this.setProf('heroRole', e.target.value), setPos: e => this.setProf('heroPos', e.target.value),
+      toastOpen: !!t, toastMsg: t ? t.msg : '', toastUndoDisp: t && t.undo ? 'flex' : 'none',
+      toastUndo: () => { const l = this.state.last; if (!l) return; this.setState(st => { const a = [...st.data[l.sec]]; a.splice(l.idx, 0, l.it); return { last: null, toast: null, data: { ...st.data, [l.sec]: a } }; }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
