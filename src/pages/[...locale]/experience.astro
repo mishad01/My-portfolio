@@ -1,0 +1,20 @@
+---
+import Base from '@/layouts/Base.astro';
+import SubPage from '@/components/SubPage.astro';
+import ExperienceList from '@/islands/ExperienceList';
+import { loadPublished } from '@/lib/content';
+import { localePaths } from '@/lib/paths';
+import { views } from '@/lib/view';
+import { cls } from '@/lib/cls';
+import type { Lang } from '@/lib/types';
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const V = views(await loadPublished(), lang);
+---
+<Base lang={lang} path="/experience/" title={`${V.U.nav.experience} — Mishad`} description={V.experience.map((e) => e.role).join(' · ')}>
+  <SubPage lang={lang} id="experience">
+    <h2 class={cls.h2}>{V.U.nav.experience}</h2>
+    <ExperienceList client:idle all items={V.experience} labels={{ current: V.U.current, ...V.moreLabels }} />
+  </SubPage>
+</Base>

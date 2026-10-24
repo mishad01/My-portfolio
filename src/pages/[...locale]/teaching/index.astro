@@ -1,0 +1,35 @@
+---
+import Base from '@/layouts/Base.astro';
+import Teaching from '@/islands/Teaching';
+import { loadPublished } from '@/lib/content';
+import { localePaths } from '@/lib/paths';
+import { href, t } from '@/lib/i18n';
+import { views } from '@/lib/view';
+import { cls } from '@/lib/cls';
+import type { Lang } from '@/lib/types';
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const c = await loadPublished();
+const V = views(c, lang);
+---
+<Base lang={lang} path="/teaching/" title={`${V.U.classes} — Mishad`} description={V.U.teachIntro}>
+  <main id="main">
+    <section id="teaching" class={cls.section + ' box-border min-h-screen'}>
+      <div class={cls.inner}>
+        <Teaching
+          client:idle
+          view="list"
+          pagesBase={href(lang, '/teaching/')}
+          backHref={href(lang, '/') + '#teaching'}
+          classes={c.classes}
+          platform={c.profile.teachPlatform}
+          teachRole={t(c.profile.teachRole, lang)}
+          topics={c.profile.teachTopics}
+          title={V.U.nav.teaching}
+          labels={V.teachLabels}
+        />
+      </div>
+    </section>
+  </main>
+</Base>
