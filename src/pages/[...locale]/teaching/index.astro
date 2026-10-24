@@ -5,7 +5,7 @@ import { loadPublished } from '@/data/content-repository';
 import { localePaths } from '@/platform/locale-paths';
 import { href, t } from '@/domain/i18n';
 import { views } from '@/features/portfolio/view-model';
-import { cls } from '@/ui/classes';
+import { button, layout, text } from '@/ui/classes';
 import type { Lang } from '@/domain/types';
 
 export const getStaticPaths = localePaths;
@@ -15,8 +15,8 @@ const V = views(c, lang);
 ---
 <Base lang={lang} path="/teaching/" title={`${V.U.classes} — Mishad`} description={V.U.teachIntro}>
   <main id="main">
-    <section id="teaching" class={cls.section + ' box-border min-h-screen'}>
-      <div class={cls.inner}>
+    <section id="teaching" class={layout.section + ' box-border min-h-screen'}>
+      <div class={layout.container}>
         <Teaching
           client:idle
           view="list"

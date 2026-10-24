@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ClassItem } from '@/domain/types';
-import { cls, filterChip, tones, toneCls } from '@/ui/classes';
+import { Button, FilterChip, LabelChip, TONES, Tag, card as cardCls, text, tone } from '@/ui';
 
 type View = 'home' | 'list' | 'detail';
 
@@ -28,19 +28,18 @@ const card = 'relative flex cursor-pointer flex-col gap-4 rounded-[28px] p-7 tex
 
 export default function Teaching({ classes, platform, teachRole, topics, title, view = 'home', sel, pagesBase, backHref = '/', labels: L }: Props) {
   const [topic, setTopic] = useState('All');
-  const toneOf = (k: ClassItem) => toneCls[tones[classes.indexOf(k) % 3]];
+  const toneOf = (k: ClassItem) => tone[TONES[classes.indexOf(k) % 3]];
   const allTopics = ['All', ...new Set(classes.flatMap((k) => k.topics))];
   const kk = classes.find((k) => k.id === sel);
 
   const back = view === 'detail' ? pagesBase : backHref;
   const backLabel = view === 'detail' ? L.backAll : L.back;
-  const backCls = 'flex h-12 cursor-pointer items-center gap-2 rounded-3xl border-0 bg-secondary-container pr-5 pl-3.5 text-sm font-medium text-on-secondary-container no-underline hover:text-on-secondary-container hover:opacity-[.92]';
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-wrap items-center gap-4">
-        {view !== 'home' && <a href={back} className={backCls}><span className="ms text-xl">arrow_back</span>{backLabel}</a>}
-        {view !== 'detail' && <h2 className={cls.h2}>{view === 'list' ? L.classes : title}</h2>}
+        {view !== 'home' && <Button href={back} variant="tonal" icon="arrow_back">{backLabel}</Button>}
+        {view !== 'detail' && <h2 className={text.headline}>{view === 'list' ? L.classes : title}</h2>}
       </div>
 
       {view === 'home' && (
@@ -71,7 +70,7 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
           <a href={pagesBase} className={card + ' bg-surface-low text-on-surface hover:text-on-surface'}>
             <span className="kicker text-on-surface-variant">{L.topics}</span>
             <div className="flex flex-wrap gap-2">
-              {topics.map((t) => <span key={t} className={cls.chipFilled}>{t}</span>)}
+              {topics.map((t) => <LabelChip key={t}>{t}</LabelChip>)}
             </div>
             <span className="ms absolute top-6 right-6 opacity-70">north_east</span>
           </a>
@@ -83,10 +82,7 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
           <p className="m-0 max-w-[36em] text-pretty text-on-surface-variant">{L.teachIntro}</p>
           <div className="flex flex-wrap gap-2">
             {allTopics.map((k) => (
-              <button key={k} type="button" aria-pressed={topic === k} onClick={() => setTopic(k)} className={filterChip(topic === k)}>
-                {topic === k && <span className="ms text-lg">check</span>}
-                {k === 'All' ? L.all : k}
-              </button>
+              <FilterChip key={k} selected={topic === k} onClick={() => setTopic(k)}>{k === 'All' ? L.all : k}</FilterChip>
             ))}
           </div>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,320px),1fr))] gap-4">
@@ -98,9 +94,9 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
                     <span className="absolute top-3 left-3 flex h-7 items-center rounded-[14px] bg-surface px-3 text-[13px] font-medium text-on-surface">{k.level}</span>
                   </div>
                   <div className="flex flex-1 flex-col gap-2 px-5 pt-5 pb-3">
-                    <h3 className={cls.h3}>{k.name}</h3>
+                    <h3 className={text.title}>{k.name}</h3>
                     <p className="m-0 text-[15px] leading-[22px] text-pretty text-on-surface-variant">{k.desc}</p>
-                    <div className="mt-1 flex flex-wrap gap-1.5">{k.topics.map((t) => <span key={t} className={cls.tag}>{t}</span>)}</div>
+                    <div className="mt-1 flex flex-wrap gap-1.5">{k.topics.map((t) => <Tag key={t}>{t}</Tag>)}</div>
                   </div>
                   <div className="flex items-center gap-4 px-5 pt-2 pb-4 text-[13px] text-on-surface-variant">
                     {k.weeks > 0 && <span className="flex items-center gap-1.5"><span className="ms text-lg">schedule</span>{k.weeks} {L.weeks}</span>}
@@ -109,8 +105,7 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
                   </div>
                 </>
               );
-              const c = 'flex flex-col overflow-hidden rounded-[28px] bg-surface-high text-left text-on-surface no-underline transition-shadow duration-200 hover:text-on-surface hover:shadow-[0_2px_10px_rgba(0,0,0,.2)]';
-              return <a key={k.id} href={`${pagesBase}${k.id}/`} className={c}>{inner}</a>;
+              return <a key={k.id} href={`${pagesBase}${k.id}/`} className={cardCls.media}>{inner}</a>;
             })}
           </div>
         </div>
@@ -118,7 +113,7 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
 
       {view === 'detail' && kk && (
         <div className="flex flex-col gap-4">
-          <div className={'stripes flex flex-col gap-4 rounded-[36px] p-6 wide:p-12 ' + toneOf(kk)}>
+          <div className={'stripes flex flex-col gap-4 ' + cardCls.hero + ' ' + toneOf(kk)}>
             <span className="ms text-5xl">{kk.icon}</span>
             <span className="kicker">{platform} · {kk.level}</span>
             <h3 className="m-0 h-display text-[clamp(32px,6vw,52px)] leading-[1.05] text-balance">{kk.name}</h3>
@@ -138,7 +133,7 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
             ))}
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-start gap-4">
-            <div className="flex flex-col gap-2 rounded-[28px] bg-surface-high p-7">
+            <div className={'flex flex-col gap-2 ' + cardCls.filled}>
               <span className="kicker mb-2 text-on-surface-variant">{L.syllabus}</span>
               {kk.modules.map((m, i) => (
                 <div key={i} className="flex items-center gap-4 py-2">
@@ -148,9 +143,9 @@ export default function Teaching({ classes, platform, teachRole, topics, title, 
               ))}
             </div>
             <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-4 rounded-[28px] bg-surface-high p-7">
+              <div className={'flex flex-col gap-4 ' + cardCls.filled}>
                 <span className="kicker text-on-surface-variant">{L.topics}</span>
-                <div className="flex flex-wrap gap-2">{kk.topics.map((t) => <span key={t} className={cls.chipFilled}>{t}</span>)}</div>
+                <div className="flex flex-wrap gap-2">{kk.topics.map((t) => <LabelChip key={t}>{t}</LabelChip>)}</div>
               </div>
               <div className="flex flex-col gap-2 rounded-[28px] bg-tertiary-container p-7 text-on-tertiary-container">
                 <span className="kicker">{L.outcome}</span>

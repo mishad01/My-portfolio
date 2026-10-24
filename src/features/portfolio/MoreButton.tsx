@@ -1,17 +1,10 @@
-import { cls } from '@/ui/classes';
-
-interface Props {
-  href: string;
-  hidden: number;
-  labels: { loadMore: string; more: string };
-}
+import { Button } from '@/ui';
 
 /** "Load more · N more" — opens the section's full page. */
-export function MoreButton({ href, hidden, labels }: Props) {
+export function MoreButton({ href, hidden, labels }: { href: string; hidden: number; labels: { loadMore: string; more: string } }) {
   return (
-    <a href={href} className={cls.moreBtn + ' no-underline hover:text-on-secondary-container'}>
+    <Button href={href} variant="tonal" trailingIcon="arrow_forward" className="self-center">
       {`${labels.loadMore} · ${hidden} ${labels.more}`}
-      <span className="ms text-xl">arrow_forward</span>
-    </a>
+    </Button>
   );
 }

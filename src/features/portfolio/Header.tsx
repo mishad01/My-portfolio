@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Lang } from '@/domain/types';
 import { NAV_ICON, NAV_IDS } from '@/features/portfolio/icons';
 import { scrollToId } from '@/platform/scroll';
+import { IconButton } from '@/ui';
 import { ThemeToggle } from './ThemeToggle';
 
 type NavId = (typeof NAV_IDS)[number];
@@ -109,15 +110,7 @@ export default function Header({ lang, brand, nav, langHref, labels }: Props) {
             <span className="ms text-xl">{isAdmin ? 'admin_panel_settings' : 'login'}</span>
             <span className="hidden xl:inline">{isAdmin ? labels.admin : labels.signIn}</span>
           </a>
-          <button
-            type="button"
-            onClick={() => setMenu(!menu)}
-            aria-label={labels.menu}
-            aria-expanded={menu}
-            className="flex h-10 w-10 flex-none items-center justify-center rounded-full border-0 bg-secondary-container text-on-secondary-container nav:hidden"
-          >
-            <span className="ms">{menu ? 'close' : 'menu'}</span>
-          </button>
+          <IconButton variant="tonal" icon={menu ? 'close' : 'menu'} label={labels.menu} aria-expanded={menu} onClick={() => setMenu(!menu)} className="nav:hidden" />
         </div>
       </div>
 

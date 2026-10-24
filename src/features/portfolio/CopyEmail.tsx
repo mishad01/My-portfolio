@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { cls } from '@/ui/classes';
+import { Button } from '@/ui';
 
 export default function CopyEmail({ email, label, done }: { email: string; label: string; done: string }) {
   const [copied, setCopied] = useState(false);
@@ -9,9 +9,8 @@ export default function CopyEmail({ email, label, done }: { email: string; label
     setTimeout(() => setCopied(false), 1800);
   };
   return (
-    <button type="button" onClick={copy} className={cls.tonalBtn + ' pl-5'} aria-live="polite">
-      <span className="ms text-xl">{copied ? 'check' : 'content_copy'}</span>
+    <Button variant="tonal" icon={copied ? 'check' : 'content_copy'} onClick={copy} aria-live="polite">
       {copied ? done : label}
-    </button>
+    </Button>
   );
 }

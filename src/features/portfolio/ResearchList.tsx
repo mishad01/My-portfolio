@@ -1,4 +1,4 @@
-import { toneCls } from '@/ui/classes';
+import { Tag, card, tone as toneCls } from '@/ui';
 import type { Tone } from '@/domain/types';
 import { MoreButton } from './MoreButton';
 
@@ -35,16 +35,14 @@ export default function ResearchList({ items, moreHref, labels }: Props) {
             <Wrap
               key={r.id}
               {...(r.link ? { href: r.link, target: '_blank', rel: 'noopener' } : {})}
-              className={'grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] items-center gap-8 rounded-[36px] p-6 no-underline wide:p-12 ' + toneCls[tone]}
+              className={'grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] items-center gap-8 no-underline ' + card.hero + ' ' + toneCls[tone]}
             >
               <div className="flex flex-col gap-4">
                 <span className="kicker">{r.kicker}</span>
                 <h3 className="m-0 h-title text-[28px] leading-9 text-balance">{r.title}</h3>
                 <p className="m-0 text-pretty">{r.summary}</p>
                 <div className="flex flex-wrap gap-2">
-                  {r.tags.map((t, j) => (
-                    <span key={j} className="flex h-7 items-center rounded-lg border border-current px-3 text-[13px] font-medium">{t}</span>
-                  ))}
+                  {r.tags.map((t, j) => <Tag key={j} onTone>{t}</Tag>)}
                 </div>
               </div>
               {r.image ? (

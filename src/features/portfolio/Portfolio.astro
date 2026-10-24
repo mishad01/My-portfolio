@@ -1,7 +1,7 @@
 ---
 import type { Content, Lang } from '@/domain/types';
 import { formatDay, href, t } from '@/domain/i18n';
-import { cls, toneCls } from '@/ui/classes';
+import { button, layout, text, tone } from '@/ui/classes';
 import { views } from '@/features/portfolio/view-model';
 import Header from '@/features/portfolio/Header';
 import ExperienceList from '@/features/portfolio/ExperienceList';
@@ -52,8 +52,8 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
           {P.stack.map((s) => <span class="flex h-8 items-center rounded-lg border border-outline px-3 text-sm font-medium text-on-surface-variant">{s}</span>)}
         </div>
         <div class="flex flex-wrap gap-3">
-          <a href={c.contact.cv} download="Mishad-CV.pdf" class={cls.filledBtn}><span class="ms text-xl">download</span>{U.cv}</a>
-          <a href="#contact" class={cls.tonalBtn}>{U.contact}</a>
+          <a href={c.contact.cv} download="Mishad-CV.pdf" class={button('filled', 'lg', true)}><span class="ms text-xl">download</span>{U.cv}</a>
+          <a href="#contact" class={button('tonal')}>{U.contact}</a>
         </div>
       </div>
       {P.portrait ? (
@@ -71,15 +71,15 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
   </section>
 
   {c.now.length > 0 && (
-    <section id="now" class={cls.section + ' bg-surface-low'}>
-      <div class={cls.inner + ' gap-8'}>
+    <section id="now" class={layout.section + ' bg-surface-low'}>
+      <div class={layout.container + ' gap-8'}>
         <div class="flex flex-wrap items-end justify-between gap-4">
-          <h2 class={cls.h2}>{U.nowTitle}</h2>
+          <h2 class={text.headline}>{U.nowTitle}</h2>
           <span class="flex items-center gap-1.5 text-sm text-on-surface-variant"><span class="ms text-lg">update</span>{U.updated} {formatDay(P.nowUpdated, lang)}</span>
         </div>
         <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4">
           {c.now.map((n) => (
-            <div class={'flex flex-col gap-3 rounded-[28px] p-6 ' + toneCls[n.tone]}>
+            <div class={'flex flex-col gap-3 rounded-[28px] p-6 ' + tone[n.tone]}>
               <span class="ms text-[28px]">{n.icon}</span>
               <span class="kicker">{t(n.label, lang)}</span>
               <span class="text-lg leading-[26px] text-pretty">{t(n.text, lang)}</span>
@@ -90,22 +90,22 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
     </section>
   )}
 
-  <section id="experience" class={cls.section}>
-    <div class={cls.inner + ' gap-8'}>
-      <h2 class={cls.h2}>{U.nav.experience}</h2>
+  <section id="experience" class={layout.section}>
+    <div class={layout.container + ' gap-8'}>
+      <h2 class={text.headline}>{U.nav.experience}</h2>
       <ExperienceList client:visible moreHref={href(lang, '/experience/')} items={V.experience} labels={{ current: U.current, ...V.moreLabels }} />
     </div>
   </section>
 
-  <section id="projects" class={cls.section + ' bg-surface-low'}>
-    <div class={cls.inner + ' gap-6'}>
-      <h2 class={cls.h2}>{U.nav.projects}</h2>
+  <section id="projects" class={layout.section + ' bg-surface-low'}>
+    <div class={layout.container + ' gap-6'}>
+      <h2 class={text.headline}>{U.nav.projects}</h2>
       <Projects client:visible moreHref={href(lang, '/projects/')} projects={V.projects} labels={V.projectLabels} />
     </div>
   </section>
 
-  <section id="teaching" class={cls.section}>
-    <div class={cls.inner}>
+  <section id="teaching" class={layout.section}>
+    <div class={layout.container}>
       <Teaching
         client:visible
         pagesBase={href(lang, '/teaching/')}
@@ -120,17 +120,17 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
   </section>
 
   {c.research.length > 0 && (
-    <section id="research" class={cls.section + ' bg-surface-low'}>
-      <div class={cls.inner + ' gap-8'}>
-        <h2 class={cls.h2}>{U.nav.research}</h2>
+    <section id="research" class={layout.section + ' bg-surface-low'}>
+      <div class={layout.container + ' gap-8'}>
+        <h2 class={text.headline}>{U.nav.research}</h2>
         <ResearchList client:visible moreHref={href(lang, '/research/')} items={V.research} labels={V.moreLabels} />
       </div>
     </section>
   )}
 
-  <section id="education" class={cls.section}>
-    <div class={cls.inner + ' gap-8'}>
-      <h2 class={cls.h2}>{U.eduTitle}</h2>
+  <section id="education" class={layout.section}>
+    <div class={layout.container + ' gap-8'}>
+      <h2 class={text.headline}>{U.eduTitle}</h2>
       <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-4">
         {c.education.map((e) => (
           <div class={'flex flex-col gap-1.5 rounded-3xl border p-6 ' + (e.highlight ? 'border-transparent bg-tertiary-container text-on-tertiary-container' : 'border-outline-variant text-on-surface')}>
@@ -153,13 +153,13 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
     </div>
   </section>
 
-  <section id="contact" class={cls.section + ' bg-surface-low'}>
+  <section id="contact" class={layout.section + ' bg-surface-low'}>
     <div class="mx-auto grid max-w-[1120px] grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] items-start gap-10">
       <div class="flex flex-col gap-5">
         <h2 class="m-0 h-display text-[clamp(40px,7vw,64px)] leading-none">{U.contactTitle}</h2>
         <p class="m-0 max-w-[26em] text-lg leading-7 text-pretty text-on-surface-variant">{U.contactSub}</p>
         <div class="flex flex-wrap gap-3">
-          <a href={`mailto:${email}`} class={cls.filledBtn}><span class="ms text-xl">mail</span>{U.emailMe}</a>
+          <a href={`mailto:${email}`} class={button('filled', 'lg', true)}><span class="ms text-xl">mail</span>{U.emailMe}</a>
           <CopyEmail client:idle email={email} label={U.copyEmail} done={U.copied} />
         </div>
       </div>

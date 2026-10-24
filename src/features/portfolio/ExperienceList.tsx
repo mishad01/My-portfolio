@@ -1,4 +1,4 @@
-import { cls } from '@/ui/classes';
+import { text } from '@/ui';
 import { MoreButton } from './MoreButton';
 
 export interface ExpView {
@@ -42,7 +42,7 @@ export default function ExperienceList({ items, moreHref, limit = 3, labels }: P
               )}
             </div>
             <div className="flex min-w-0 flex-col gap-2 wide:col-span-2">
-              <h3 className={cls.h3}>{e.role}</h3>
+              <h3 className={text.title}>{e.role}</h3>
               <span className="text-base text-on-surface-variant">{e.org}</span>
               <p className="mt-1 mb-0 text-pretty">{e.summary}</p>
               {e.bullets.length > 0 && (
@@ -52,9 +52,7 @@ export default function ExperienceList({ items, moreHref, limit = 3, labels }: P
               )}
               {e.skills.length > 0 && (
                 <div className="mt-1 flex flex-wrap gap-2">
-                  {e.skills.map((s) => (
-                    <span key={s} className="flex h-7 items-center rounded-lg bg-secondary-container px-3 text-[13px] font-medium text-on-secondary-container">{s}</span>
-                  ))}
+                  {e.skills.map((s) => <span key={s} className="flex h-7 items-center rounded-lg bg-secondary-container px-3 text-[13px] font-medium text-on-secondary-container">{s}</span>)}
                 </div>
               )}
             </div>

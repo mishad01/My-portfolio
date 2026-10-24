@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { byFrequency } from '@/domain/i18n';
-import { cls, filterChip } from '@/ui/classes';
+import { FilterChip, IconButton, Tag, card, text } from '@/ui';
 import { MoreButton } from './MoreButton';
 
 export interface ProjectView {
@@ -65,10 +65,7 @@ export default function Projects({ projects, moreHref, labels }: Props) {
         {['All', ...techs].map((k) => {
           const on = filter === k;
           return (
-            <button key={k} type="button" aria-pressed={on} className={filterChip(on)} onClick={() => setFilter(k)}>
-              {on && <span className="ms text-lg">check</span>}
-              {k === 'All' ? labels.all : k}
-            </button>
+            <FilterChip key={k} selected={on} onClick={() => setFilter(k)}>{k === 'All' ? labels.all : k}</FilterChip>
           );
         })}
       </div>
@@ -78,7 +75,7 @@ export default function Projects({ projects, moreHref, labels }: Props) {
           <article
             key={p.id}
             onClick={() => p.url && window.open(p.url, '_blank', 'noopener')}
-            className={'flex flex-col overflow-hidden rounded-[28px] bg-surface-high hover:shadow-[0_2px_8px_rgba(0,0,0,.2)] ' + (p.url ? 'cursor-pointer' : 'cursor-default')}
+            className={card.media + ' ' + (p.url ? 'cursor-pointer' : 'cursor-default')}
           >
             <div
               className={
@@ -100,19 +97,17 @@ export default function Projects({ projects, moreHref, labels }: Props) {
               )}
             </div>
             <div className="flex flex-1 flex-col gap-2 px-5 pt-5 pb-3">
-              <h3 className={cls.h3}>
+              <h3 className={text.title}>
                 {p.url ? <a href={p.url} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()} className="text-inherit no-underline hover:text-inherit">{p.name}</a> : p.name}
               </h3>
               <p className="m-0 text-[15px] leading-[22px] text-pretty text-on-surface-variant">{p.desc}</p>
               <div className="mt-1 flex flex-wrap gap-1.5">
-                {p.stack.map((s) => <span key={s} className={cls.tag}>{s}</span>)}
+                {p.stack.map((s) => <Tag key={s}>{s}</Tag>)}
               </div>
             </div>
             <div className="flex min-h-12 items-center gap-1 px-3 pt-1 pb-3">
               {p.links.map((l) => (
-                <a key={l.url + l.icon} href={l.url} target="_blank" rel="noopener" title={l.title} aria-label={l.title} onClick={(e) => e.stopPropagation()} className={cls.iconBtn + ' text-primary hover:text-primary'}>
-                  <span className="ms">{l.icon}</span>
-                </a>
+                <IconButton key={l.url + l.icon} href={l.url} target="_blank" rel="noopener" icon={l.icon} label={l.title} tint="primary" onClick={(e: { stopPropagation(): void }) => e.stopPropagation()} />
               ))}
               {!p.url && <span className="ml-3 text-xs tracking-[.4px] text-on-surface-variant">{labels.displayOnly}</span>}
               {p.url && <span className="ms mr-2 ml-auto text-on-surface-variant">north_east</span>}
@@ -135,10 +130,10 @@ export default function Projects({ projects, moreHref, labels }: Props) {
               </div>
             )}
             <div className="flex items-center gap-2 rounded-[28px] bg-surface-high px-2 py-1 text-on-surface">
-              <button type="button" onClick={() => step(-1)} aria-label={labels.previous} className={cls.iconBtn + ' text-on-surface'}><span className="ms">chevron_left</span></button>
+              <IconButton icon="chevron_left" label={labels.previous} tint="onSurface" onClick={() => step(-1)} />
               <span className="min-w-[120px] text-center text-sm font-medium">{lbProject.name} · {lb.i + 1} / {lbProject.images.length}</span>
-              <button type="button" onClick={() => step(1)} aria-label={labels.next} className={cls.iconBtn + ' text-on-surface'}><span className="ms">chevron_right</span></button>
-              <button type="button" onClick={() => setLb(null)} aria-label={labels.close} className={cls.iconBtn + ' text-on-surface'}><span className="ms">close</span></button>
+              <IconButton icon="chevron_right" label={labels.next} tint="onSurface" onClick={() => step(1)} />
+              <IconButton icon="close" label={labels.close} tint="onSurface" onClick={() => setLb(null)} />
             </div>
           </div>
         </div>

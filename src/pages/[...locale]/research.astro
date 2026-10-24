@@ -5,7 +5,7 @@ import ResearchList from '@/features/portfolio/ResearchList';
 import { loadPublished } from '@/data/content-repository';
 import { localePaths } from '@/platform/locale-paths';
 import { views } from '@/features/portfolio/view-model';
-import { cls } from '@/ui/classes';
+import { button, layout, text } from '@/ui/classes';
 import type { Lang } from '@/domain/types';
 
 export const getStaticPaths = localePaths;
@@ -14,7 +14,7 @@ const V = views(await loadPublished(), lang);
 ---
 <Base lang={lang} path="/research/" title={`${V.U.nav.research} — Mishad`} description={V.research.map((r) => r.title).join(' · ')}>
   <SubPage lang={lang} id="research" tinted>
-    <h2 class={cls.h2}>{V.U.nav.research}</h2>
+    <h2 class={text.headline}>{V.U.nav.research}</h2>
     <ResearchList client:idle items={V.research} labels={V.moreLabels} />
   </SubPage>
 </Base>
