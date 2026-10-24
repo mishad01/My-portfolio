@@ -18,7 +18,8 @@ export interface Profile {
   heroPos: I18n;
   avail: I18n;
   stack: string[];
-  portrait: string;
+  /** Hero photo(s). More than one and the hero becomes a tap/auto-advance slideshow. */
+  portraits: string[];
   /** YYYY-MM-DD, shown as “Updated …” on the Now section. */
   nowUpdated: string;
   teachPlatform: string;

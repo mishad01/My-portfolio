@@ -9,6 +9,7 @@ import Projects from '@/features/portfolio/Projects';
 import Teaching from '@/features/portfolio/Teaching';
 import ResearchList from '@/features/portfolio/ResearchList';
 import CopyEmail from '@/features/portfolio/CopyEmail';
+import PortraitSlideshow from '@/features/portfolio/PortraitSlideshow';
 import Footer from './Footer.astro';
 
 interface Props { lang: Lang; content: Content }
@@ -16,6 +17,8 @@ const { lang, content: c } = Astro.props;
 const V = views(c, lang);
 const U = V.U;
 const P = c.profile;
+// Firestore may briefly hold the pre-migration shape until the owner's next admin sign-in applies SEED_VERSION.
+const portraits = P.portraits ?? [];
 const email = c.contact.email;
 const strip = (u: string) => u.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const contacts = [
@@ -56,9 +59,15 @@ const langHref = { en: href('en', '/'), bn: href('bn', '/'), de: href('de', '/')
           <a href="#contact" class={button('tonal')}>{U.contact}</a>
         </div>
       </div>
-      {P.portrait ? (
+      {portraits.length > 1 ? (
+        <PortraitSlideshow
+          client:visible
+          images={portraits.map((src) => ({ src, alt: P.fullName }))}
+          className="order-first aspect-square w-full max-w-[168px] justify-self-center rounded-[32px_32px_96px_32px] wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]"
+        />
+      ) : portraits[0] ? (
         <img
-          src={P.portrait}
+          src={portraits[0]}
           alt={P.fullName}
           class="order-first aspect-square w-full max-w-[168px] justify-self-center rounded-[32px_32px_96px_32px] object-cover wide:order-none wide:max-w-[440px] wide:rounded-[48px_48px_160px_48px]"
         />

@@ -64,6 +64,16 @@ Drafts (`status: draft`) never reach the public build. The admin edits English o
 
 For local work with real Firebase, copy `.env.example` to `.env` and fill it in.
 
+### Image uploads (Cloudinary)
+
+Firebase Storage now requires the paid Blaze plan just to turn on, so portrait/project/research image uploads in the admin go through [Cloudinary](https://cloudinary.com)'s free tier instead (25 GB, no card required). The CV upload still uses Firebase Storage.
+
+1. Create a free Cloudinary account — the **Cloud name** is on the dashboard.
+2. Settings → Upload → **Upload presets** → add preset → set **Signing mode** to **Unsigned**. Restricting it to image formats and a sane max file size is recommended, since the preset name ships in the client bundle.
+3. Add to `.env` (local) and as GitHub Actions **Variables** (deployed admin): `PUBLIC_CLOUDINARY_CLOUD_NAME` and `PUBLIC_CLOUDINARY_UPLOAD_PRESET`.
+
+Without these set, image upload fails with a message pointing back here.
+
 ## Placeholders to replace
 
 - Content now comes from your CV (`src/data/seed.ts`). Load it in Admin → Dashboard → **Load content from code**, review it, then Publish. Remaining placeholders are drafts (hidden from the site).
