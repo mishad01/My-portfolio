@@ -46,15 +46,22 @@ export default function Admin() {
       off = b.onAuth(async (inn) => {
         try { if (!b.demo) inn ? localStorage.setItem('pfAdmin', '1') : localStorage.removeItem('pfAdmin'); } catch {}
         if (!inn) { setAuth('out'); setScreen('login'); return; }
+        setAuth('loading');
         try {
-          const s = await b.load();
+          const s = await Promise.race([
+            b.load(),
+            new Promise<never>((_, rej) => setTimeout(() => rej(new Error('firestore-timeout')), 15000)),
+          ]);
           setContent(s.draft);
           setChanged(s.changed || q.get('changed') === '1');
           setAuth('in');
           const want = (q.get('screen') as Screen) || 'dashboard';
           openScreen(want === 'login' ? 'dashboard' : want, s.draft);
         } catch (e) {
+          console.error('[admin] loading content failed', e);
           setError(msg(e));
+          // Sign out so the next "Sign in" starts over (auth would otherwise stay signed in silently).
+          await b.signOut().catch(() => {});
           setAuth('out');
         }
       });
@@ -93,7 +100,7 @@ export default function Admin() {
     [be],
   );
 
-  if (auth === 'loading' || !be) return <div className="flex min-h-screen items-center justify-center text-on-surface-variant">Loading…</div>;
+  if (auth === 'loading' || !be) return <div className="flex min-h-screen items-center justify-center text-on-surface-variant">{be ? 'Loading your content…' : 'Loading…'}</div>;
 
   const signIn = async () => {
     setError('');
@@ -566,7 +573,13 @@ function Preview({ sec, f, showDraft }: { sec: Section; f: Form; showDraft: bool
 
 function msg(e: unknown): string {
   const m = e instanceof Error ? e.message : String(e);
-  if (/auth\/(invalid-credential|wrong-password|user-not-found)/.test(m)) return 'Wrong email or password.';
-  if (/permission/i.test(m)) return 'This account isn’t allowed to edit the site.';
+  if (/auth\/(invalid-credential|wrong-password|user-not-found|invalid-email)/.test(m)) return 'Wrong email or password.';
+  if (/auth\/operation-not-allowed/.test(m)) return 'Email/Password sign-in is turned off. Enable it in Firebase → Authentication → Sign-in method.';
+  if (/auth\/too-many-requests/.test(m)) return 'Too many attempts. Wait a minute and try again.';
+  if (/firestore-timeout|offline|unavailable/i.test(m))
+    return 'Signed in, but Firestore didn’t respond. Create the Firestore database in the Firebase console (Databases and storage → Firestore).';
+  if (/permission|insufficient/i.test(m))
+    return 'Signed in, but the Firestore rules don’t allow this account yet. Put your User UID in the rules and publish them.';
+  if (/not-found|NOT_FOUND|database .* does not exist/i.test(m)) return 'Signed in, but the Firestore database doesn’t exist yet. Create it in the Firebase console.';
   return m.replace(/^Firebase:\s*/, '');
 }
