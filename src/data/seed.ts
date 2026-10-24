@@ -14,7 +14,16 @@ const pub = 'published' as const;
 const draft = 'draft' as const;
 const GH = 'https://github.com/mishad01';
 
+/**
+ * Bump to push a new built-in content release: on the owner's next admin
+ * sign-in it replaces the draft and is published automatically (one time per
+ * version). This overwrites admin edits, so bump only for deliberate content
+ * migrations.
+ */
+export const SEED_VERSION = '2026-10-24-cv';
+
 export const seed: Content = {
+  seedVersion: SEED_VERSION,
   profile: {
     displayName: T('Mishad', 'মিশাদ', 'Mishad'),
     fullName: 'Md. Sakif Rahaman Mishad',

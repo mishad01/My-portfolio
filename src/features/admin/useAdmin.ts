@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Content, ListSection, Section } from '@/domain/types';
-import { seed } from '@/data/seed';
+import { SEED_VERSION, seed } from '@/data/seed';
 import { type Backend, demoBackend, firebaseBackend, firebaseConfigured } from './backend';
 import { describeError } from './errors';
 import { type Form, applyForm, blank, meta, toForm } from './schema';
@@ -73,10 +73,19 @@ export function useAdmin() {
         setAuth('loading');
         try {
           const s = await Promise.race([b.load(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error('firestore-timeout')), LOAD_TIMEOUT))]);
-          setContent(s.draft);
-          setChanged(s.changed || q.get('changed') === '1');
+          // Content migration: a newer built-in release replaces the draft and goes live once.
+          let draft = s.draft;
+          if (draft.seedVersion !== SEED_VERSION && q.get('demo') !== '1') {
+            draft = clone(seed);
+            await b.publish(draft);
+            setChanged(false);
+            notify('Your site was updated with the latest built-in content (from your CV) and published.');
+          } else {
+            setChanged(s.changed || q.get('changed') === '1');
+          }
+          setContent(draft);
           setAuth('in');
-          openInitial(s.draft);
+          openInitial(draft);
         } catch (e) {
           console.error('[admin] loading content failed', e);
           setError(describeError(e));

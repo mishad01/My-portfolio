@@ -103,6 +103,8 @@ export interface Education extends Item {
 }
 
 export interface Content {
+  /** Which built-in content release this was last synced from (see data/seed.ts). */
+  seedVersion?: string;
   profile: Profile;
   contact: Contact;
   now: NowCard[];
