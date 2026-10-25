@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [astro-site]
   workflow_dispatch:
   # Picks up admin "Publish" clicks: rebuilds only if Firestore changed.
   schedule:
@@ -10,8 +10,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -36,7 +34,11 @@ jobs:
             echo "deploy=true" >> "$GITHUB_OUTPUT"
           fi
 
-  build:
+  # mishad01.github.io is a separate repo (GitHub only serves the bare
+  # <user>.github.io domain from a repo with that exact name), so this job
+  # builds here and pushes the static output there directly — it can't use
+  # actions/deploy-pages, which only targets this repo's own Pages site.
+  build-and-deploy:
     needs: check
     if: needs.check.outputs.deploy == 'true'
     runs-on: ubuntu-latest
@@ -56,15 +58,23 @@ jobs:
           PUBLIC_FIREBASE_APPCHECK_SITE_KEY: ${{ vars.PUBLIC_FIREBASE_APPCHECK_SITE_KEY }}
           PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ vars.PUBLIC_CLOUDINARY_CLOUD_NAME }}
           PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${{ vars.PUBLIC_CLOUDINARY_UPLOAD_PRESET }}
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: dist }
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Push build to mishad01.github.io
+        env:
+          TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::PAGES_DEPLOY_TOKEN secret is not set. Add a fine-grained PAT (Contents: Read and write, scoped to mishad01/mishad01.github.io) in this repo's Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/mishad01/mishad01.github.io.git" target
+          rsync -a --delete --exclude '.git' dist/ target/
+          cd target
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy"
+            exit 0
+          fi
+          git commit -m "Deploy ${{ github.sha }}"
+          git push origin main
